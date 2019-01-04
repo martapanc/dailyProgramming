@@ -4,12 +4,12 @@ import static org.junit.Assert.assertEquals;
 
 public class DayOneTest{
 
+    private DayOne dayOne = new DayOne();
+
     @Test
     public void addNumberTest() {
-        assertEquals(3, frequencyCalculator("+1, +1, +1"));
+        assertEquals(3, dayOne.frequencyCalculator("+1, +1, +1"));
+        assertEquals(0, dayOne.frequencyCalculator("+1, +1, -2"));
     }
 
-    private int frequencyCalculator(String s) {
-        return 3;
-    }
 }
