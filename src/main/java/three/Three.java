@@ -36,7 +36,9 @@ public class Three {
                 if (!allCoordinates.contains(coordinate)) {
                     allCoordinates.add(coordinate);
                 } else {
-                    overlappingCoordinates.add(coordinate);
+                    if (!overlappingCoordinates.contains(coordinate)) {
+                        overlappingCoordinates.add(coordinate);
+                    }
                 }
             }
         }
