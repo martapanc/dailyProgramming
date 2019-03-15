@@ -76,4 +76,28 @@ public class ThreeTest {
         expCoordinates.add("2,2");
         assertEquals(expCoordinates, Three.computeOccupiedInches(0, 0, 2, 2));
     }
+
+    @Test
+    public void test_check_overlapping_coordinates(){
+        List<List<String>> coordinatesList = new ArrayList<>();
+        coordinatesList.add(Three.computeOccupiedInches(1,3,4,4));
+        coordinatesList.add(Three.computeOccupiedInches(3,1,4,4));
+
+        List<String> overlappingCoordinates = new ArrayList<>();
+        overlappingCoordinates.add("4,4");
+        overlappingCoordinates.add("4,5");
+        overlappingCoordinates.add("5,4");
+        overlappingCoordinates.add("5,5");
+        assertEquals(overlappingCoordinates, Three.computeOverlappingCoordinates(coordinatesList));
+    }
+
+    @Test
+    public void test_check_number_of_overlapping_coordinates(){
+        List<List<String>> coordinatesList = new ArrayList<>();
+        coordinatesList.add(Three.computeOccupiedInches(1,3,4,4));
+        coordinatesList.add(Three.computeOccupiedInches(3,1,4,4));
+        coordinatesList.add(Three.computeOccupiedInches(5,5,2,2));
+
+        assertEquals(4, Three.computeNumberOfOverlappingCoordinates(coordinatesList));
+    }
 }

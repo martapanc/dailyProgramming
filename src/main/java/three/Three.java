@@ -24,4 +24,28 @@ public class Three {
 
         return coordinates;
     }
+
+    public static List<String> computeOverlappingCoordinates(List<List<String>> coordinateLists) {
+
+        List<String> overlappingCoordinates = new ArrayList<>();
+        List<String> allCoordinates = new ArrayList<>();
+
+        for (List<String> coordinateList : coordinateLists) {
+            for (String coordinate : coordinateList) {
+
+                if (!allCoordinates.contains(coordinate)) {
+                    allCoordinates.add(coordinate);
+                } else {
+                    overlappingCoordinates.add(coordinate);
+                }
+            }
+        }
+
+        return overlappingCoordinates;
+    }
+
+    public static int computeNumberOfOverlappingCoordinates(List<List<String>> coordinatesList) {
+
+        return computeOverlappingCoordinates(coordinatesList).size();
+    }
 }
