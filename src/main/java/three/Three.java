@@ -5,15 +5,7 @@ import java.util.List;
 
 public class Three {
 
-    public static void printMatrix(String[][] matrix) {
-        for (int i = 0; i < matrix[0].length; i++) {
-            for (int j = 0; j < matrix.length; j++)
-                System.out.print(matrix[j][i] + " ");
-            System.out.println();
-        }
-    }
-
-    public static List<String> computeOccupiedInches(int xBorder, int yBorder, int length, int height) {
+    public static Item computeOccupiedInches(int id, int xBorder, int yBorder, int length, int height) {
         List<String> coordinates = new ArrayList<>();
 
         for (int x = xBorder+1; x <= xBorder+length; x++) {
@@ -22,16 +14,17 @@ public class Three {
             }
         }
 
-        return coordinates;
+        return new Item(id, coordinates);
     }
 
-    public static List<String> computeOverlappingCoordinates(List<List<String>> coordinateLists) {
+    public static List<String> computeOverlappingCoordinates(List<Item> coordinateLists) {
 
         List<String> overlappingCoordinates = new ArrayList<>();
         List<String> allCoordinates = new ArrayList<>();
 
-        for (List<String> coordinateList : coordinateLists) {
-            for (String coordinate : coordinateList) {
+        for (Item coordinateList : coordinateLists) {
+
+            for (String coordinate : coordinateList.getCoordinates()) {
 
                 if (!allCoordinates.contains(coordinate)) {
                     allCoordinates.add(coordinate);
@@ -43,10 +36,27 @@ public class Three {
             }
         }
 
+        findCoordinatesThatDontOverLap(coordinateLists, overlappingCoordinates);
+
         return overlappingCoordinates;
     }
 
-    public static int computeNumberOfOverlappingCoordinates(List<List<String>> coordinatesList) {
+    private static void findCoordinatesThatDontOverLap(List<Item> coordinateLists, List<String> overlappingCoordinates) {
+        for (Item coordinateList : coordinateLists) {
+            boolean doesntOverlap = true;
+            for (String coordinate: coordinateList.getCoordinates()) {
+                if (overlappingCoordinates.contains(coordinate)) {
+                    doesntOverlap = false;
+                }
+            }
+
+            if (doesntOverlap) {
+                System.out.println("Doesn't overlap: " + coordinateList.getId());
+            }
+        }
+    }
+
+    public static int computeNumberOfOverlappingCoordinates(List<Item> coordinatesList) {
 
         return computeOverlappingCoordinates(coordinatesList).size();
     }
