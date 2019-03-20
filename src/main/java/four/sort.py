@@ -1,6 +1,6 @@
 import re
 
-with open("fourInput.txt", "r") as fp:
+with open("input2.txt", "r") as fp:
     line = fp.readline()
     while line:
         line = line.replace('Guard ', '').replace(' begins shift\n', '').replace('falls asleep\n', 'asleep').replace('wakes up\n', 'awaken')

@@ -6,19 +6,22 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static java.time.temporal.ChronoUnit.MINUTES;
+
 public class Four {
 
-    public static List<GuardStatus> readInputAndParse() {
+    public static List<GuardStatus> readInputAndParse(String fileName) {
 
         List<GuardStatus> statusList = new ArrayList<>();
         BufferedReader reader;
         try {
             reader = new BufferedReader(new FileReader(
-                    "src/main/java/four/out2"));
+                    fileName));
             String line = reader.readLine();
             while (line != null) {
                 String[] val = line.split(" ");
@@ -29,7 +32,13 @@ public class Four {
                         Integer.parseInt(val[3]),
                         Integer.parseInt(val[4]),
                         0);
-                GuardStatus status = new GuardStatus(date, val[5]);
+                GuardStatus status;
+                if (StringUtils.isNumeric(val[5])) {
+                    status = new GuardStatus(date, Integer.parseInt(val[5]));
+                } else {
+                    status = new GuardStatus(date, val[5]);
+                }
+
                 statusList.add(status);
                 line = reader.readLine();
             }
@@ -37,8 +46,6 @@ public class Four {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        System.out.println(statusList);
 
         return statusList;
     }
@@ -48,5 +55,26 @@ public class Four {
         Collections.sort(list);
         System.out.println(list);
         return list;
+    }
+
+    public static int getGuardWithMostTimeAsleep(List<GuardStatus> list) {
+
+        List<MinutesAsleep> minutesAsleep = new ArrayList<>();
+        int guardId = 0;
+
+        for (int i = 0; i < list.size(); i++) {
+            GuardStatus guardStatus = list.get(i);
+            if (guardStatus.getId() != 0) {
+                guardId = guardStatus.getId();
+            } else if (guardStatus.getStatus().equals("awaken")) {
+                GuardStatus previous = list.get(i-1);
+                LocalTime begin = previous.getDate().toLocalTime();
+                LocalTime end = guardStatus.getDate().toLocalTime();
+
+                minutesAsleep.add(new MinutesAsleep(guardId,guardStatus.getDate().toLocalDate(), (int) begin.until(end, MINUTES)));
+            }
+        }
+
+        return 10;
     }
 }
