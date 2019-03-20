@@ -7,9 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static java.time.temporal.ChronoUnit.MINUTES;
 
@@ -53,13 +51,12 @@ public class Four {
     public static List<GuardStatus> sortInputByDate(List<GuardStatus> list) {
 
         Collections.sort(list);
-        System.out.println(list);
         return list;
     }
 
     public static int getGuardWithMostTimeAsleep(List<GuardStatus> list) {
 
-        List<MinutesAsleep> minutesAsleep = new ArrayList<>();
+        Map<String, Integer> minutesAsleepMap = new HashMap<>();
         int guardId = 0;
 
         for (int i = 0; i < list.size(); i++) {
@@ -68,13 +65,36 @@ public class Four {
                 guardId = guardStatus.getId();
             } else if (guardStatus.getStatus().equals("awaken")) {
                 GuardStatus previous = list.get(i-1);
-                LocalTime begin = previous.getDate().toLocalTime();
-                LocalTime end = guardStatus.getDate().toLocalTime();
+                LocalTime beginTime = previous.getDate().toLocalTime();
+                LocalTime endTime = guardStatus.getDate().toLocalTime();
+                LocalDate localDate = guardStatus.getDate().toLocalDate();
+                int until = (int) beginTime.until(endTime, MINUTES);
 
-                minutesAsleep.add(new MinutesAsleep(guardId,guardStatus.getDate().toLocalDate(), (int) begin.until(end, MINUTES)));
+                if (minutesAsleepMap.get(guardId + ":" + localDate) != null) {
+                    Integer mins = minutesAsleepMap.get(guardId + ":" + localDate);
+                    minutesAsleepMap.put(guardId + ":" + localDate, mins + until);
+                } else {
+                    minutesAsleepMap.put(guardId + ":" + localDate, until);
+                }
             }
         }
 
-        return 10;
+        int maxMins = 0;
+        for (Integer value : minutesAsleepMap.values()) {
+            if (value > maxMins)
+                maxMins = value;
+        }
+
+        String key = getKey(minutesAsleepMap, maxMins);
+        return Integer.parseInt(key.split(":")[0]);
+    }
+
+    public static <K, V> K getKey(Map<K, V> map, V value) {
+        for (Map.Entry<K, V> entry : map.entrySet()) {
+            if (entry.getValue().equals(value)) {
+                return entry.getKey();
+            }
+        }
+        return null;
     }
 }
