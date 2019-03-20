@@ -10,7 +10,9 @@ public class FourTest {
 
     @Test
     public void test_read_input_and_sort() {
-        Four.readInputAndSort();
+
+        Four.sortInputByDate(Four.readInputAndParse());
+
     }
 
 }

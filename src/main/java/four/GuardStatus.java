@@ -1,9 +1,8 @@
 package four;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
-public class GuardStatus {
+public class GuardStatus implements Comparable<GuardStatus>{
 
     public LocalDateTime date;
     public int id;
@@ -38,5 +37,12 @@ public class GuardStatus {
                 ", id=" + id +
                 ", status='" + status + '\'' +
                 '}' + '\n';
+    }
+
+    @Override
+    public int compareTo(GuardStatus compareDate) {
+        LocalDateTime date=(compareDate).getDate();
+
+        return this.date.compareTo(date);
     }
 }

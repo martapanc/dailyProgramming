@@ -5,15 +5,14 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Collections;
 import java.util.List;
 
 public class Four {
 
-    public static void readInputAndSort() {
+    public static List<GuardStatus> readInputAndParse() {
 
         List<GuardStatus> statusList = new ArrayList<>();
         BufferedReader reader;
@@ -23,9 +22,6 @@ public class Four {
             String line = reader.readLine();
             while (line != null) {
                 String[] val = line.split(" ");
-//                for (int i = 0; i < val.length -1; i++) {
-//                    val[i] = Integer.parseInt(val[i]);
-//                }
                 LocalDateTime date = LocalDateTime.of(
                         Integer.parseInt(val[0]),
                         Integer.parseInt(val[1]),
@@ -33,9 +29,7 @@ public class Four {
                         Integer.parseInt(val[3]),
                         Integer.parseInt(val[4]),
                         0);
-//                if (StringUtils.isNumeric(val[5])) {
                 GuardStatus status = new GuardStatus(date, val[5]);
-//                }
                 statusList.add(status);
                 line = reader.readLine();
             }
@@ -45,5 +39,14 @@ public class Four {
         }
 
         System.out.println(statusList);
+
+        return statusList;
+    }
+
+    public static List<GuardStatus> sortInputByDate(List<GuardStatus> list) {
+
+        Collections.sort(list);
+        System.out.println(list);
+        return list;
     }
 }
