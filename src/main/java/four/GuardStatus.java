@@ -31,15 +31,6 @@ public class GuardStatus implements Comparable<GuardStatus>{
     }
 
     @Override
-    public String toString() {
-        return "GuardStatus{" +
-                "date=" + date +
-                ", id=" + id +
-                ", status='" + status + '\'' +
-                '}' + '\n';
-    }
-
-    @Override
     public int compareTo(GuardStatus compareDate) {
         LocalDateTime date=(compareDate).getDate();
 

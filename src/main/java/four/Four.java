@@ -18,8 +18,7 @@ public class Four {
         List<GuardStatus> statusList = new ArrayList<>();
         BufferedReader reader;
         try {
-            reader = new BufferedReader(new FileReader(
-                    fileName));
+            reader = new BufferedReader(new FileReader(fileName));
             String line = reader.readLine();
             while (line != null) {
                 String[] val = line.split(" ");
@@ -49,7 +48,6 @@ public class Four {
     }
 
     public static List<GuardStatus> sortInputByDate(List<GuardStatus> list) {
-
         Collections.sort(list);
         return list;
     }
@@ -60,21 +58,23 @@ public class Four {
         int guardId = 0;
 
         for (int i = 0; i < list.size(); i++) {
+
             GuardStatus guardStatus = list.get(i);
+
             if (guardStatus.getId() != 0) {
                 guardId = guardStatus.getId();
             } else if (guardStatus.getStatus().equals("awaken")) {
-                GuardStatus previous = list.get(i-1);
+                GuardStatus previous = list.get(i - 1);
                 LocalTime beginTime = previous.getDate().toLocalTime();
                 LocalTime endTime = guardStatus.getDate().toLocalTime();
                 LocalDate localDate = guardStatus.getDate().toLocalDate();
-                int until = (int) beginTime.until(endTime, MINUTES);
+                int minuteDiff = (int) beginTime.until(endTime, MINUTES);
 
                 if (minutesAsleepMap.get(guardId + ":" + localDate) != null) {
                     Integer mins = minutesAsleepMap.get(guardId + ":" + localDate);
-                    minutesAsleepMap.put(guardId + ":" + localDate, mins + until);
+                    minutesAsleepMap.put(guardId + ":" + localDate, mins + minuteDiff);
                 } else {
-                    minutesAsleepMap.put(guardId + ":" + localDate, until);
+                    minutesAsleepMap.put(guardId + ":" + localDate, minuteDiff);
                 }
             }
         }
@@ -85,11 +85,16 @@ public class Four {
                 maxMins = value;
         }
 
-        String key = getKey(minutesAsleepMap, maxMins);
-        return Integer.parseInt(key.split(":")[0]);
+        String key = getKeyFromValue(minutesAsleepMap, maxMins);
+
+        return getGuardId(key);
     }
 
-    public static <K, V> K getKey(Map<K, V> map, V value) {
+    private static int getGuardId(String key) {
+        return Integer.parseInt(Objects.requireNonNull(key).split(":")[0]);
+    }
+
+    private static <K, V> K getKeyFromValue(Map<K, V> map, V value) {
         for (Map.Entry<K, V> entry : map.entrySet()) {
             if (entry.getValue().equals(value)) {
                 return entry.getKey();
