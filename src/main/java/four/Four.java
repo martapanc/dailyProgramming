@@ -79,15 +79,29 @@ public class Four {
             }
         }
 
+        Map<String, Integer> minutesSumPerGuard = new HashMap<>();
+
+        Iterator it = minutesAsleepMap.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            String id = pair.getKey().toString().split(":")[0];
+            if (minutesSumPerGuard.containsKey(id)) {
+                int prevSum = minutesSumPerGuard.get(id);
+                minutesSumPerGuard.put(id, prevSum + Integer.parseInt(String.valueOf(pair.getValue())));
+            } else {
+                minutesSumPerGuard.put(id, Integer.parseInt(String.valueOf(pair.getValue())));
+            }
+        }
+
         int maxMins = 0;
-        for (Integer value : minutesAsleepMap.values()) {
+        for (Integer value : minutesSumPerGuard.values()) {
             if (value > maxMins)
                 maxMins = value;
         }
 
-        String key = getKeyFromValue(minutesAsleepMap, maxMins);
+        String key = getKeyFromValue(minutesSumPerGuard, maxMins);
 
-        return getGuardId(key);
+        return Integer.parseInt(key);
     }
 
     private static int getGuardId(String key) {

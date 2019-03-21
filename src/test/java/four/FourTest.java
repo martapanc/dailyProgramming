@@ -26,7 +26,7 @@ public class FourTest {
     @Test
     public void test_get_guard_with_most_time_asleep_2(){
         List<GuardStatus> list = Four.sortInputByDate(Four.readInputAndParse("src/main/java/four/out"));
-        assertEquals(3119, Four.getGuardWithMostTimeAsleep(list));
+        assertEquals(1487, Four.getGuardWithMostTimeAsleep(list));
     }
 
     @Test
@@ -38,7 +38,7 @@ public class FourTest {
     @Test
     public void test_draw_sleep_pattern_2(){
         List<GuardStatus> list = Four.sortInputByDate(Four.readInputAndParse("src/main/java/four/out"));
-        Four.drawSleepPattern(3119, list);
+        Four.drawSleepPattern(1487, list);
     }
 
 }
