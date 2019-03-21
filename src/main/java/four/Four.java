@@ -102,4 +102,31 @@ public class Four {
         }
         return null;
     }
+
+    public static void drawSleepPattern(int id, List<GuardStatus> list) {
+
+        int[] minutes = new int[60];
+        for (int i : minutes) {
+            minutes[i] = 0;
+        }
+
+        for (int i = 0; i < list.size(); i++) {
+
+            GuardStatus guardStatus = list.get(i);
+
+            if (guardStatus.getId() == id) {
+                 int j = i+1;
+                 while (list.get(j).getId() == 0) {
+                     int asleepTime = list.get(j).getDate().toLocalTime().getMinute();
+                     int awakeTime = list.get(j+1).getDate().toLocalTime().getMinute();
+
+                     for (int k = asleepTime; k < awakeTime; k++) {
+                         minutes[k] += 1;
+                     }
+
+                     j += 2;
+                 }
+            }
+        }
+    }
 }
