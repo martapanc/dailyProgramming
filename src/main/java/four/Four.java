@@ -1,12 +1,12 @@
 package four;
 
 import org.apache.commons.lang3.StringUtils;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.*;
+import java.time.LocalTime;
 import java.util.*;
 
 import static java.time.temporal.ChronoUnit.MINUTES;
@@ -81,48 +81,41 @@ public class Four {
 
         Map<String, Integer> minutesSumPerGuard = new HashMap<>();
 
-        Iterator it = minutesAsleepMap.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-            String id = pair.getKey().toString().split(":")[0];
+        for (Map.Entry<String, Integer> entry : minutesAsleepMap.entrySet()) {
+            String id = entry.getKey().split(":")[0];
+            String value = String.valueOf(entry.getValue());
             if (minutesSumPerGuard.containsKey(id)) {
                 int prevSum = minutesSumPerGuard.get(id);
-                minutesSumPerGuard.put(id, prevSum + Integer.parseInt(String.valueOf(pair.getValue())));
+                minutesSumPerGuard.put(id, prevSum + Integer.parseInt(value));
             } else {
-                minutesSumPerGuard.put(id, Integer.parseInt(String.valueOf(pair.getValue())));
+                minutesSumPerGuard.put(id, Integer.parseInt(value));
             }
         }
 
         int maxMins = 0;
-        for (Integer value : minutesSumPerGuard.values()) {
+        for (Integer value : minutesSumPerGuard.values())
             if (value > maxMins)
                 maxMins = value;
-        }
 
         String key = getKeyFromValue(minutesSumPerGuard, maxMins);
 
-        return Integer.parseInt(key);
-    }
-
-    private static int getGuardId(String key) {
-        return Integer.parseInt(Objects.requireNonNull(key).split(":")[0]);
+        if (key != null)
+            return Integer.parseInt(key);
+        return 0;
     }
 
     private static <K, V> K getKeyFromValue(Map<K, V> map, V value) {
-        for (Map.Entry<K, V> entry : map.entrySet()) {
-            if (entry.getValue().equals(value)) {
+        for (Map.Entry<K, V> entry : map.entrySet())
+            if (entry.getValue().equals(value))
                 return entry.getKey();
-            }
-        }
         return null;
     }
 
     public static void drawSleepPattern(int id, List<GuardStatus> list) {
 
         int[] minutes = new int[60];
-        for (int i : minutes) {
+        for (int i : minutes)
             minutes[i] = 0;
-        }
 
         for (int i = 0; i < list.size(); i++) {
 
@@ -134,10 +127,8 @@ public class Four {
                      int asleepTime = list.get(j).getDate().toLocalTime().getMinute();
                      int awakeTime = list.get(j+1).getDate().toLocalTime().getMinute();
 
-                     for (int k = asleepTime; k < awakeTime; k++) {
+                     for (int k = asleepTime; k < awakeTime; k++)
                          minutes[k] += 1;
-                     }
-
                      j += 2;
                  }
             }

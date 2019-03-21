@@ -1,9 +1,7 @@
 package four;
 
 import org.junit.Test;
-
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class FourTest {
@@ -40,5 +38,6 @@ public class FourTest {
         List<GuardStatus> list = Four.sortInputByDate(Four.readInputAndParse("src/main/java/four/out"));
         Four.drawSleepPattern(1487, list);
     }
+    //Result is 1487*34
 
 }
