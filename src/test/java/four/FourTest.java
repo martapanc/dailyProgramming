@@ -40,4 +40,25 @@ public class FourTest {
     }
     //Result is 1487*34
 
+    // Part 2 - Example
+    // Matrix where x are the minutes and y are the guard IDs
+    //   000000000011111111112222222222333333333344444444445555555555
+    //   012345678901234567890123456789012345678901234567890123456789
+    //10 .....11111111111111111112111101111111111111111111111111.....
+    //99 ....................................1111222223222211111.....
+    //
+    // The result is the ID of the guard times the minute you chose (e.g. 99 * 45 = 4455)
+
+    @Test
+    public void test_sleep_count_matrix(){
+        List<GuardStatus> list = Four.sortInputByDate(Four.readInputAndParse("src/main/java/four/out2"));
+        Four.buildSleepCountMatrix(list);
+    }
+
+    @Test
+    public void test_sleep_count_matrix_2(){
+        List<GuardStatus> list = Four.sortInputByDate(Four.readInputAndParse("src/main/java/four/out"));
+        Four.buildSleepCountMatrix(list);
+    }
+
 }

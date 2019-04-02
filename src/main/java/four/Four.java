@@ -111,11 +111,9 @@ public class Four {
         return null;
     }
 
-    public static void drawSleepPattern(int id, List<GuardStatus> list) {
+    public static int[] drawSleepPattern(int id, List<GuardStatus> list) {
 
         int[] minutes = new int[60];
-        for (int i : minutes)
-            minutes[i] = 0;
 
         for (int i = 0; i < list.size(); i++) {
 
@@ -123,7 +121,7 @@ public class Four {
 
             if (guardStatus.getId() == id) {
                  int j = i+1;
-                 while (list.get(j).getId() == 0) {
+                 while (j < list.size() && list.get(j).getId() == 0) {
                      int asleepTime = list.get(j).getDate().toLocalTime().getMinute();
                      int awakeTime = list.get(j+1).getDate().toLocalTime().getMinute();
 
@@ -131,6 +129,28 @@ public class Four {
                          minutes[k] += 1;
                      j += 2;
                  }
+            }
+        }
+
+        return minutes;
+    }
+
+    public static void buildSleepCountMatrix(List<GuardStatus> list) {
+
+        List<Integer> idList = new ArrayList<>();
+
+        for (GuardStatus status : list) {
+            int id = status.getId();
+            if (id != 0 && !idList.contains(id))
+                idList.add(id);
+        }
+
+        int[][] sleepMatrix = new int[61][idList.size()];
+        for (int i = 0; i < 60; i++) {
+            for (int j = 0; j < idList.size(); j++) {
+                int[] minutes = drawSleepPattern(idList.get(j), list);
+                sleepMatrix[i][j] += minutes[i];
+                sleepMatrix[60][j] = Integer.parseInt(String.valueOf(idList.get(j)));
             }
         }
     }
