@@ -1,6 +1,11 @@
 package six;
 
+import four.Four;
+
 import java.awt.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 
 public class Six {
@@ -9,7 +14,7 @@ public class Six {
         return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
     }
 
-    public static ArrayList<Point> getClosestPoint(Point point, ArrayList<Point> coordinateList) {
+    public static ArrayList<Point> getClosestPoint(Point point, Collection<Point> coordinateList) {
 
         Map<Point, Integer> map = new HashMap<>();
         for (Point p : coordinateList)
@@ -23,5 +28,33 @@ public class Six {
                 minimumList.add(entry.getKey());
 
         return minimumList;
+    }
+
+    public static String getClosestPointName(Point point, Map<String, Point> coordinateList) {
+        ArrayList<Point> minimumList = getClosestPoint(point, coordinateList.values());
+        if (minimumList.size() == 1)
+            return Four.getKeyFromValue(coordinateList, minimumList.get(0));
+        else
+            return ".";
+    }
+
+    public static Map<String, Point> readInputFile(String filepath) {
+        BufferedReader reader;
+        Map<String, Point> map = new HashMap<>();
+        String[] data;
+        try {
+            reader = new BufferedReader(new FileReader(filepath));
+            String line = reader.readLine();
+            while (line != null) {
+                data = line.split(",");
+                map.put(data[0], new Point(Integer.parseInt(data[1]), Integer.parseInt(data[2])));
+                line = reader.readLine();
+            }
+            reader.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return map;
     }
 }
