@@ -65,4 +65,19 @@ public class SixTest {
         map = Six.readInputFile("src/main/java/six/in1");
         System.out.println(map);
     }
+
+    @Test
+    public void test_draw_matrix(){
+        Map map = Six.readInputFile("src/main/java/six/in1");
+        Six.drawMatrix(map);
+    }
+
+    @Test
+    public void test_get_largest_area(){
+        Map map = Six.readInputFile("src/main/java/six/in1");
+        assertEquals(4475, Six.drawMatrix(map));
+
+        map = Six.readInputFile("src/main/java/six/in4");
+        assertEquals(17, Six.drawMatrix(map));
+    }
 }
