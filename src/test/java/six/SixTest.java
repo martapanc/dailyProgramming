@@ -80,4 +80,18 @@ public class SixTest {
         map = Six.readInputFile("src/main/java/six/in4");
         assertEquals(17, Six.drawMatrix(map));
     }
+
+    @Test
+    public void test_get_manhattan_distance_sum() {
+        Map map = Six.readInputFile("src/main/java/six/in4");
+        assertEquals(30, Six.getManhattanDistanceSum(new Point(4,3), map));
+    }
+
+    @Test
+    public void test_compute_area() {
+        Map map = Six.readInputFile("src/main/java/six/in4");
+        assertEquals(16, Six.computeArea(map, 32));
+        map = Six.readInputFile("src/main/java/six/in1");
+        assertEquals(35237, Six.computeArea(map, 10000));
+    }
 }

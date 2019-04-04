@@ -107,12 +107,39 @@ public class Six {
 
     public static Point getMaxCoordinates(Map<String, Point> coordinateList) {
 
-        int maxX = 0;
-        int maxY = 0;
+        int maxX = 0, maxY = 0;
         for (Point p : coordinateList.values()) {
             if (maxX < p.x) maxX = p.x;
             if (maxY < p.y) maxY = p.y;
         }
         return new Point(maxX + maxX/5, maxY + maxY/5);
+    }
+
+    public static int getManhattanDistanceSum(Point point, Map<String, Point> coordinateMap) {
+        int distanceSum = 0;
+        for (Point p : coordinateMap.values()) {
+            distanceSum += getManhattanDistance(p, point);
+        }
+        return distanceSum;
+    }
+
+    public static int computeArea(Map<String, Point> coordinateMap, int maxDistance) {
+        int area = 0;
+        Point maxCoordinates = getMaxCoordinates(coordinateMap);
+        String[][] matrix = new String[maxCoordinates.x][maxCoordinates.y];
+
+        for (int i = 0; i < maxCoordinates.x; i++) {
+            for (int j = 0; j < maxCoordinates.y; j++) {
+                if (getManhattanDistanceSum(new Point(i, j), coordinateMap) < maxDistance) {
+                    matrix[i][j] = "#";
+                    area += 1;
+                } else {
+                    matrix[i][j] = ".";
+                }
+                System.out.print(matrix[i][j]);
+            }
+            System.out.println();
+        }
+        return area;
     }
 }
