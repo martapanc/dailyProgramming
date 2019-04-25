@@ -47,7 +47,7 @@ public class Converter {
 
             number = number / 10;
 
-            if (curr == 0)
+            if (0 == curr)
                 continue;
 
             result.insert(0, convertSimpleIntegerToNumeral(curr));
@@ -57,7 +57,7 @@ public class Converter {
         return result.toString();
     }
 
-    public static String convertSimpleIntegerToNumeral(int number) {
+    private static String convertSimpleIntegerToNumeral(int number) {
 
         String numeral;
         int digit;
@@ -66,37 +66,26 @@ public class Converter {
             digit = number / 1000;
             numeral = StringUtils.repeat("M", digit);
         } else if (number > 99) {
-            digit = number / 100;
-            if (digit == 4)
-                numeral = "CD";
-            else if (digit == 9)
-                numeral = "CM";
-            else if (digit < 4)
-                numeral = StringUtils.repeat("C", digit);
-            else
-                numeral = "D" + StringUtils.repeat("C", digit-5);
+            numeral = getPartialNumber(number, 100, "CD", "CM", "C", "D");
         } else if (number > 9) {
-            digit = number / 10;
-            if (digit == 4)
-                numeral = "XL";
-            else if (digit == 9)
-                numeral = "XC";
-            else if (digit < 4)
-                numeral = StringUtils.repeat("X", digit);
-            else
-                numeral = "L" + StringUtils.repeat("X", digit-5);
+            numeral = getPartialNumber(number, 10, "XL", "XC", "X", "L");
         } else {
-            digit = number;
-            if (digit == 4)
-                numeral = "IV";
-            else if (digit == 9)
-                numeral = "IX";
-            else if (digit < 4)
-                numeral = StringUtils.repeat("I", digit);
-            else
-                numeral = "V" + StringUtils.repeat("I", digit-5);
+            numeral = getPartialNumber(number, 1, "IV", "IX", "I", "V");
         }
         return numeral;
+    }
+
+    private static String getPartialNumber(int number, int div, String fourNum, String nineNum, String oneNum, String fiveNum) {
+        int digit = number / div;
+        if (4 == digit) {
+            return fourNum;
+        } else if (9 == digit) {
+            return nineNum;
+        } else if (digit < 4)
+            return StringUtils.repeat(oneNum, digit);
+        else {
+            return fiveNum + StringUtils.repeat(oneNum, digit-5);
+        }
     }
 
     private static BiMap<Character, Integer> genRomanNumeralToIntegerMap() {
@@ -110,9 +99,5 @@ public class Converter {
         romanToIntegerMap.put('D', 500);
         romanToIntegerMap.put('M', 1000);
         return romanToIntegerMap;
-    }
-
-    private static BiMap<Integer, Character> genIntegerToRomanNumeralMap() {
-        return genRomanNumeralToIntegerMap().inverse();
     }
 }
