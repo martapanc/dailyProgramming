@@ -40,7 +40,14 @@ public class ConverterTest {
 
     @Test
     public void test_convert_integer_to_roman_numeral(){
-        assertEquals("I", Converter.ConvertIntegerToRomanNumeral(345));
-
+        assertEquals("CCCXLV", Converter.ConvertIntegerToRomanNumeral(345));
+        assertEquals("CDXLIV", Converter.ConvertIntegerToRomanNumeral(444));
+        assertEquals("MMMMMMMMMCMXCIX", Converter.ConvertIntegerToRomanNumeral(9999));
+        assertEquals("DCCC", Converter.ConvertIntegerToRomanNumeral(800));
+        assertEquals("CXLIX", Converter.ConvertIntegerToRomanNumeral(149));
+        assertEquals("MCDXCIX", Converter.ConvertIntegerToRomanNumeral(1499));
+        assertEquals("MCDXLIX", Converter.ConvertIntegerToRomanNumeral(1449));
+        assertEquals("MCMXCIV", Converter.ConvertIntegerToRomanNumeral(1994));
+        assertEquals("MMMCMXCVIII", Converter.ConvertIntegerToRomanNumeral(3998));
     }
 }
