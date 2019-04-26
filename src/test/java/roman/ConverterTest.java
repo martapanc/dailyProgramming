@@ -50,4 +50,11 @@ public class ConverterTest {
         assertEquals("MCMXCIV", Converter.ConvertIntegerToRomanNumeral(1994));
         assertEquals("MMMCMXCVIII", Converter.ConvertIntegerToRomanNumeral(3998));
     }
+
+    @Test
+    public void test_converter_2(){
+        for (int i = -1; i<= 1002; i++) {
+            System.out.println(i + " = " + Converter2.toRoman(i));
+        }
+    }
 }
