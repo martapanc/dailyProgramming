@@ -53,7 +53,7 @@ public class ConverterTest {
 
     @Test
     public void test_converter_2(){
-        for (int i = -1; i<= 1002; i++) {
+        for (int i = 0; i<= 1002; i++) {
             System.out.println(i + " = " + Converter2.toRoman(i));
         }
     }
