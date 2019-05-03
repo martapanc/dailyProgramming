@@ -30,6 +30,9 @@ class CalendarTest {
         assertEquals(3, Calendar.howManyLeapYearsBetween(1995, 2005, Calendar.CalendarType.REVISED_JULIAN));
         assertEquals(0, Calendar.howManyLeapYearsBetween(1599, 1604, Calendar.CalendarType.REVISED_JULIAN));
         assertEquals(1, Calendar.howManyLeapYearsBetween(1995, 1999, Calendar.CalendarType.GREGORIAN));
+
+        assertEquals(970, Calendar.howManyLeapYearsBetween(0, 4000, Calendar.CalendarType.GREGORIAN));
+        assertEquals(969, Calendar.howManyLeapYearsBetween(0, 4000, Calendar.CalendarType.REVISED_JULIAN));
     }
 
     @Test
