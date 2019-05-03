@@ -17,6 +17,11 @@ package calendars;
 
 public class Calendar {
 
+    public enum CalendarType {
+        GREGORIAN,
+        REVISED_JULIAN
+    }
+
     static boolean isLeapInGregorianCalendar(long year) {
 
         if (year % 4 != 0) {
@@ -33,5 +38,41 @@ public class Calendar {
         } else if (year % 100 != 0) {
             return true;
         } else return year % 900 == 200 || year % 900 == 600;
+    }
+
+    static long howManyLeapYearsBetween(long year1, long year2, CalendarType calendarType) {
+        long leapYearCount = 0;
+        for (long y = year1; y < year2; y++) {
+            if (calendarType == CalendarType.GREGORIAN) {
+                if (isLeapInGregorianCalendar(y)) {
+                    leapYearCount += 1;
+                }
+            } else {
+                if (isLeapInRevisedJulianCalendar(y)) {
+                    leapYearCount += 1;
+                }
+            }
+        }
+
+        return leapYearCount;
+    }
+
+    /**
+     * Every 900-year period has a fixed number of leap years. An optimised solution requires multiplying years/900
+     * by 218 (number of leap years in [0, 900) ) and compute how many leap years the remainder contains.
+     * */
+    static long howManyLeapYearsBetween_better(long year1, long year2) {
+        long leapYearCount = 0;
+
+        long first_even = ( Math.floorDiv(year1, 900) + 1 ) * 900;
+        long last_even = ( Math.floorDiv(year2, 900) - 1 ) * 900;
+
+        long middle_periods = (last_even - first_even) / 900;
+
+        leapYearCount += middle_periods * 218;
+        leapYearCount += howManyLeapYearsBetween(year1, first_even, CalendarType.REVISED_JULIAN);
+        leapYearCount += howManyLeapYearsBetween(last_even, year2, CalendarType.REVISED_JULIAN);
+
+        return leapYearCount;
     }
 }
