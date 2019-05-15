@@ -2,9 +2,9 @@ package AoC2018.eight;
 
 public class Result {
 
-    public int total;
-    public int score;
-    public int[] data;
+    private int total;
+    private int score;
+    private int[] data;
 
     public Result(int total, int score, int[] data) {
         this.total = total;

@@ -1,12 +1,17 @@
 package AoC2018.eight;
 
-import java.io.*;
-import java.util.*;
-import java.util.stream.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class Eight {
 
-    public static long sumMetadata(String inputFile) {
+    static long sumMetadata(String inputFile) {
 
         int[] input = readInput(inputFile);
 
@@ -18,7 +23,7 @@ public class Eight {
         }
     }
 
-    public static long getRootScore(String inputFile) {
+    static long getRootScore(String inputFile) {
 
         int[] input = readInput(inputFile);
 
@@ -30,7 +35,7 @@ public class Eight {
         }
     }
 
-    public static Result parse(int[] input) {
+    private static Result parse(int[] input) {
         int children = input[0];
         int metas = input[1];
         int[] input2 = Arrays.copyOfRange(input, 2, input.length);
@@ -54,14 +59,14 @@ public class Eight {
             int sc = 0;
             for (int j : currMetas) {
                 if (j > 0 && j <= scores.size()) {
-                    sc += scores.get(j-1);
+                    sc += scores.get(j - 1);
                 }
             }
             return new Result(totals, sc, restOfInput);
         }
     }
 
-    public static int[] readInput(String inputFile) {
+    private static int[] readInput(String inputFile) {
         BufferedReader reader;
         try {
             reader = new BufferedReader(new FileReader(inputFile));
