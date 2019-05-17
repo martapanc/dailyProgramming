@@ -13,18 +13,24 @@ class ThirteenTest {
     private final String input1 = "src/test/java/AoC2018/thirteen/input1";
     private final String input2 = "src/test/java/AoC2018/thirteen/input2";
     private final String input3 = "src/test/java/AoC2018/thirteen/input3";
+    private final String input4 = "src/test/java/AoC2018/thirteen/input4";
 
     private final int ONE_X = 13;
     private final int ONE_Y = 6;
     private final int TWO_XY = 150;
+    private final int FOUR_XY = 7;
 
     @Test
     void readInput() {
         Thirteen.readInput(input1, ONE_X, ONE_Y);
         Thirteen.readInput(input2, TWO_XY, TWO_XY);
+        Thirteen.readInput(input3, ONE_X, ONE_Y);
+        Thirteen.readInput(input4, FOUR_XY, FOUR_XY);
 
         Thirteen.printMatrix(Thirteen.readInput(input1, ONE_X, ONE_Y));
         Thirteen.printMatrix(Thirteen.readInput(input2, TWO_XY, TWO_XY));
+        Thirteen.printMatrix(Thirteen.readInput(input3, ONE_X, ONE_Y));
+        Thirteen.printMatrix(Thirteen.readInput(input4, FOUR_XY, FOUR_XY));
     }
 
     @Test
@@ -53,6 +59,18 @@ class ThirteenTest {
         l2.add(new Point(98, 119));
         l2.add(new Point(36, 135));
         assertEquals(l2, Thirteen.findInitialPositions(input2, TWO_XY, TWO_XY));
+
+        List<Point> l3 = new ArrayList<>();
+        l3.add(new Point(1,0));
+        l3.add(new Point(3,0));
+        l3.add(new Point(3,2));
+        l3.add(new Point(6,3));
+        l3.add(new Point(1,4));
+        l3.add(new Point(3,4));
+        l3.add(new Point(6,5));
+        l3.add(new Point(3,6));
+        l3.add(new Point(5,6));
+        assertEquals(l3, Thirteen.findInitialPositions(input4, FOUR_XY, FOUR_XY));
     }
 
     @Test
@@ -65,6 +83,10 @@ class ThirteenTest {
                 Thirteen.findFirstCollisionPoint(
                         Thirteen.readInput(input3, ONE_X, ONE_Y),
                         Thirteen.findInitialPositions(input3, ONE_X, ONE_Y)));
+        assertEquals(new Point(2,0),
+                Thirteen.findFirstCollisionPoint(
+                        Thirteen.readInput(input4, FOUR_XY, FOUR_XY),
+                        Thirteen.findInitialPositions(input4, FOUR_XY, FOUR_XY)));
     }
 
     @Test
