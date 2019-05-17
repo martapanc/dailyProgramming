@@ -36,11 +36,33 @@ class ThirteenTest {
         List<Point> l2 = new ArrayList<>();
         l2.add(new Point(43, 14));
         l2.add(new Point(47, 16));
+        l2.add(new Point(101, 21));
+        l2.add(new Point(134, 24));
+        l2.add(new Point(50, 34));
+        l2.add(new Point(148, 39));
+        l2.add(new Point(25, 53));
+        l2.add(new Point(117, 62));
+        l2.add(new Point(67, 65));
+        l2.add(new Point(12, 72));
+        l2.add(new Point(98, 95));
+        l2.add(new Point(127, 97));
+        l2.add(new Point(15, 108));
+        l2.add(new Point(54, 113));
+        l2.add(new Point(47, 117));
+        l2.add(new Point(98, 119));
+        l2.add(new Point(36, 135));
         assertEquals(l2, Thirteen.findInitialPositions(input2, TWO_XY, TWO_XY));
     }
 
     @Test
     void moveCursor() {
-        Thirteen.moveCursor(Thirteen.readInput(input1, ONE_X, ONE_Y), Thirteen.findInitialPositions(input1, ONE_X, ONE_Y));
+        assertEquals(new Point(7,3),
+                Thirteen.findFirstCollisionPoint(
+                        Thirteen.readInput(input1, ONE_X, ONE_Y),
+                        Thirteen.findInitialPositions(input1, ONE_X, ONE_Y)));
+        assertEquals(new Point(3,57),
+                Thirteen.findFirstCollisionPoint(
+                        Thirteen.readInput(input2, TWO_XY, TWO_XY),
+                        Thirteen.findInitialPositions(input2, TWO_XY, TWO_XY)));
     }
 }
