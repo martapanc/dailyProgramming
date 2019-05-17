@@ -38,4 +38,9 @@ class ThirteenTest {
         l2.add(new Point(47, 16));
         assertEquals(l2, Thirteen.findInitialPositions(input2, TWO_XY, TWO_XY));
     }
+
+    @Test
+    void moveCursor() {
+        Thirteen.moveCursor(Thirteen.readInput(input1, ONE_X, ONE_Y), Thirteen.findInitialPositions(input1, ONE_X, ONE_Y));
+    }
 }

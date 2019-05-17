@@ -1,5 +1,7 @@
 package AoC2018.thirteen;
 
+import org.testng.internal.thread.DefaultThreadPoolExecutorFactory;
+
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -67,5 +69,82 @@ public class Thirteen {
             System.out.println();
         }
         System.out.println();
+    }
+
+    public static void moveCursor(char[][] matrix, List<Point> points) {
+
+
+//        while (!points.get(0).equals(points.get(1))) {
+//
+//
+//        }
+
+        for (Point p : points) {
+            Cursor c = new Cursor(Direction.valueOf(matrix[p.y][p.x]), p, Turn.LEFT, '-');
+            c.setTrackCellType(( c.direction == Direction.NORTH || c.direction == Direction.SOUTH ? '|' : '-'));
+
+            // Get coordinates of next cell
+            switch (c.direction) {
+                case NORTH:
+                    c.setNextPos(new Point(c.currentPos.x, c.currentPos.y - 1));
+                    break;
+                case SOUTH:
+                    c.setNextPos(new Point(c.currentPos.x, c.currentPos.y + 1));
+                    break;
+                case EAST:
+                    c.setNextPos(new Point(c.currentPos.x + 1, c.currentPos.y));
+                    break;
+                case WEST:
+                    c.setNextPos(new Point(c.currentPos.x - 1, c.currentPos.y));
+                    break;
+            }
+
+            // Get type of next cell
+            char nextCell = matrix[c.nextPos.y][c.nextPos.x];
+
+            Cursor next_c = new Cursor(c.direction, c.nextPos, Turn.LEFT, nextCell);
+
+            if (c.trackCellType == '+') {
+                switch (c.nextTurn) {
+                    case LEFT:
+                        switch (c.direction.getDirChar()) {
+                            case '^':
+                                c.direction = Direction.valueOf('<');
+                                break;
+                            case '>':
+                                c.direction = Direction.valueOf('^');
+                                break;
+                            case 'v':
+                                c.direction = Direction.valueOf('>');
+                                break;
+                            case '<':
+                                c.direction = Direction.valueOf('v');
+                                break;
+                        }
+                        break;
+
+                    case RIGHT:
+                        switch (c.direction.getDirChar()) {
+                            case '^':
+                                c.direction = Direction.valueOf('>');
+                                break;
+                            case '>':
+                                c.direction = Direction.valueOf('v');
+                                break;
+                            case 'v':
+                                c.direction = Direction.valueOf('<');
+                                break;
+                            case '<':
+                                c.direction = Direction.valueOf('^');
+                                break;
+                        }
+                        break;
+                }
+                c.nextTurn = Turn.valueOf((c.nextTurn.getTurnVal() + 1) % 3);
+            }
+
+            System.out.println();
+        }
+
     }
 }
