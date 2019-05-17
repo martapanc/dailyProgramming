@@ -4,8 +4,9 @@ import java.awt.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Thirteen {
 
@@ -66,24 +67,48 @@ public class Thirteen {
 
     public static Point findFirstCollisionPoint(char[][] matrix, List<Point> points) {
 
-        Point p1 = points.get(0);
-        Point p2 = points.get(1);
+        List<Cursor> cursorList = new ArrayList<>();
+        for (Point p : points) {
+            Cursor c1 = new Cursor(Direction.valueOf(matrix[p.y][p.x]), p, Turn.LEFT, '-');
+            c1.setTrackCellType(( c1.direction == Direction.NORTH || c1.direction == Direction.SOUTH ? '|' : '-'));
 
-        Cursor c1 = new Cursor(Direction.valueOf(matrix[p1.y][p1.x]), p1, Turn.LEFT, '-');
-        c1.setTrackCellType(( c1.direction == Direction.NORTH || c1.direction == Direction.SOUTH ? '|' : '-'));
-
-        Cursor c2 = new Cursor(Direction.valueOf(matrix[p2.y][p2.x]), p2, Turn.LEFT, '-');
-        c2.setTrackCellType(( c2.direction == Direction.NORTH || c2.direction == Direction.SOUTH ? '|' : '-'));
-
-        while (!c1.currentPos.equals(c2.currentPos)) {
-            c1 = getNextCursor(c1, matrix);
-            c2 = getNextCursor(c2, matrix);
-
-//            printMatrix(matrix);
+            cursorList.add(c1);
         }
 
-        System.out.println("Cursors collided at (" + c1.currentPos.x + ", " + c1.currentPos.y + ")");
-        return c1.currentPos;
+        while (areAllUnique(cursorList)) {
+            cursorList = cursorList.stream().sorted(Comparator
+                    .comparing((Cursor c) -> c.currentPos.y)
+                    .thenComparing((Cursor c) -> c.currentPos.x)
+            ).collect(Collectors.toList());
+
+            List<Cursor> newCursorList = new ArrayList<>();
+
+            for (Cursor c : cursorList) {
+
+                Cursor newCur = getNextCursor(c, matrix);
+                if (newCur.getTrackCellType() == 'X') {
+                    return newCur.currentPos;
+                }
+                newCursorList.add(newCur);
+                cursorList = newCursorList;
+            }
+        }
+//        Set<Point> allItems = new HashSet<>();
+//        List<Cursor> duplicates = cursorList.stream()
+//                .filter(c -> !allItems.add(c.currentPos))
+//                .collect(Collectors.toList());
+//
+//        return duplicates.get(0).currentPos;
+        return null;
+    }
+
+    public static boolean areAllUnique(List<Cursor> list){
+        Set<Point> set = new HashSet<>();
+        for (Cursor t: list){
+            if (!set.add(t.currentPos))
+                return false;
+        }
+        return true;
     }
 
     public static Cursor getNextCursor(Cursor c, char[][] matrix) {
@@ -181,6 +206,10 @@ public class Thirteen {
 
         // Get type of next cell
         char nextCell = matrix[c.nextPos.y][c.nextPos.x];
+
+        if (nextCell == '>' || nextCell == 'v' || nextCell == '<' || nextCell == '^') {
+            return new Cursor(c.direction, c.nextPos, nextTurn, 'X');
+        }
 
         matrix[c.currentPos.y][c.currentPos.x] = c.trackCellType;
         matrix[c.nextPos.y][c.nextPos.x] = c.direction.getDirChar();

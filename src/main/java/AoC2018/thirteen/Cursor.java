@@ -19,40 +19,12 @@ public class Cursor {
         this.trackCellType = trackCellType;
     }
 
-    public Direction getDirection() {
-        return direction;
-    }
-
-    public void setDirection(Direction direction) {
-        this.direction = direction;
-    }
-
-    public Point getCurrentPos() {
-        return currentPos;
-    }
-
-    public void setCurrentPos(Point currentPos) {
-        this.currentPos = currentPos;
-    }
-
-    public Turn getNextTurn() {
-        return nextTurn;
-    }
-
-    public void setNextTurn(Turn nextTurn) {
-        this.nextTurn = nextTurn;
-    }
-
     public char getTrackCellType() {
         return trackCellType;
     }
 
     public void setTrackCellType(char trackCellType) {
         this.trackCellType = trackCellType;
-    }
-
-    public Point getNextPos() {
-        return nextPos;
     }
 
     public void setNextPos(Point nextPos) {

@@ -12,6 +12,7 @@ class ThirteenTest {
 
     private final String input1 = "src/test/java/AoC2018/thirteen/input1";
     private final String input2 = "src/test/java/AoC2018/thirteen/input2";
+    private final String input3 = "src/test/java/AoC2018/thirteen/input3";
 
     private final int ONE_X = 13;
     private final int ONE_Y = 6;
@@ -55,14 +56,35 @@ class ThirteenTest {
     }
 
     @Test
-    void moveCursor() {
+    void findFirstCollision() {
         assertEquals(new Point(7,3),
                 Thirteen.findFirstCollisionPoint(
                         Thirteen.readInput(input1, ONE_X, ONE_Y),
                         Thirteen.findInitialPositions(input1, ONE_X, ONE_Y)));
-        assertEquals(new Point(3,57),
+        assertEquals(new Point(11,4),
+                Thirteen.findFirstCollisionPoint(
+                        Thirteen.readInput(input3, ONE_X, ONE_Y),
+                        Thirteen.findInitialPositions(input3, ONE_X, ONE_Y)));
+    }
+
+    @Test
+    void findFirstCollision2() {
+        assertEquals(new Point(41,17),
                 Thirteen.findFirstCollisionPoint(
                         Thirteen.readInput(input2, TWO_XY, TWO_XY),
                         Thirteen.findInitialPositions(input2, TWO_XY, TWO_XY)));
+    }
+
+    @Test
+    void areAllUnique() {
+        List<Cursor> cursorList = new ArrayList<>();
+        cursorList.add(new Cursor(Direction.NORTH, new Point(1,2), Turn.LEFT, '-'));
+        cursorList.add(new Cursor(Direction.NORTH, new Point(2,3), Turn.LEFT, '-'));
+        assertTrue(Thirteen.areAllUnique(cursorList));
+
+        List<Cursor> cursorList2 = new ArrayList<>();
+        cursorList2.add(new Cursor(Direction.NORTH, new Point(2,3), Turn.LEFT, '-'));
+        cursorList2.add(new Cursor(Direction.WEST, new Point(2,3), Turn.STRAIGHT, '-'));
+        assertFalse(Thirteen.areAllUnique(cursorList2));
     }
 }
