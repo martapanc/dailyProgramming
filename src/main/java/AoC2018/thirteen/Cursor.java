@@ -6,28 +6,28 @@ import java.util.Map;
 
 public class Cursor {
 
-    public Direction direction;
-    public Point currentPos;
-    public Turn nextTurn;
-    public char trackCellType;
-    public Point nextPos;
+    Direction direction;
+    Point currentPos;
+    Turn nextTurn;
+    char trackCellType;
+    Point nextPos;
 
-    public Cursor(Direction direction, Point currentPos, Turn nextTurn, char trackCellType) {
+    Cursor(Direction direction, Point currentPos, Turn nextTurn, char trackCellType) {
         this.direction = direction;
         this.currentPos = currentPos;
         this.nextTurn = nextTurn;
         this.trackCellType = trackCellType;
     }
 
-    public void setTrackCellType(char trackCellType) {
+    void setTrackCellType(char trackCellType) {
         this.trackCellType = trackCellType;
     }
 
-    public void setNextPos(Point nextPos) {
+    void setNextPos(Point nextPos) {
         this.nextPos = nextPos;
     }
 
-    public Point getCurrentPos() {
+    Point getCurrentPos() {
         return currentPos;
     }
 }
@@ -77,5 +77,4 @@ enum Direction {
     public static Direction valueOf(char direction) {
         return (Direction) map.get(direction);
     }
-
 }

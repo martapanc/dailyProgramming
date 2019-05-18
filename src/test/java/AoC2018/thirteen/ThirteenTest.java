@@ -62,29 +62,29 @@ class ThirteenTest {
         assertEquals(l2, Thirteen.findInitialPositions(input2, TWO_XY, TWO_XY));
 
         List<Point> l3 = new ArrayList<>();
-        l3.add(new Point(1,0));
-        l3.add(new Point(3,0));
-        l3.add(new Point(3,2));
-        l3.add(new Point(6,3));
-        l3.add(new Point(1,4));
-        l3.add(new Point(3,4));
-        l3.add(new Point(6,5));
-        l3.add(new Point(3,6));
-        l3.add(new Point(5,6));
+        l3.add(new Point(1, 0));
+        l3.add(new Point(3, 0));
+        l3.add(new Point(3, 2));
+        l3.add(new Point(6, 3));
+        l3.add(new Point(1, 4));
+        l3.add(new Point(3, 4));
+        l3.add(new Point(6, 5));
+        l3.add(new Point(3, 6));
+        l3.add(new Point(5, 6));
         assertEquals(l3, Thirteen.findInitialPositions(input4, FOUR_XY, FOUR_XY));
     }
 
     @Test
     void findFirstCollision() {
-        assertEquals(new Point(7,3),
+        assertEquals(new Point(7, 3),
                 Thirteen.findFirstCollisionPoint(
                         Thirteen.readInput(input1, ONE_X, ONE_Y),
                         Thirteen.findInitialPositions(input1, ONE_X, ONE_Y)));
-        assertEquals(new Point(11,4),
+        assertEquals(new Point(11, 4),
                 Thirteen.findFirstCollisionPoint(
                         Thirteen.readInput(input3, ONE_X, ONE_Y),
                         Thirteen.findInitialPositions(input3, ONE_X, ONE_Y)));
-        assertEquals(new Point(2,0),
+        assertEquals(new Point(2, 0),
                 Thirteen.findFirstCollisionPoint(
                         Thirteen.readInput(input4, FOUR_XY, FOUR_XY),
                         Thirteen.findInitialPositions(input4, FOUR_XY, FOUR_XY)));
@@ -92,7 +92,7 @@ class ThirteenTest {
 
     @Test
     void findFirstCollision2() {
-        assertEquals(new Point(41,17),
+        assertEquals(new Point(41, 17),
                 Thirteen.findFirstCollisionPoint(
                         Thirteen.readInput(input2, TWO_XY, TWO_XY),
                         Thirteen.findInitialPositions(input2, TWO_XY, TWO_XY)));
@@ -100,19 +100,19 @@ class ThirteenTest {
 
     @Test
     void test_findLastRemainingCursor() {
-        assertEquals(new Point(134,117),
+        assertEquals(new Point(134, 117),
                 Thirteen.findLastRemainingCursor(
                         Thirteen.readInput(input2, TWO_XY, TWO_XY),
                         Thirteen.findInitialPositions(input2, TWO_XY, TWO_XY)));
-        assertEquals(new Point(6,5),
+        assertEquals(new Point(6, 5),
                 Thirteen.findLastRemainingCursor(
                         Thirteen.readInput(input5, 30, 10),
                         Thirteen.findInitialPositions(input5, 30, 10)));
-        assertEquals(new Point(6,4),
+        assertEquals(new Point(6, 4),
                 Thirteen.findLastRemainingCursor(
                         Thirteen.readInput(input4, FOUR_XY, FOUR_XY),
                         Thirteen.findInitialPositions(input4, FOUR_XY, FOUR_XY)));
-        assertEquals(new Point(4,1),
+        assertEquals(new Point(4, 1),
                 Thirteen.findLastRemainingCursor(
                         Thirteen.readInput(input3, ONE_X, ONE_Y),
                         Thirteen.findInitialPositions(input3, ONE_X, ONE_Y)));
@@ -121,13 +121,13 @@ class ThirteenTest {
     @Test
     void areAllUnique() {
         List<Cursor> cursorList = new ArrayList<>();
-        cursorList.add(new Cursor(Direction.NORTH, new Point(1,2), Turn.LEFT, '-'));
-        cursorList.add(new Cursor(Direction.NORTH, new Point(2,3), Turn.LEFT, '-'));
+        cursorList.add(new Cursor(Direction.NORTH, new Point(1, 2), Turn.LEFT, '-'));
+        cursorList.add(new Cursor(Direction.NORTH, new Point(2, 3), Turn.LEFT, '-'));
         assertTrue(Thirteen.areAllUnique(cursorList));
 
         List<Cursor> cursorList2 = new ArrayList<>();
-        cursorList2.add(new Cursor(Direction.NORTH, new Point(2,3), Turn.LEFT, '-'));
-        cursorList2.add(new Cursor(Direction.WEST, new Point(2,3), Turn.STRAIGHT, '-'));
+        cursorList2.add(new Cursor(Direction.NORTH, new Point(2, 3), Turn.LEFT, '-'));
+        cursorList2.add(new Cursor(Direction.WEST, new Point(2, 3), Turn.STRAIGHT, '-'));
         assertFalse(Thirteen.areAllUnique(cursorList2));
     }
 }
