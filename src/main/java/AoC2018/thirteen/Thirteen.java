@@ -82,23 +82,24 @@ public class Thirteen {
             ).collect(Collectors.toList());
 
             List<Cursor> newCursorList = new ArrayList<>();
+            cursorList.forEach(c -> newCursorList.add(c));
 
             for (Cursor c : cursorList) {
 
                 Cursor newCur = getNextCursor(c, matrix);
-                if (newCur.getTrackCellType() == 'X') {
-                    return newCur.currentPos;
+                if (newCur.nextTurn == null) {
+
+                    Cursor nextC = newCursorList.stream()
+                            .filter(k -> k.currentPos.equals(newCur.nextPos))
+                            .collect(Collectors.toList()).get(0);
+                    matrix[nextC.currentPos.y][nextC.currentPos.x] = nextC.trackCellType;
+                    return newCur.nextPos;
                 }
+                newCursorList.remove(c);
                 newCursorList.add(newCur);
-                cursorList = newCursorList;
             }
+            cursorList = newCursorList;
         }
-//        Set<Point> allItems = new HashSet<>();
-//        List<Cursor> duplicates = cursorList.stream()
-//                .filter(c -> !allItems.add(c.currentPos))
-//                .collect(Collectors.toList());
-//
-//        return duplicates.get(0).currentPos;
         return null;
     }
 
@@ -208,7 +209,10 @@ public class Thirteen {
         char nextCell = matrix[c.nextPos.y][c.nextPos.x];
 
         if (nextCell == '>' || nextCell == 'v' || nextCell == '<' || nextCell == '^') {
-            return new Cursor(c.direction, c.nextPos, nextTurn, 'X');
+            matrix[c.currentPos.y][c.currentPos.x] = c.trackCellType;
+            Cursor currC = new Cursor(c.direction, c.currentPos, null, c.trackCellType);
+            currC.setNextPos(c.nextPos);
+            return currC;
         }
 
         matrix[c.currentPos.y][c.currentPos.x] = c.trackCellType;
