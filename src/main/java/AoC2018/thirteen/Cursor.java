@@ -19,16 +19,16 @@ public class Cursor {
         this.trackCellType = trackCellType;
     }
 
-    public char getTrackCellType() {
-        return trackCellType;
-    }
-
     public void setTrackCellType(char trackCellType) {
         this.trackCellType = trackCellType;
     }
 
     public void setNextPos(Point nextPos) {
         this.nextPos = nextPos;
+    }
+
+    public Point getCurrentPos() {
+        return currentPos;
     }
 }
 

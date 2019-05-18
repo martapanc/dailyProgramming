@@ -14,6 +14,7 @@ class ThirteenTest {
     private final String input2 = "src/test/java/AoC2018/thirteen/input2";
     private final String input3 = "src/test/java/AoC2018/thirteen/input3";
     private final String input4 = "src/test/java/AoC2018/thirteen/input4";
+    private final String input5 = "src/test/java/AoC2018/thirteen/input5";
 
     private final int ONE_X = 13;
     private final int ONE_Y = 6;
@@ -95,6 +96,26 @@ class ThirteenTest {
                 Thirteen.findFirstCollisionPoint(
                         Thirteen.readInput(input2, TWO_XY, TWO_XY),
                         Thirteen.findInitialPositions(input2, TWO_XY, TWO_XY)));
+    }
+
+    @Test
+    void test_findLastRemainingCursor() {
+        assertEquals(new Point(134,117),
+                Thirteen.findLastRemainingCursor(
+                        Thirteen.readInput(input2, TWO_XY, TWO_XY),
+                        Thirteen.findInitialPositions(input2, TWO_XY, TWO_XY)));
+        assertEquals(new Point(6,5),
+                Thirteen.findLastRemainingCursor(
+                        Thirteen.readInput(input5, 30, 10),
+                        Thirteen.findInitialPositions(input5, 30, 10)));
+        assertEquals(new Point(6,4),
+                Thirteen.findLastRemainingCursor(
+                        Thirteen.readInput(input4, FOUR_XY, FOUR_XY),
+                        Thirteen.findInitialPositions(input4, FOUR_XY, FOUR_XY)));
+        assertEquals(new Point(4,1),
+                Thirteen.findLastRemainingCursor(
+                        Thirteen.readInput(input3, ONE_X, ONE_Y),
+                        Thirteen.findInitialPositions(input3, ONE_X, ONE_Y)));
     }
 
     @Test

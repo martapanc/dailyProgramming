@@ -81,8 +81,7 @@ public class Thirteen {
                     .thenComparing((Cursor c) -> c.currentPos.x)
             ).collect(Collectors.toList());
 
-            List<Cursor> newCursorList = new ArrayList<>();
-            cursorList.forEach(c -> newCursorList.add(c));
+            List<Cursor> newCursorList = new ArrayList<>(cursorList);
 
             for (Cursor c : cursorList) {
 
@@ -101,6 +100,62 @@ public class Thirteen {
             cursorList = newCursorList;
         }
         return null;
+    }
+
+    public static Point findLastRemainingCursor(char[][] matrix, List<Point> points) {
+        List<Cursor> cursorList = new ArrayList<>();
+        for (Point p : points) {
+            Cursor c1 = new Cursor(Direction.valueOf(matrix[p.y][p.x]), p, Turn.LEFT, '-');
+            c1.setTrackCellType(( c1.direction == Direction.NORTH || c1.direction == Direction.SOUTH ? '|' : '-'));
+
+            cursorList.add(c1);
+        }
+
+        while (cursorList.size() > 1) {
+            cursorList = cursorList.stream().sorted(Comparator
+                    .comparing((Cursor c) -> c.currentPos.y)
+                    .thenComparing((Cursor c) -> c.currentPos.x)
+            ).collect(Collectors.toList());
+
+            List<Cursor> newCursorList = new ArrayList<>(cursorList);
+            List<Cursor> collidingCursors = new ArrayList<>();
+
+            for (Cursor c : cursorList) {
+                if (collidingCursors.stream().anyMatch(c::equals)) {
+                    continue;
+                }
+
+                Cursor newCur = getNextCursor(c, matrix);
+
+                if (newCur.nextTurn == null) {
+                    Cursor nextC = newCursorList.stream()
+                            .filter(k -> k.currentPos.equals(newCur.nextPos))
+                            .collect(Collectors.toList()).get(0);
+                    matrix[nextC.currentPos.y][nextC.currentPos.x] = nextC.trackCellType;
+
+                    collidingCursors.add(nextC);
+                    collidingCursors.add(c);
+                } else {
+                    newCursorList.remove(c);
+                    newCursorList.add(newCur);
+                }
+            }
+            cursorList = newCursorList;
+
+            List<Cursor> list = new ArrayList<>();
+            for (Cursor cc : cursorList) {
+                if (collidingCursors.stream().map(Cursor::getCurrentPos).anyMatch(c -> c.equals(cc.currentPos))) {
+                    list.add(cc);
+                }
+            }
+
+            for (Cursor c : list) {
+                matrix[c.currentPos.y][c.currentPos.x] = c.trackCellType;
+            }
+            cursorList.removeAll(list);
+
+        }
+        return cursorList.get(0).currentPos;
     }
 
     public static boolean areAllUnique(List<Cursor> list){
