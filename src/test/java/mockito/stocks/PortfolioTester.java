@@ -1,4 +1,4 @@
-package mockito;
+package mockito.stocks;
 
 import mockito.stocks.Portfolio;
 import mockito.stocks.Stock;
