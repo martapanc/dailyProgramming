@@ -46,7 +46,11 @@ public class MockitoAnnotationTest {
         Mockito.verify(mockedList).add("one");
         assertEquals(0, mockedList.size());
 
+        // Both of the following work
+
+//        Mockito.doReturn(100).when(mockedList).size();
         Mockito.when(mockedList.size()).thenReturn(100);
+
         assertEquals(100, mockedList.size());
     }
 
@@ -65,7 +69,10 @@ public class MockitoAnnotationTest {
 
         assertEquals(2, spyList.size());
 
-        Mockito.doReturn(100).when(spyList).size();
+        // Both of the following work
+
+//        Mockito.doReturn(100).when(spyList).size();
+        Mockito.when(spyList.size()).thenReturn(100);
         assertEquals(100, spyList.size());
     }
 
@@ -132,4 +139,15 @@ public class MockitoAnnotationTest {
 
         assertEquals("aMeaning", dic.getMeaning("aWord"));
     }
+
+    /*
+    * doReturn() ... when()  VS  when() ... thenReturn()
+    * The two syntaxes for stubbing are roughly equivalent. However, you can always use doReturn/when for stubbing;
+    * but there are cases where you can't use when/thenReturn. Stubbing void methods is one such.
+    * Others include use with Mockito spies, and stubbing the same method more than once.
+    *
+    * One thing that when/thenReturn gives you, that doReturn/when doesn't, is type-checking of the value that
+    * you're returning, at compile time. However, I believe this is of almost no value - if you've got the type wrong,
+    * you'll find out as soon as you run your test.
+    * */
 }
