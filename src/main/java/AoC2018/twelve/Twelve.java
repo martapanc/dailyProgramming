@@ -3,11 +3,10 @@ package AoC2018.twelve;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class Twelve {
 
@@ -49,6 +48,27 @@ public class Twelve {
         }
 
         return ruleMap;
+    }
+
+    public static long findPotsWithPlants(String inputFile, String inputFileRules, long gens) {
+        long sum = 0;
+
+        char[] input = read_input(inputFile);
+        Map<String, String> rules = read_input_rules(inputFileRules);
+
+        // List starting from input. Add . at the beginning if #, and count how many are added -> then shift
+
+        List<Character> list = new ArrayList<>();
+        int shifts = 0;
+        for (char c : input) {
+            list.add(c);
+        }
+
+        return sum;
+    }
+
+    public void addDotsIfNeeded(List list, int shifts) {
+
     }
 
     public static long findPotsWithPlantsAfterGenerations(String inputFile, String inputFileRules, long gens) {

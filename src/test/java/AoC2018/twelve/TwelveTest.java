@@ -29,6 +29,6 @@ class TwelveTest {
     void doThings() {
         assertEquals(325, Twelve.findPotsWithPlantsAfterGenerations(INPUT2, INPUT2_RULES, 20));
         assertEquals(3337, Twelve.findPotsWithPlantsAfterGenerations(INPUT1, INPUT1_RULES, 20));
-        assertEquals(3337, Twelve.findPotsWithPlantsAfterGenerations(INPUT1, INPUT1_RULES, 500000));
+        assertEquals(3337, Twelve.findPotsWithPlantsAfterGenerations(INPUT1, INPUT1_RULES, 500));
     }
 }
