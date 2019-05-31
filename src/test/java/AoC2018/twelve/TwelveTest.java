@@ -29,6 +29,16 @@ class TwelveTest {
     void doThings() {
         assertEquals(325, Twelve.findPotsWithPlantsAfterGenerations(INPUT2, INPUT2_RULES, 20));
         assertEquals(3337, Twelve.findPotsWithPlantsAfterGenerations(INPUT1, INPUT1_RULES, 20));
-        assertEquals(3337, Twelve.findPotsWithPlantsAfterGenerations(INPUT1, INPUT1_RULES, 500));
+//        assertEquals(3337, Twelve.findPotsWithPlantsAfterGenerations(INPUT2, INPUT2_RULES, 1000));
+    }
+
+    @Test
+    void test_findPotsWithPlants() {
+        assertEquals(325, Twelve.findPotsWithPlantsAfterGenerations_2(INPUT2, INPUT2_RULES, 20));
+
+        assertEquals(1374, Twelve.findPotsWithPlantsAfterGenerations_2(INPUT2, INPUT2_RULES, 100));
+        assertEquals(3374, Twelve.findPotsWithPlantsAfterGenerations_2(INPUT2, INPUT2_RULES, 200));
+        assertEquals(5374, Twelve.findPotsWithPlantsAfterGenerations_2(INPUT2, INPUT2_RULES, 300));
+//        assertEquals(3374, Twelve.findPotsWithPlantsAfterGenerations(INPUT2, INPUT2_RULES, 200));
     }
 }
