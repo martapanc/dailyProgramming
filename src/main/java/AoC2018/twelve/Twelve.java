@@ -11,25 +11,21 @@ public class Twelve {
     static char[] read_input(String inputFile) {
 
         char[] chars = null;
-
         BufferedReader reader;
         try {
             reader = new BufferedReader(new FileReader(inputFile));
             String line = reader.readLine();
             chars = line.toCharArray();
             reader.close();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return chars;
     }
 
     static Map<String, String> read_input_rules(String inputRulesFile) {
 
         Map<String, String> ruleMap = new HashMap<>();
-
         BufferedReader reader;
         try {
             reader = new BufferedReader(new FileReader(inputRulesFile));
@@ -40,166 +36,25 @@ public class Twelve {
                 line = reader.readLine();
             }
             reader.close();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return ruleMap;
     }
 
-    static Map<String, Character> read_input_rules_2(String inputRulesFile) {
+    public static long findPotsWithPlantsAfterGenerations(String inputFile, String inputFileRules, long targetGens) {
 
-        Map<String, Character> ruleMap = new HashMap<>();
+        final int limitForPerformance = 300;
 
-        BufferedReader reader;
-        try {
-            reader = new BufferedReader(new FileReader(inputRulesFile));
-            String line = reader.readLine();
-            while (line != null) {
-                String[] rule = line.split(" => ");
-                ruleMap.put(rule[0], rule[1].charAt(0));
-                line = reader.readLine();
-            }
-            reader.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return ruleMap;
-    }
-
-    public static long findPotsWithPlants(String inputFile, String inputFileRules, long targetGens) {
-        long sum = 0;
-
-        char[] input = read_input(inputFile);
-        Map<String, Character> rules = read_input_rules_2(inputFileRules);
-
-        // List starting from input. Add . at the beginning if #, and count how many are added -> then shift
-
-        List<Character> plantList = new ArrayList<>();
-        int shifts = 0;
-        for (char c : input) {
-            plantList.add(c);
-        }
-
-        int generations = 0;
-        while (generations < targetGens) {
-
-            shifts += addDotsIfNeeded(plantList);
-            List<Character> newGen = new ArrayList<>(plantList);
-
-            for (int i = 2; i < plantList.size() - 2; i++) {
-                String pattern = getNeighborsOfPlant(plantList, i);
-                newGen.remove(i);
-                newGen.add(i, rules.getOrDefault(pattern, '.'));
-            }
-
-            plantList = newGen;
-
-            generations += 1;
-
-            System.out.println(plantList);
-        }
-
-
-        return sum;
-    }
-
-    public static String getNeighborsOfPlant(List<Character> list, int index) {
-
-        return "" + list.get(index - 2) + list.get(index - 1) + list.get(index) + list.get(index + 1) + list.get(index + 2);
-    }
-
-    private static int addDotsIfNeeded(List<Character> list) {
-
-        if (list.get(list.size() - 1) == '#') {
-            list.add(list.size(), '.');
-            list.add(list.size(), '.');
-            list.add(list.size(), '.');
-        }
-
-        if (list.get(list.size() - 2) == '#' && list.get(list.size() - 1) == '.') {
-            list.add(list.size(), '.');
-            list.add(list.size(), '.');
-        }
-        if (list.get(list.size() - 3) == '#' && list.get(list.size() - 2) == '.' && list.get(list.size() - 1) == '.') {
-            list.add(list.size(), '.');
-        }
-
-        if (list.get(0) == '#') {
-            list.add(0, '.');
-            list.add(0, '.');
-            return 2;
-        }
-        if (list.get(0) == '.' && list.get(1) == '#') {
-            list.add(0, '.');
-            return 1;
-        }
-        return 0;
-    }
-
-    public static long findPotsWithPlantsAfterGenerations(String inputFile, String inputFileRules, long gens) {
         char[] input = read_input(inputFile);
         Map<String, String> rules = read_input_rules(inputFileRules);
 
         PlantArray plants = new PlantArray(input);
-
-        plants.printAsAString();
-
-        PlantArray newGen = null;
-
-        int generations = 0;
-        while (generations < gens) {
-
-            newGen = new PlantArray(plants);
-            for (int i = 2; i < plants.size() - 2; i++) {
-                String pattern = plants.getNeighborsOfPlant(i);
-                if (rules.containsKey(pattern)) {
-                    newGen.setPlantAt(i, rules.get(pattern).charAt(0));
-                }
-            }
-
-            newGen.printAsAString();
-
-            plants = new PlantArray(newGen.getArray());
-            generations += 1;
-        }
-
-        List<Character> result = new ArrayList<>();
-
-
-        for (long i = gens*2; i < newGen.size() - gens; i++) {
-            result.add(newGen.getChar((int) i));
-        }
-
-        long sum = IntStream.range(0, result.size()).filter(i -> result.get(i) == '#').sum();
-
-        for (long i = (gens*2 -1); i > 0; i--) {
-            if (newGen.getArray()[(int) i] == '#') {
-                sum -= gens*2 - i;
-            }
-        }
-        return sum;
-    }
-
-    public static long findPotsWithPlantsAfterGenerations_2(String inputFile, String inputFileRules, long targetGens) {
-        char[] input = read_input(inputFile);
-        Map<String, String> rules = read_input_rules(inputFileRules);
-
-        PlantArray plants = new PlantArray(input);
-
-        plants.printAsAString();
-
         PlantArray newGen = null;
 
         int totShifts = plants.getShift();
         int generations = 0;
-
-        long loopLimit = (targetGens < 500 ? targetGens : 500);
-
-        PlantArray penultimateGen = null;
+        long loopLimit = (targetGens < limitForPerformance ? targetGens : limitForPerformance);
 
         while (generations < loopLimit) {
 
@@ -210,41 +65,36 @@ public class Twelve {
                     newGen.setPlantAt(i, rules.get(pattern).charAt(0));
                 }
             }
-
-            newGen.printAsAString();
-
+//            newGen.printAsAString();
             plants = new PlantArray(newGen.getArray());
             totShifts += plants.getShift();
             generations += 1;
-
-            if (generations == loopLimit - 1) {
-                penultimateGen = newGen;
-            }
         }
+
+        long currSum = calcSumOfGen(Objects.requireNonNull(newGen), totShifts);
+        long penSum = calcSumOfGen(newGen, totShifts+1);
+
+        if (loopLimit == targetGens) {
+            return currSum;
+        }
+        return currSum + (targetGens - limitForPerformance) * (currSum - penSum);
+    }
+
+    public static long calcSumOfGen(PlantArray gen, int shifts) {
 
         List<Character> result = new ArrayList<>();
 
-        for (long i = totShifts; i < newGen.size(); i++) {
-            result.add(newGen.getChar((int) i));
+        for (long i = shifts; i < gen.size(); i++) {
+            result.add(gen.getChar((int) i));
         }
 
         long sum = IntStream.range(0, result.size()).filter(i -> result.get(i) == '#').sum();
 
-        for (long i = totShifts; i > 0; i--) {
-            if (newGen.getArray()[(int) i] == '#') {
-                sum -= totShifts - i;
+        for (long i = shifts; i > 0; i--) {
+            if (gen.getArray()[(int) i] == '#') {
+                sum -= shifts - i;
             }
         }
-
-//        if (loopLimit == targetGens) {
         return sum;
-//        } else {
-//
-//            return sum + (targetGens - 500);
-//        }
     }
-
-//    public long calcSumOfGen(List<Character> gen, int shifts) {
-//
-//    }
 }

@@ -6,7 +6,6 @@ import java.util.stream.IntStream;
 public class PlantArray {
 
     private char[] plantArray;
-    private int minNegativeIndex = -2;
 
     private int shift = 0;
 
@@ -18,17 +17,11 @@ public class PlantArray {
         if (array[0] == '#') {
             emptyPotsAtTheBeginning = 3;
         }
-        if (array[0] == '.' && array[1] == '#') {
-            emptyPotsAtTheBeginning = 2;
-        }
         if (array[0] == '.' && array[1] == '.' && array[2] == '#') {
             emptyPotsAtTheBeginning = 1;
         }
         if (array[array.length -1] == '#') {
             emptyPotsAtTheEnd = 3;
-        }
-        if (array[array.length -2] == '#' && array[array.length -1] == '.') {
-            emptyPotsAtTheEnd = 2;
         }
         if (array[array.length -3] == '#' &&array[array.length -2] == '.' && array[array.length -1] == '.') {
             emptyPotsAtTheEnd = 1;
@@ -42,7 +35,7 @@ public class PlantArray {
             this.plantArray[plantArray.length - e] = '.';
         }
         this.shift = emptyPotsAtTheBeginning;
-//        IntStream.of(0, 1, this.plantArray.length - 2, this.plantArray.length - 1).forEach(i -> this.plantArray[i] = '.');
+        IntStream.of(0, 1, this.plantArray.length - 2, this.plantArray.length - 1).forEach(i -> this.plantArray[i] = '.');
         System.arraycopy(array, 0, this.plantArray, emptyPotsAtTheBeginning, array.length);
     }
 
@@ -66,14 +59,6 @@ public class PlantArray {
             neighbors += plantArray[i];
         }
         return neighbors;
-    }
-
-    public int getMinNegativeIndex() {
-        return minNegativeIndex;
-    }
-
-    public void setMinNegativeIndex(int minNegativeIndex) {
-        this.minNegativeIndex = minNegativeIndex;
     }
 
     public int size() {
