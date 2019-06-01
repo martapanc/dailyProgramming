@@ -27,8 +27,8 @@ class TwelveTest {
 
     @Test
     void doThings() {
-        assertEquals(325, Twelve.findPotsWithPlantsAfterGenerations(INPUT2, INPUT2_RULES, 20));
-        assertEquals(3337, Twelve.findPotsWithPlantsAfterGenerations(INPUT1, INPUT1_RULES, 20));
+        assertEquals(325, Twelve.findPotsWithPlantsAfterGenerations_2(INPUT2, INPUT2_RULES, 20));
+        assertEquals(3337, Twelve.findPotsWithPlantsAfterGenerations_2(INPUT1, INPUT1_RULES, 20));
 //        assertEquals(3337, Twelve.findPotsWithPlantsAfterGenerations(INPUT2, INPUT2_RULES, 1000));
     }
 
@@ -37,8 +37,26 @@ class TwelveTest {
         assertEquals(325, Twelve.findPotsWithPlantsAfterGenerations_2(INPUT2, INPUT2_RULES, 20));
 
         assertEquals(1374, Twelve.findPotsWithPlantsAfterGenerations_2(INPUT2, INPUT2_RULES, 100));
+        assertEquals(2374, Twelve.findPotsWithPlantsAfterGenerations_2(INPUT2, INPUT2_RULES, 150));
         assertEquals(3374, Twelve.findPotsWithPlantsAfterGenerations_2(INPUT2, INPUT2_RULES, 200));
         assertEquals(5374, Twelve.findPotsWithPlantsAfterGenerations_2(INPUT2, INPUT2_RULES, 300));
-//        assertEquals(3374, Twelve.findPotsWithPlantsAfterGenerations(INPUT2, INPUT2_RULES, 200));
+        assertEquals(9374, Twelve.findPotsWithPlantsAfterGenerations_2(INPUT2, INPUT2_RULES, 500));
+//        assertEquals(19374, Twelve.findPotsWithPlantsAfterGenerations_2(INPUT2, INPUT2_RULES, 1000));
+//        assertEquals(99374, Twelve.findPotsWithPlantsAfterGenerations_2(INPUT2, INPUT2_RULES, 5000));
+//        assertEquals(999374, Twelve.findPotsWithPlantsAfterGenerations_2(INPUT2, INPUT2_RULES, 50000));
+
+        assertEquals(3337, Twelve.findPotsWithPlantsAfterGenerations_2(INPUT1, INPUT1_RULES, 20));
+
+        assertEquals(8749, Twelve.findPotsWithPlantsAfterGenerations_2(INPUT1, INPUT1_RULES, 100));
+        assertEquals(13249, Twelve.findPotsWithPlantsAfterGenerations_2(INPUT1, INPUT1_RULES, 150));
+        assertEquals(17549, Twelve.findPotsWithPlantsAfterGenerations_2(INPUT1, INPUT1_RULES, 200));
+        assertEquals(17635, Twelve.findPotsWithPlantsAfterGenerations_2(INPUT1, INPUT1_RULES, 201));
+        assertEquals(17721, Twelve.findPotsWithPlantsAfterGenerations_2(INPUT1, INPUT1_RULES, 202));
+        assertEquals(17807, Twelve.findPotsWithPlantsAfterGenerations_2(INPUT1, INPUT1_RULES, 203));
+        assertEquals(26149, Twelve.findPotsWithPlantsAfterGenerations_2(INPUT1, INPUT1_RULES, 300));
+        assertEquals(43349, Twelve.findPotsWithPlantsAfterGenerations_2(INPUT1, INPUT1_RULES, 500));
+//        assertEquals(77749, Twelve.findPotsWithPlantsAfterGenerations_2(INPUT1, INPUT1_RULES, 900));
+//        assertEquals(86349, Twelve.findPotsWithPlantsAfterGenerations_2(INPUT1, INPUT1_RULES, 1000));
+//        assertEquals(430349, Twelve.findPotsWithPlantsAfterGenerations_2(INPUT1, INPUT1_RULES, 5000));
     }
 }

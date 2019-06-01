@@ -184,7 +184,7 @@ public class Twelve {
         return sum;
     }
 
-    public static long findPotsWithPlantsAfterGenerations_2(String inputFile, String inputFileRules, long gens) {
+    public static long findPotsWithPlantsAfterGenerations_2(String inputFile, String inputFileRules, long targetGens) {
         char[] input = read_input(inputFile);
         Map<String, String> rules = read_input_rules(inputFileRules);
 
@@ -194,8 +194,14 @@ public class Twelve {
 
         PlantArray newGen = null;
 
+        int totShifts = plants.getShift();
         int generations = 0;
-        while (generations < gens) {
+
+        long loopLimit = (targetGens < 500 ? targetGens : 500);
+
+        PlantArray penultimateGen = null;
+
+        while (generations < loopLimit) {
 
             newGen = new PlantArray(plants);
             for (int i = 2; i < plants.size() - 2; i++) {
@@ -208,23 +214,37 @@ public class Twelve {
             newGen.printAsAString();
 
             plants = new PlantArray(newGen.getArray());
+            totShifts += plants.getShift();
             generations += 1;
+
+            if (generations == loopLimit - 1) {
+                penultimateGen = newGen;
+            }
         }
 
         List<Character> result = new ArrayList<>();
 
-
-        for (long i = gens*2; i < newGen.size() - gens; i++) {
+        for (long i = totShifts; i < newGen.size(); i++) {
             result.add(newGen.getChar((int) i));
         }
 
         long sum = IntStream.range(0, result.size()).filter(i -> result.get(i) == '#').sum();
 
-        for (long i = (gens*2 -1); i > 0; i--) {
+        for (long i = totShifts; i > 0; i--) {
             if (newGen.getArray()[(int) i] == '#') {
-                sum -= gens*2 - i;
+                sum -= totShifts - i;
             }
         }
+
+//        if (loopLimit == targetGens) {
         return sum;
+//        } else {
+//
+//            return sum + (targetGens - 500);
+//        }
     }
+
+//    public long calcSumOfGen(List<Character> gen, int shifts) {
+//
+//    }
 }

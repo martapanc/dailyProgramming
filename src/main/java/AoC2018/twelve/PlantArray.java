@@ -16,13 +16,13 @@ public class PlantArray {
         int emptyPotsAtTheBeginning = 0;
         int emptyPotsAtTheEnd = 0;
         if (array[0] == '#') {
-            emptyPotsAtTheBeginning = 2;
+            emptyPotsAtTheBeginning = 3;
         }
         if (array[0] == '.' && array[1] == '#') {
-            emptyPotsAtTheBeginning = 1;
+            emptyPotsAtTheBeginning = 2;
         }
         if (array[0] == '.' && array[1] == '.' && array[2] == '#') {
-            emptyPotsAtTheBeginning = 2;
+            emptyPotsAtTheBeginning = 1;
         }
         if (array[array.length -1] == '#') {
             emptyPotsAtTheEnd = 3;
@@ -90,5 +90,9 @@ public class PlantArray {
 
     public char getChar(int index) {
         return this.plantArray[index];
+    }
+
+    public int getShift() {
+        return shift;
     }
 }
