@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class Thirteen {
 
-    static char[][] readInput(String inputFile, int horLength, int verLength) {
+    public static char[][] readInput(String inputFile, int horLength, int verLength) {
 
         char[][] input = new char[verLength][horLength];
 
@@ -56,7 +56,7 @@ public class Thirteen {
         return points;
     }
 
-    static void printMatrix(char[][] matrix) {
+    public static void printMatrix(char[][] matrix) {
         for (char[] yChars : matrix) {
             for (char xChar : yChars)
                 System.out.print(xChar);
