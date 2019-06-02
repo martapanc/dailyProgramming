@@ -3,15 +3,31 @@ package AoC2018.one;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.IntStream;
 
 public class DayOne {
 
     public static int frequencyCalculator(String s) {
         return IntStream.of(Arrays.stream(s.split(", ")).mapToInt(Integer::parseInt).toArray()).sum();
+    }
+
+    public static int findFirstRepeatedFrequency(String s) {
+        int sum = 0;
+        List<Integer> frequencies = new ArrayList<>();
+        frequencies.add(sum);
+
+        int[] values = Arrays.stream(s.split(", ")).mapToInt(Integer::parseInt).toArray();
+
+        while (true)
+            for (int val : values) {
+                sum += val;
+                if (frequencies.contains(sum)) {
+                    return sum;
+                } else {
+                    frequencies.add(sum);
+                }
+            }
     }
 
     public static String readInput(String inputRulesFile) {
