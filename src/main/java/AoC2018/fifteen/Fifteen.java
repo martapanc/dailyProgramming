@@ -31,4 +31,41 @@ public class Fifteen {
 
         return unitList;
     }
+
+    public static List<Point> findPossibleTargets(Unit playingUnit, List<Unit> unitList, char[][] matrix) {
+        List<Point> pointList = new ArrayList<>();
+        Class targetType;
+
+
+        if (playingUnit instanceof Elf) {
+            targetType = Goblin.class;
+        } else {
+            targetType = Elf.class;
+        }
+
+        for (Unit potentialTarget : unitList) {
+            if (targetType.isInstance(potentialTarget)) {
+                Point[] pointArray = new Point[] {
+                    new Point(potentialTarget.position.x, potentialTarget.position.y - 1),
+                    new Point(potentialTarget.position.x + 1, potentialTarget.position.y),
+                    new Point(potentialTarget.position.x, potentialTarget.position.y + 1),
+                    new Point(potentialTarget.position.x - 1, potentialTarget.position.y)
+                };
+                char[] charArray = new char[] {
+                        matrix[pointArray[0].y][pointArray[0].x],
+                        matrix[pointArray[1].y][pointArray[1].x],
+                        matrix[pointArray[2].y][pointArray[2].x],
+                        matrix[pointArray[3].y][pointArray[3].x]
+                };
+                for (int i = 0; i < pointArray.length; i++) {
+                    if (!pointList.contains(pointArray[i]) && charArray[i] != '#' && charArray[i] != 'E' && charArray[i] != 'G') {
+                        pointList.add(pointArray[i]);
+                    }
+                }
+
+            }
+        }
+
+        return pointList;
+    }
 }

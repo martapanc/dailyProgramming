@@ -40,4 +40,19 @@ class FifteenTest {
         List<Unit> actual = Fifteen.getInitialUnitPositions(Thirteen.readInput(input1, 9,9));
         IntStream.range(0, unitList.size()).forEach(i -> assertEquals(unitList.get(i).toString(), actual.get(i).toString()));
     }
+
+    @Test
+    public void testFindPossibleTargets() {
+        List<Point> pointList = new ArrayList<>();
+        pointList.add(new Point(4, 3));
+        pointList.add(new Point(5, 4));
+        pointList.add(new Point(4, 5));
+        pointList.add(new Point(3, 4));
+
+        assertEquals(pointList, Fifteen.findPossibleTargets(
+                new Goblin(new Point(1,1)),
+                Fifteen.getInitialUnitPositions(Thirteen.readInput(input1, 9, 9)),
+                Thirteen.readInput(input1, 9, 9)
+        ));
+    }
 }
