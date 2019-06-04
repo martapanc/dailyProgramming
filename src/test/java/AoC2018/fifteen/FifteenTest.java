@@ -132,7 +132,19 @@ class FifteenTest {
     }
 
     @Test
-    public void testGetNextPosition() {
-        assertEquals(new Point(3,4), Fifteen.getNextPosition(new Elf(new Point(4,4)), new Point(1, 4)));
+    public void testGetNextPositionInReadingOrder() {
+        Unit e1 = new Elf(new Point(4,4));
+        Unit e2 = new Elf(new Point(4,7));
+        assertEquals(new Point(4,5), Fifteen.getNextPositionInReadingOrder(e1, new Point(1, 4), Thirteen.readInput(input_flood, 9,9)));
+        assertEquals(new Point(4,5), Fifteen.getNextPositionInReadingOrder(e1, new Point(7, 4), Thirteen.readInput(input_flood, 9,9)));
+        assertEquals(new Point(3,7), Fifteen.getNextPositionInReadingOrder(e2, new Point(2, 7), Thirteen.readInput(input_flood, 9,9)));
+        assertEquals(new Point(4,6), Fifteen.getNextPositionInReadingOrder(e2, new Point(4, 5), Thirteen.readInput(input_flood, 9,9)));
+        assertEquals(new Point(5,7), Fifteen.getNextPositionInReadingOrder(e2, new Point(6, 7), Thirteen.readInput(input_flood, 9,9)));
+        assertEquals(new Point(4,6), Fifteen.getNextPositionInReadingOrder(e2, new Point(1, 6), Thirteen.readInput(input_flood, 9,9)));
+        assertEquals(new Point(4,6), Fifteen.getNextPositionInReadingOrder(e2, new Point(7, 6), Thirteen.readInput(input_flood, 9,9)));
+
+        Unit g1 = new Goblin(new Point(1, 7));
+        assertEquals(new Point(2,7), Fifteen.getNextPositionInReadingOrder(g1, new Point(4, 7), Thirteen.readInput(input_flood, 9,9)));
+        assertEquals(new Point(1,6), Fifteen.getNextPositionInReadingOrder(g1, new Point(5, 6), Thirteen.readInput(input_flood, 9,9)));
     }
 }

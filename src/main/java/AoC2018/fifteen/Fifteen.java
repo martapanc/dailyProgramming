@@ -125,13 +125,23 @@ public class Fifteen {
                 .collect(Collectors.toList()).get(0);
     }
 
-    public static Point getNextPosition(Unit playingUnit, Point target) {
-        //TODO: compute shortest distance
-        int currX = playingUnit.position.x, currY = playingUnit.position.y;
-        int newX = (currX == target.x) ? currX : ((currX < target.x) ? (currX + 1) : (currX - 1));
-        int newY = (currY == target.y) ? currY : ((currY < target.y) ? (currY + 1) : (currY - 1));
+    public static Point getNextPositionInReadingOrder(Unit playingUnit, Point target, char[][] matrix) {
+        Point currPos = playingUnit.position;
+        Point[] directionArray = new Point[] {
+                new Point(currPos.x, currPos.y - 1),
+                new Point(currPos.x, currPos.y + 1),
+                new Point(currPos.x + 1, currPos.y),
+                new Point(currPos.x - 1, currPos.y)
+        };
 
-        return new Point(newX, newY);
+        Map<Point, Integer> pointAndDistances = Arrays
+                .stream(directionArray)
+                .filter(p -> matrix[p.y][p.x] == '.')
+                .collect(Collectors.toMap(p -> p, p -> getManhattanDistance(p, target), (a, b) -> b));
+
+        int minDistance = Collections.min(pointAndDistances.values());
+        return pointAndDistances.entrySet().stream().filter(entry -> entry.getValue() == minDistance)
+                .map(Map.Entry::getKey).sorted(pointComparator()).collect(Collectors.toList()).get(0);
     }
 
     public static int getManhattanDistance(Point p1, Point p2) {
