@@ -49,7 +49,7 @@ class FifteenTest {
         pointList.add(new Point(4, 5));
         pointList.add(new Point(3, 4));
 
-        assertEquals(pointList, Fifteen.findPossibleTargets(
+        assertEquals(pointList, Fifteen.findPossibleEnemyTargets(
                 new Goblin(new Point(1,1)),
                 Fifteen.getInitialUnitPositions(Thirteen.readInput(input1, 9, 9)),
                 Thirteen.readInput(input1, 9, 9)
@@ -69,7 +69,7 @@ class FifteenTest {
         accessiblePoints.add(new Point(3,3));
 
         assertThat("List equality without order",
-                Fifteen.getAccessiblePoints(new Goblin(new Point(1,1)), Thirteen.readInput(input_flood, 9,9)),
+                Fifteen.getAllAccessibleTargets(new Goblin(new Point(1,1)), Thirteen.readInput(input_flood, 9,9)),
                 containsInAnyOrder(accessiblePoints.toArray()));
                 containsInAnyOrder(accessiblePoints.toArray());
     }

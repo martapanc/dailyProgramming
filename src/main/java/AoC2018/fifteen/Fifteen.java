@@ -47,7 +47,10 @@ public class Fifteen {
     }
 
     public static void move(Unit playingUnit, List<Unit> unitList, char[][] matrix) {
+        // Get list of enemies that can be reached
         List<Point> reachableTargets = findReachableTargets(playingUnit, unitList, matrix);
+        // Get cell next to targets with shortest distance.
+        // If no such cell is found (i.e. all four cells around target are occupied, skip moving turn
         Point closestTargetCell = getClosestTargetInReadingOrder(playingUnit, reachableTargets);
         if (!closestTargetCell.equals(new Point(-1,-1))) { // case when unit cannot find any cell in range of a target
             Point nextPosition = getNextPositionInReadingOrder(playingUnit, closestTargetCell, matrix);
@@ -63,6 +66,7 @@ public class Fifteen {
     }
 
     public static boolean canUnitAttackDirectly(Unit playingUnit, List<Unit> unitList) {
+        // If a unit has an enemy in any adjacent cell, it can attack without moving
         Point currPos = playingUnit.position;
         Point[] directionArray = new Point[] {
                 new Point(currPos.x, currPos.y - 1),
@@ -84,7 +88,9 @@ public class Fifteen {
         return false;
     }
 
-    public static List<Point> findPossibleTargets(Unit playingUnit, List<Unit> unitList, char[][] matrix) {
+    public static List<Point> findPossibleEnemyTargets(Unit playingUnit, List<Unit> unitList, char[][] matrix) {
+        // Enemies belong to the opposite category (e.g. Elf for Goblin, and vice versa)
+        // For each enemy, create a list of the adjacent (four) cells that are free (.)
         List<Point> pointList = new ArrayList<>();
         Class targetType = playingUnit instanceof Elf ? Goblin.class : Elf.class;
 
@@ -92,11 +98,12 @@ public class Fifteen {
             // Add potential targets of the 'enemy' category
             if (targetType.isInstance(potentialTarget)) {
                 Point[] pointArray = new Point[] {
-                    new Point(potentialTarget.position.x, potentialTarget.position.y - 1),
-                    new Point(potentialTarget.position.x + 1, potentialTarget.position.y),
-                    new Point(potentialTarget.position.x, potentialTarget.position.y + 1),
-                    new Point(potentialTarget.position.x - 1, potentialTarget.position.y)
+                    new Point(potentialTarget.position.x, potentialTarget.position.y - 1),  //north cell
+                    new Point(potentialTarget.position.x + 1, potentialTarget.position.y),  //east
+                    new Point(potentialTarget.position.x, potentialTarget.position.y + 1),  //south
+                    new Point(potentialTarget.position.x - 1, potentialTarget.position.y)   //west
                 };
+                // array of the chars contained in the four cells
                 char[] charArray = new char[] {
                         matrix[pointArray[0].y][pointArray[0].x],
                         matrix[pointArray[1].y][pointArray[1].x],
@@ -113,7 +120,8 @@ public class Fifteen {
         return pointList;
     }
 
-    public static List<Point> getAccessiblePoints(Unit playingUnit, char[][] inputMatrix) {
+    public static List<Point> getAllAccessibleTargets(Unit playingUnit, char[][] inputMatrix) {
+        // Get ALL cells that a playing unit can reach
         int index = 0;
         int maxX = inputMatrix[0].length - 1, maxY = inputMatrix.length - 1;
         int x = playingUnit.position.x, y = playingUnit.position.y;
@@ -167,17 +175,19 @@ public class Fifteen {
     }
 
     public static List<Point> findReachableTargets(Unit playingUnit, List<Unit> unitPositions, char[][] matrix) {
-        List<Point> possibleTargets = findPossibleTargets(playingUnit, unitPositions, matrix);
-        List<Point> allAccessiblePointsFromUnit = getAccessiblePoints(playingUnit, matrix);
+        // Reachable targets (i.e. cells adjacent to enemies) are the intersection of the set of reachable cells and the set of target cells
+
+        List<Point> possibleTargets = findPossibleEnemyTargets(playingUnit, unitPositions, matrix);
+        List<Point> allAccessiblePointsFromUnit = getAllAccessibleTargets(playingUnit, matrix);
 
         List<Point> reachableTargets = new ArrayList<>();
-        // Find possible targets that are reachable
         possibleTargets.forEach(pt -> allAccessiblePointsFromUnit.stream().filter(pt::equals).map(ap -> pt).forEach(reachableTargets::add));
 
         return reachableTargets;
     }
 
     public static Point getClosestTargetInReadingOrder(Unit playingUnit, List<Point> reachableTargets) {
+        // Among all reachable targets, pick the closest (reading order is the deal breaker)
         Map<Point, Integer> distanceMap = reachableTargets
                 .stream()
                 .collect(Collectors.toMap(target -> target, target -> getManhattanDistance(playingUnit.position, target), (a, b) -> b));
@@ -195,6 +205,9 @@ public class Fifteen {
     }
 
     public static Point getNextPositionInReadingOrder(Unit playingUnit, Point target, char[][] matrix) {
+        // If any cell adjacent to an enemy is free, the unit can move.
+        // Next cell is a free cell (.) with the minimum distance to the target cell (adjacent to enemy)
+        // If multiple such cells are found, pick the first in reading order (top-down, left-right)
         Point currPos = playingUnit.position;
         Point[] directionArray = new Point[] {
                 new Point(currPos.x, currPos.y - 1),
@@ -218,6 +231,7 @@ public class Fifteen {
     }
 
     private static Comparator<Point> pointComparator() {
+        //Sort points by increasing distance from the top-left corner
         Point p = new Point(0, -1000);
         final Point finalP = new Point(p.x, p.y);
         return (p0, p1) -> {
