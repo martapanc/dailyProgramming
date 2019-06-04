@@ -56,4 +56,14 @@ public class Elf extends Unit {
     public void setDead() {
         super.setDead();
     }
+
+    @Override
+    public char getIdChar() {
+        return 'E';
+    }
+
+    @Override
+    public void setIdChar(char idChar) {
+        super.setIdChar(idChar);
+    }
 }

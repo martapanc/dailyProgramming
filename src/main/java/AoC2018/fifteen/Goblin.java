@@ -52,6 +52,16 @@ public class Goblin extends Unit {
     }
 
     @Override
+    public char getIdChar() {
+        return 'G';
+    }
+
+    @Override
+    public void setIdChar(char idChar) {
+        super.setIdChar(idChar);
+    }
+
+    @Override
     public String toString() {
         return "Goblin(" + position.x + "," + position.y + ")";
     }

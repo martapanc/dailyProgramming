@@ -16,6 +16,8 @@ class FifteenTest {
 
     private final String input1 = "src/test/java/AoC2018/fifteen/input1";
     private final String input_flood = "src/test/java/AoC2018/fifteen/input_flood";
+    private final String input_attackFirst = "src/test/java/AoC2018/fifteen/input_attackFirst";
+    private final String input_progress = "src/test/java/AoC2018/fifteen/input_progress";
 
     @Test
     public void testReadInputAndPrintMatrix(){
@@ -146,5 +148,22 @@ class FifteenTest {
         Unit g1 = new Goblin(new Point(1, 7));
         assertEquals(new Point(2,7), Fifteen.getNextPositionInReadingOrder(g1, new Point(4, 7), Thirteen.readInput(input_flood, 9,9)));
         assertEquals(new Point(1,6), Fifteen.getNextPositionInReadingOrder(g1, new Point(5, 6), Thirteen.readInput(input_flood, 9,9)));
+    }
+
+    @Test
+    void moveEverything() {
+        Fifteen.moveEverything(Fifteen.getInitialUnitPositions(Thirteen.readInput(input1, 9, 9)),
+                Thirteen.readInput(input1, 9, 9), 4);
+
+        Fifteen.moveEverything(Fifteen.getInitialUnitPositions(Thirteen.readInput(input_progress, 7, 7)),
+                Thirteen.readInput(input_progress, 7, 7), 23);
+    }
+
+    @Test
+    void canUnitAttackDirectly() {
+        Unit e1 = new Elf(new Point(4,3));
+        Unit g1 = new Goblin(new Point(4,2));
+        assertTrue(Fifteen.canUnitAttackDirectly(e1, Fifteen.getInitialUnitPositions(Thirteen.readInput(input_attackFirst, 9,9))));
+        assertTrue(Fifteen.canUnitAttackDirectly(g1, Fifteen.getInitialUnitPositions(Thirteen.readInput(input_attackFirst, 9,9))));
     }
 }

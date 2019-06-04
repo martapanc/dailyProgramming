@@ -8,6 +8,7 @@ public class Unit {
     private int hitPoints;
     Point position;
     private boolean alive = true;
+    private char idChar = 'U';
 
     public Unit(Point position) {
         this.position = position;
@@ -43,6 +44,14 @@ public class Unit {
 
     public void setDead() {
         this.alive = false;
+    }
+
+    public char getIdChar() {
+        return idChar;
+    }
+
+    public void setIdChar(char idChar) {
+        this.idChar = idChar;
     }
 
     @Override

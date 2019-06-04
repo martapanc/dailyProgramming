@@ -1,9 +1,12 @@
 package AoC2018.fifteen;
 
+import AoC2018.thirteen.Thirteen;
+
 import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Fifteen {
 
@@ -20,6 +23,65 @@ public class Fifteen {
             }
         }
         return unitList;
+    }
+
+    public static void moveEverything(List<Unit> unitList, char[][] matrix, int turns) {
+        Thirteen.printMatrix(matrix);
+
+        int times = 0;
+        while (times < turns) {
+            List<Unit> movingUnits = new ArrayList<>(unitList);
+            for (Unit unit : unitList) {
+                if (!canUnitAttackDirectly(unit, unitList))
+                    move(unit, movingUnits, matrix);
+            }
+            // Sort cursor list by y and then by x (increasing)
+            unitList = movingUnits.stream().sorted(Comparator
+                    .comparing((Unit u) -> u.position.y)
+                    .thenComparing((Unit u) -> u.position.x)
+            ).collect(Collectors.toList());
+
+            Thirteen.printMatrix(matrix);
+            times += 1;
+        }
+    }
+
+    public static void move(Unit playingUnit, List<Unit> unitList, char[][] matrix) {
+        List<Point> reachableTargets = findReachableTargets(playingUnit, unitList, matrix);
+        Point closestTargetCell = getClosestTargetInReadingOrder(playingUnit, reachableTargets);
+        if (!closestTargetCell.equals(new Point(-1,-1))) { // case when unit cannot find any cell in range of a target
+            Point nextPosition = getNextPositionInReadingOrder(playingUnit, closestTargetCell, matrix);
+            matrix[playingUnit.position.y][playingUnit.position.x] = '.';
+            matrix[nextPosition.y][nextPosition.x] = playingUnit.getIdChar();
+
+            for (Unit u : unitList) {
+                if (u.position.equals(playingUnit.position)) {
+                    u.position = nextPosition;
+                }
+            }
+        }
+    }
+
+    public static boolean canUnitAttackDirectly(Unit playingUnit, List<Unit> unitList) {
+        Point currPos = playingUnit.position;
+        Point[] directionArray = new Point[] {
+                new Point(currPos.x, currPos.y - 1),
+                new Point(currPos.x, currPos.y + 1),
+                new Point(currPos.x + 1, currPos.y),
+                new Point(currPos.x - 1, currPos.y)
+        };
+        Class targetType = playingUnit instanceof Elf ? Goblin.class : Elf.class;
+
+        List<Unit> targets = unitList.stream().filter(targetType::isInstance).collect(Collectors.toList());
+
+        for (Unit t : targets) {
+            for (Point p : directionArray) {
+                if (t.position.equals(p)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public static List<Point> findPossibleTargets(Unit playingUnit, List<Unit> unitList, char[][] matrix) {
@@ -51,10 +113,14 @@ public class Fifteen {
         return pointList;
     }
 
-    public static List<Point> getAccessiblePoints(Unit playingUnit, char[][] matrix) {
+    public static List<Point> getAccessiblePoints(Unit playingUnit, char[][] inputMatrix) {
         int index = 0;
-        int maxX = matrix[0].length - 1, maxY = matrix.length - 1;
+        int maxX = inputMatrix[0].length - 1, maxY = inputMatrix.length - 1;
         int x = playingUnit.position.x, y = playingUnit.position.y;
+
+        char[][] matrix = new char[inputMatrix[0].length][inputMatrix.length];
+        IntStream.range(0, matrix.length).forEach(i -> System.arraycopy(inputMatrix[i], 0, matrix[i], 0, matrix[i].length));
+
         int[][] stack = new int[(maxX+1)*(maxY+1)][2];
         char fillSymbol = '0', originalSymbol = '.';
         List<Point> filledPoints = new ArrayList<>();
@@ -115,6 +181,9 @@ public class Fifteen {
         Map<Point, Integer> distanceMap = reachableTargets
                 .stream()
                 .collect(Collectors.toMap(target -> target, target -> getManhattanDistance(playingUnit.position, target), (a, b) -> b));
+        if (distanceMap.size() == 0) {
+            return new Point(-1, -1);
+        }
         int minDistance = Collections.min(distanceMap.values());
         return distanceMap
                 .entrySet()
