@@ -6,7 +6,6 @@ public class Elf extends Unit {
 
     private int attackPoints = 3;
     private int hitPoints = 200;
-//    private Point position;
 
     public Elf(Point position) {
         super(position);
@@ -44,7 +43,7 @@ public class Elf extends Unit {
 
     @Override
     public String toString() {
-        return "Elf(" + position.x + "," + position.y + ")";
+        return "Elf[" + hitPoints + "](" + position.x + "," + position.y + ")";
     }
 
     @Override

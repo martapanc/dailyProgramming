@@ -56,6 +56,6 @@ public class Unit {
 
     @Override
     public String toString() {
-        return "Unit(" + position.x + "," + position.y + ")";
+        return "Unit[" + hitPoints + "](" + position.x + "," + position.y + ")";
     }
 }

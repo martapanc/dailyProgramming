@@ -18,10 +18,11 @@ class FifteenTest {
     private final String input_flood = "src/test/java/AoC2018/fifteen/input_flood";
     private final String input_attackFirst = "src/test/java/AoC2018/fifteen/input_attackFirst";
     private final String input_progress = "src/test/java/AoC2018/fifteen/input_progress";
+    private final String input_bfs = "src/test/java/AoC2018/fifteen/input_bfs";
 
     @Test
     public void testReadInputAndPrintMatrix(){
-        Thirteen.printMatrix(Thirteen.readInput(input1, 9,9));
+//        Thirteen.printMatrix(Thirteen.readInput(input1, 9,9));
     }
 
     @Test
@@ -45,11 +46,11 @@ class FifteenTest {
     public void testFindPossibleTargets() {
         List<Point> pointList = new ArrayList<>();
         pointList.add(new Point(4, 3));
-        pointList.add(new Point(5, 4));
         pointList.add(new Point(4, 5));
+        pointList.add(new Point(5, 4));
         pointList.add(new Point(3, 4));
 
-        assertEquals(pointList, Fifteen.findPossibleEnemyTargets(
+        assertEquals(pointList, Fifteen.findPossibleTargets(
                 new Goblin(new Point(1,1)),
                 Fifteen.getInitialUnitPositions(Thirteen.readInput(input1, 9, 9)),
                 Thirteen.readInput(input1, 9, 9)
@@ -151,19 +152,27 @@ class FifteenTest {
     }
 
     @Test
-    void moveEverything() {
+    public void moveEverything() {
         Fifteen.moveEverything(Fifteen.getInitialUnitPositions(Thirteen.readInput(input1, 9, 9)),
                 Thirteen.readInput(input1, 9, 9), 4);
 
         Fifteen.moveEverything(Fifteen.getInitialUnitPositions(Thirteen.readInput(input_progress, 7, 7)),
-                Thirteen.readInput(input_progress, 7, 7), 23);
+                Thirteen.readInput(input_progress, 7, 7), 47);
     }
 
     @Test
-    void canUnitAttackDirectly() {
+    public void canUnitAttackDirectly() {
         Unit e1 = new Elf(new Point(4,3));
         Unit g1 = new Goblin(new Point(4,2));
-        assertTrue(Fifteen.canUnitAttackDirectly(e1, Fifteen.getInitialUnitPositions(Thirteen.readInput(input_attackFirst, 9,9))));
-        assertTrue(Fifteen.canUnitAttackDirectly(g1, Fifteen.getInitialUnitPositions(Thirteen.readInput(input_attackFirst, 9,9))));
+        assertTrue(Fifteen.canUnitAttack(e1, Fifteen.getInitialUnitPositions(Thirteen.readInput(input_attackFirst, 9,9))));
+        assertTrue(Fifteen.canUnitAttack(g1, Fifteen.getInitialUnitPositions(Thirteen.readInput(input_attackFirst, 9,9))));
+    }
+
+    @Test
+    public void testBFS() {
+        Unit g1 = new Goblin(new Point(5,1));
+        Unit e1 = new Elf(new Point(5,4));
+
+        Fifteen.findMinDistanceWithBFS(g1, e1.position, Thirteen.readInput(input_bfs, 7,7));
     }
 }

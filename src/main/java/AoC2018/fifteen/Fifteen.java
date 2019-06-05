@@ -26,14 +26,18 @@ public class Fifteen {
     }
 
     public static void moveEverything(List<Unit> unitList, char[][] matrix, int turns) {
-        Thirteen.printMatrix(matrix);
 
         int times = 0;
         while (times < turns) {
+            System.out.println(" *** Round " + (times + 1) + " ***");
             List<Unit> movingUnits = new ArrayList<>(unitList);
             for (Unit unit : unitList) {
-                if (!canUnitAttackDirectly(unit, unitList))
+                if (!canUnitAttack(unit, unitList))
                     move(unit, movingUnits, matrix);
+
+                if (canUnitAttack(unit, movingUnits)) {
+                    attack(unit, movingUnits, matrix);
+                }
             }
             // Sort cursor list by y and then by x (increasing)
             unitList = movingUnits.stream().sorted(Comparator
@@ -42,7 +46,38 @@ public class Fifteen {
             ).collect(Collectors.toList());
 
             Thirteen.printMatrix(matrix);
+            System.out.println(unitList);
+
             times += 1;
+        }
+    }
+
+    public static void attack(Unit playingUnit, List<Unit> unitList, char[][] matrix){
+        Point currPos = playingUnit.position;
+        Point[] directionArray = getAdjacentPoints(currPos);
+
+        Class targetType = playingUnit instanceof Elf ? Goblin.class : Elf.class;
+
+        List<Unit> enemies = unitList.stream().filter(targetType::isInstance).collect(Collectors.toList());
+        List<Unit> adjacentEnemies = new ArrayList<>();
+        enemies.forEach(enemy -> Arrays.stream(directionArray).filter(p -> p.equals(enemy.position)).map(p -> enemy).forEach(adjacentEnemies::add));
+
+        Unit attackedEnemy;
+        if (adjacentEnemies.size() == 1) {
+            attackedEnemy = adjacentEnemies.get(0);
+        } else {
+            List<Unit> sortedAdjacentEnemies = adjacentEnemies.stream().sorted(Comparator
+                    .comparing(Unit::getHitPoints)
+                    .thenComparing((Unit u) -> u.position.y)
+                    .thenComparing((Unit u) -> u.position.x)
+            ).collect(Collectors.toList());
+            attackedEnemy = sortedAdjacentEnemies.get(0);
+        }
+
+        attackedEnemy.setHitPoints(attackedEnemy.getHitPoints() - playingUnit.getAttackPoints());
+        if (attackedEnemy.getHitPoints() <= 0) {
+            unitList.remove(attackedEnemy);
+            matrix[attackedEnemy.position.y][attackedEnemy.position.x] = '.';
         }
     }
 
@@ -65,22 +100,17 @@ public class Fifteen {
         }
     }
 
-    public static boolean canUnitAttackDirectly(Unit playingUnit, List<Unit> unitList) {
+    public static boolean canUnitAttack(Unit playingUnit, List<Unit> unitList) {
         // If a unit has an enemy in any adjacent cell, it can attack without moving
         Point currPos = playingUnit.position;
-        Point[] directionArray = new Point[] {
-                new Point(currPos.x, currPos.y - 1),
-                new Point(currPos.x, currPos.y + 1),
-                new Point(currPos.x + 1, currPos.y),
-                new Point(currPos.x - 1, currPos.y)
-        };
+        Point[] directionArray = getAdjacentPoints(playingUnit.position);
         Class targetType = playingUnit instanceof Elf ? Goblin.class : Elf.class;
 
-        List<Unit> targets = unitList.stream().filter(targetType::isInstance).collect(Collectors.toList());
+        List<Unit> enemies = unitList.stream().filter(targetType::isInstance).collect(Collectors.toList());
 
-        for (Unit t : targets) {
-            for (Point p : directionArray) {
-                if (t.position.equals(p)) {
+        for (Unit enemy : enemies) {
+            for (Point adjacentPt: directionArray) {
+                if (adjacentPt.equals(enemy.position)) {
                     return true;
                 }
             }
@@ -88,7 +118,16 @@ public class Fifteen {
         return false;
     }
 
-    public static List<Point> findPossibleEnemyTargets(Unit playingUnit, List<Unit> unitList, char[][] matrix) {
+    private static Point[] getAdjacentPoints(Point currPos) {
+        return new Point[] {
+                    new Point(currPos.x, currPos.y - 1),
+                    new Point(currPos.x, currPos.y + 1),
+                    new Point(currPos.x + 1, currPos.y),
+                    new Point(currPos.x - 1, currPos.y)
+            };
+    }
+
+    public static List<Point> findPossibleTargets(Unit playingUnit, List<Unit> unitList, char[][] matrix) {
         // Enemies belong to the opposite category (e.g. Elf for Goblin, and vice versa)
         // For each enemy, create a list of the adjacent (four) cells that are free (.)
         List<Point> pointList = new ArrayList<>();
@@ -97,13 +136,8 @@ public class Fifteen {
         for (Unit potentialTarget : unitList) {
             // Add potential targets of the 'enemy' category
             if (targetType.isInstance(potentialTarget)) {
-                Point[] pointArray = new Point[] {
-                    new Point(potentialTarget.position.x, potentialTarget.position.y - 1),  //north cell
-                    new Point(potentialTarget.position.x + 1, potentialTarget.position.y),  //east
-                    new Point(potentialTarget.position.x, potentialTarget.position.y + 1),  //south
-                    new Point(potentialTarget.position.x - 1, potentialTarget.position.y)   //west
-                };
-                // array of the chars contained in the four cells
+
+                Point[] pointArray = getAdjacentPoints(potentialTarget.position);
                 char[] charArray = new char[] {
                         matrix[pointArray[0].y][pointArray[0].x],
                         matrix[pointArray[1].y][pointArray[1].x],
@@ -177,7 +211,7 @@ public class Fifteen {
     public static List<Point> findReachableTargets(Unit playingUnit, List<Unit> unitPositions, char[][] matrix) {
         // Reachable targets (i.e. cells adjacent to enemies) are the intersection of the set of reachable cells and the set of target cells
 
-        List<Point> possibleTargets = findPossibleEnemyTargets(playingUnit, unitPositions, matrix);
+        List<Point> possibleTargets = findPossibleTargets(playingUnit, unitPositions, matrix);
         List<Point> allAccessiblePointsFromUnit = getAllAccessibleTargets(playingUnit, matrix);
 
         List<Point> reachableTargets = new ArrayList<>();
@@ -209,13 +243,9 @@ public class Fifteen {
         // Next cell is a free cell (.) with the minimum distance to the target cell (adjacent to enemy)
         // If multiple such cells are found, pick the first in reading order (top-down, left-right)
         Point currPos = playingUnit.position;
-        Point[] directionArray = new Point[] {
-                new Point(currPos.x, currPos.y - 1),
-                new Point(currPos.x, currPos.y + 1),
-                new Point(currPos.x + 1, currPos.y),
-                new Point(currPos.x - 1, currPos.y)
-        };
+        Point[] directionArray = getAdjacentPoints(currPos);
 
+        // TODO: fix function that finds path
         Map<Point, Integer> pointAndDistances = Arrays
                 .stream(directionArray)
                 .filter(p -> matrix[p.y][p.x] == '.')
@@ -239,5 +269,107 @@ public class Fifteen {
             double ds1 = p1.distanceSq(finalP);
             return Double.compare(ds0, ds1);
         };
+    }
+
+    public static int findMinDistanceWithBFS(Unit playingUnit, Point targetCell, char[][] inputMatrix) {
+
+        char[][] matrix = new char[inputMatrix[0].length][inputMatrix.length];
+        IntStream.range(0, matrix.length).forEach(i -> System.arraycopy(inputMatrix[i], 0, matrix[i], 0, matrix[i].length));
+
+        Thirteen.printMatrix(matrix);
+
+        int edge = '0';
+        Point[] adjacentPoints = getAdjacentPoints(targetCell);
+        List<Point> edgeList = Arrays.stream(adjacentPoints).filter(p -> matrix[p.y][p.x] == '.').collect(Collectors.toList());
+
+        List<Point> visitedList = new ArrayList<>();
+        for (Point p : edgeList) {
+            matrix[p.y][p.x] = (char) edge;
+            visitedList.add(p);
+        }
+
+        Thirteen.printMatrix(matrix);
+
+        edge += 1;
+
+        edgeList = new ArrayList<>();
+        for (Point v : visitedList) {
+            adjacentPoints = getAdjacentPoints(v);
+            for (Point a : adjacentPoints) {
+                if (!edgeList.contains(a) && matrix[a.y][a.x] == '.') {
+                    edgeList.add(a);
+                }
+            }
+        }
+
+        visitedList = new ArrayList<>();
+        for (Point p : edgeList) {
+            matrix[p.y][p.x] = (char) edge;
+            visitedList.add(p);
+        }
+
+        Thirteen.printMatrix(matrix);
+
+        edge += 1;
+
+        edgeList = new ArrayList<>();
+        for (Point v : visitedList) {
+            adjacentPoints = getAdjacentPoints(v);
+            for (Point a : adjacentPoints) {
+                if (!edgeList.contains(a) && matrix[a.y][a.x] == '.') {
+                    edgeList.add(a);
+                }
+            }
+        }
+
+        visitedList = new ArrayList<>();
+        for (Point p : edgeList) {
+            matrix[p.y][p.x] = (char) edge;
+            visitedList.add(p);
+        }
+
+        Thirteen.printMatrix(matrix);
+
+        edge += 1;
+
+        edgeList = new ArrayList<>();
+        for (Point v : visitedList) {
+            adjacentPoints = getAdjacentPoints(v);
+            for (Point a : adjacentPoints) {
+                if (!edgeList.contains(a) && matrix[a.y][a.x] == '.') {
+                    edgeList.add(a);
+                }
+            }
+        }
+
+        visitedList = new ArrayList<>();
+        for (Point p : edgeList) {
+            matrix[p.y][p.x] = (char) edge;
+            visitedList.add(p);
+        }
+
+        Thirteen.printMatrix(matrix);
+
+        edge += 1;
+
+        edgeList = new ArrayList<>();
+        for (Point v : visitedList) {
+            adjacentPoints = getAdjacentPoints(v);
+            for (Point a : adjacentPoints) {
+                if (!edgeList.contains(a) && matrix[a.y][a.x] == '.') {
+                    edgeList.add(a);
+                }
+            }
+        }
+
+        visitedList = new ArrayList<>();
+        for (Point p : edgeList) {
+            matrix[p.y][p.x] = (char) edge;
+            visitedList.add(p);
+        }
+
+        Thirteen.printMatrix(matrix);
+
+        return 0;
     }
 }
