@@ -255,4 +255,106 @@ public class Fifteen {
             return Double.compare(ds0, ds1);
         };
     }
+
+    public static int findMinDistanceWithBFS(Unit playingUnit, Point targetCell, char[][] inputMatrix) {
+
+        char[][] matrix = new char[inputMatrix[0].length][inputMatrix.length];
+        IntStream.range(0, matrix.length).forEach(i -> System.arraycopy(inputMatrix[i], 0, matrix[i], 0, matrix[i].length));
+
+        Thirteen.printMatrix(matrix);
+
+        int edge = '0';
+        Point[] adjacentPoints = getAdjacentPoints(targetCell);
+        List<Point> edgeList = Arrays.stream(adjacentPoints).filter(p -> matrix[p.y][p.x] == '.').collect(Collectors.toList());
+
+        List<Point> visitedList = new ArrayList<>();
+        for (Point p : edgeList) {
+            matrix[p.y][p.x] = (char) edge;
+            visitedList.add(p);
+        }
+
+        Thirteen.printMatrix(matrix);
+
+        edge += 1;
+
+        edgeList = new ArrayList<>();
+        for (Point v : visitedList) {
+            adjacentPoints = getAdjacentPoints(v);
+            for (Point a : adjacentPoints) {
+                if (!edgeList.contains(a) && matrix[a.y][a.x] == '.') {
+                    edgeList.add(a);
+                }
+            }
+        }
+
+        visitedList = new ArrayList<>();
+        for (Point p : edgeList) {
+            matrix[p.y][p.x] = (char) edge;
+            visitedList.add(p);
+        }
+
+        Thirteen.printMatrix(matrix);
+
+        edge += 1;
+
+        edgeList = new ArrayList<>();
+        for (Point v : visitedList) {
+            adjacentPoints = getAdjacentPoints(v);
+            for (Point a : adjacentPoints) {
+                if (!edgeList.contains(a) && matrix[a.y][a.x] == '.') {
+                    edgeList.add(a);
+                }
+            }
+        }
+
+        visitedList = new ArrayList<>();
+        for (Point p : edgeList) {
+            matrix[p.y][p.x] = (char) edge;
+            visitedList.add(p);
+        }
+
+        Thirteen.printMatrix(matrix);
+
+        edge += 1;
+
+        edgeList = new ArrayList<>();
+        for (Point v : visitedList) {
+            adjacentPoints = getAdjacentPoints(v);
+            for (Point a : adjacentPoints) {
+                if (!edgeList.contains(a) && matrix[a.y][a.x] == '.') {
+                    edgeList.add(a);
+                }
+            }
+        }
+
+        visitedList = new ArrayList<>();
+        for (Point p : edgeList) {
+            matrix[p.y][p.x] = (char) edge;
+            visitedList.add(p);
+        }
+
+        Thirteen.printMatrix(matrix);
+
+        edge += 1;
+
+        edgeList = new ArrayList<>();
+        for (Point v : visitedList) {
+            adjacentPoints = getAdjacentPoints(v);
+            for (Point a : adjacentPoints) {
+                if (!edgeList.contains(a) && matrix[a.y][a.x] == '.') {
+                    edgeList.add(a);
+                }
+            }
+        }
+
+        visitedList = new ArrayList<>();
+        for (Point p : edgeList) {
+            matrix[p.y][p.x] = (char) edge;
+            visitedList.add(p);
+        }
+
+        Thirteen.printMatrix(matrix);
+
+        return 0;
+    }
 }
