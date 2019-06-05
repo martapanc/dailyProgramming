@@ -21,7 +21,7 @@ class FifteenTest {
 
     @Test
     public void testReadInputAndPrintMatrix(){
-        Thirteen.printMatrix(Thirteen.readInput(input1, 9,9));
+//        Thirteen.printMatrix(Thirteen.readInput(input1, 9,9));
     }
 
     @Test
@@ -156,7 +156,7 @@ class FifteenTest {
                 Thirteen.readInput(input1, 9, 9), 4);
 
         Fifteen.moveEverything(Fifteen.getInitialUnitPositions(Thirteen.readInput(input_progress, 7, 7)),
-                Thirteen.readInput(input_progress, 7, 7), 23);
+                Thirteen.readInput(input_progress, 7, 7), 47);
     }
 
     @Test

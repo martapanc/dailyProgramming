@@ -5,7 +5,6 @@ import AoC2018.thirteen.Thirteen;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -27,17 +26,17 @@ public class Fifteen {
     }
 
     public static void moveEverything(List<Unit> unitList, char[][] matrix, int turns) {
-        Thirteen.printMatrix(matrix);
 
         int times = 0;
         while (times < turns) {
+            System.out.println(" *** Round " + (times + 1) + " ***");
             List<Unit> movingUnits = new ArrayList<>(unitList);
             for (Unit unit : unitList) {
                 if (!canUnitAttack(unit, unitList))
                     move(unit, movingUnits, matrix);
 
                 if (canUnitAttack(unit, movingUnits)) {
-                    attack(unit, movingUnits);
+                    attack(unit, movingUnits, matrix);
                 }
             }
             // Sort cursor list by y and then by x (increasing)
@@ -47,11 +46,13 @@ public class Fifteen {
             ).collect(Collectors.toList());
 
             Thirteen.printMatrix(matrix);
+            System.out.println(unitList);
+
             times += 1;
         }
     }
 
-    public static void attack(Unit playingUnit, List<Unit> unitList){
+    public static void attack(Unit playingUnit, List<Unit> unitList, char[][] matrix){
         Point currPos = playingUnit.position;
         Point[] directionArray = getAdjacentPoints(currPos);
 
@@ -74,6 +75,10 @@ public class Fifteen {
         }
 
         attackedEnemy.setHitPoints(attackedEnemy.getHitPoints() - playingUnit.getAttackPoints());
+        if (attackedEnemy.getHitPoints() <= 0) {
+            unitList.remove(attackedEnemy);
+            matrix[attackedEnemy.position.y][attackedEnemy.position.x] = '.';
+        }
     }
 
     public static void move(Unit playingUnit, List<Unit> unitList, char[][] matrix) {
@@ -226,6 +231,7 @@ public class Fifteen {
         Point currPos = playingUnit.position;
         Point[] directionArray = getAdjacentPoints(currPos);
 
+        // TODO: fix function that finds path
         Map<Point, Integer> pointAndDistances = Arrays
                 .stream(directionArray)
                 .filter(p -> matrix[p.y][p.x] == '.')

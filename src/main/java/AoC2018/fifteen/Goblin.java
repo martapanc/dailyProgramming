@@ -63,6 +63,6 @@ public class Goblin extends Unit {
 
     @Override
     public String toString() {
-        return "Goblin(" + position.x + "," + position.y + ")";
+        return "Goblin[" + hitPoints + "](" + position.x + "," + position.y + ")";
     }
 }
