@@ -5,6 +5,7 @@ import AoC2018.thirteen.Thirteen;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -32,8 +33,12 @@ public class Fifteen {
         while (times < turns) {
             List<Unit> movingUnits = new ArrayList<>(unitList);
             for (Unit unit : unitList) {
-                if (!canUnitAttackDirectly(unit, unitList))
+                if (!canUnitAttack(unit, unitList))
                     move(unit, movingUnits, matrix);
+
+                if (canUnitAttack(unit, movingUnits)) {
+                    attack(unit, movingUnits);
+                }
             }
             // Sort cursor list by y and then by x (increasing)
             unitList = movingUnits.stream().sorted(Comparator
@@ -44,6 +49,31 @@ public class Fifteen {
             Thirteen.printMatrix(matrix);
             times += 1;
         }
+    }
+
+    public static void attack(Unit playingUnit, List<Unit> unitList){
+        Point currPos = playingUnit.position;
+        Point[] directionArray = getAdjacentPoints(currPos);
+
+        Class targetType = playingUnit instanceof Elf ? Goblin.class : Elf.class;
+
+        List<Unit> enemies = unitList.stream().filter(targetType::isInstance).collect(Collectors.toList());
+        List<Unit> adjacentEnemies = new ArrayList<>();
+        enemies.forEach(enemy -> Arrays.stream(directionArray).filter(p -> p.equals(enemy.position)).map(p -> enemy).forEach(adjacentEnemies::add));
+
+        Unit attackedEnemy;
+        if (adjacentEnemies.size() == 1) {
+            attackedEnemy = adjacentEnemies.get(0);
+        } else {
+            List<Unit> sortedAdjacentEnemies = adjacentEnemies.stream().sorted(Comparator
+                    .comparing(Unit::getHitPoints)
+                    .thenComparing((Unit u) -> u.position.y)
+                    .thenComparing((Unit u) -> u.position.x)
+            ).collect(Collectors.toList());
+            attackedEnemy = sortedAdjacentEnemies.get(0);
+        }
+
+        attackedEnemy.setHitPoints(attackedEnemy.getHitPoints() - playingUnit.getAttackPoints());
     }
 
     public static void move(Unit playingUnit, List<Unit> unitList, char[][] matrix) {
@@ -62,26 +92,29 @@ public class Fifteen {
         }
     }
 
-    public static boolean canUnitAttackDirectly(Unit playingUnit, List<Unit> unitList) {
-        Point currPos = playingUnit.position;
-        Point[] directionArray = new Point[] {
-                new Point(currPos.x, currPos.y - 1),
-                new Point(currPos.x, currPos.y + 1),
-                new Point(currPos.x + 1, currPos.y),
-                new Point(currPos.x - 1, currPos.y)
-        };
+    public static boolean canUnitAttack(Unit playingUnit, List<Unit> unitList) {
+        Point[] directionArray = getAdjacentPoints(playingUnit.position);
         Class targetType = playingUnit instanceof Elf ? Goblin.class : Elf.class;
 
-        List<Unit> targets = unitList.stream().filter(targetType::isInstance).collect(Collectors.toList());
+        List<Unit> enemies = unitList.stream().filter(targetType::isInstance).collect(Collectors.toList());
 
-        for (Unit t : targets) {
-            for (Point p : directionArray) {
-                if (t.position.equals(p)) {
+        for (Unit enemy : enemies) {
+            for (Point adjacentPt: directionArray) {
+                if (adjacentPt.equals(enemy.position)) {
                     return true;
                 }
             }
         }
         return false;
+    }
+
+    private static Point[] getAdjacentPoints(Point currPos) {
+        return new Point[] {
+                    new Point(currPos.x, currPos.y - 1),
+                    new Point(currPos.x, currPos.y + 1),
+                    new Point(currPos.x + 1, currPos.y),
+                    new Point(currPos.x - 1, currPos.y)
+            };
     }
 
     public static List<Point> findPossibleTargets(Unit playingUnit, List<Unit> unitList, char[][] matrix) {
@@ -91,12 +124,7 @@ public class Fifteen {
         for (Unit potentialTarget : unitList) {
             // Add potential targets of the 'enemy' category
             if (targetType.isInstance(potentialTarget)) {
-                Point[] pointArray = new Point[] {
-                    new Point(potentialTarget.position.x, potentialTarget.position.y - 1),
-                    new Point(potentialTarget.position.x + 1, potentialTarget.position.y),
-                    new Point(potentialTarget.position.x, potentialTarget.position.y + 1),
-                    new Point(potentialTarget.position.x - 1, potentialTarget.position.y)
-                };
+                Point[] pointArray = getAdjacentPoints(potentialTarget.position);
                 char[] charArray = new char[] {
                         matrix[pointArray[0].y][pointArray[0].x],
                         matrix[pointArray[1].y][pointArray[1].x],
@@ -196,12 +224,7 @@ public class Fifteen {
 
     public static Point getNextPositionInReadingOrder(Unit playingUnit, Point target, char[][] matrix) {
         Point currPos = playingUnit.position;
-        Point[] directionArray = new Point[] {
-                new Point(currPos.x, currPos.y - 1),
-                new Point(currPos.x, currPos.y + 1),
-                new Point(currPos.x + 1, currPos.y),
-                new Point(currPos.x - 1, currPos.y)
-        };
+        Point[] directionArray = getAdjacentPoints(currPos);
 
         Map<Point, Integer> pointAndDistances = Arrays
                 .stream(directionArray)

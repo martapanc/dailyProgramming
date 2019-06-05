@@ -45,8 +45,8 @@ class FifteenTest {
     public void testFindPossibleTargets() {
         List<Point> pointList = new ArrayList<>();
         pointList.add(new Point(4, 3));
-        pointList.add(new Point(5, 4));
         pointList.add(new Point(4, 5));
+        pointList.add(new Point(5, 4));
         pointList.add(new Point(3, 4));
 
         assertEquals(pointList, Fifteen.findPossibleTargets(
@@ -163,7 +163,7 @@ class FifteenTest {
     void canUnitAttackDirectly() {
         Unit e1 = new Elf(new Point(4,3));
         Unit g1 = new Goblin(new Point(4,2));
-        assertTrue(Fifteen.canUnitAttackDirectly(e1, Fifteen.getInitialUnitPositions(Thirteen.readInput(input_attackFirst, 9,9))));
-        assertTrue(Fifteen.canUnitAttackDirectly(g1, Fifteen.getInitialUnitPositions(Thirteen.readInput(input_attackFirst, 9,9))));
+        assertTrue(Fifteen.canUnitAttack(e1, Fifteen.getInitialUnitPositions(Thirteen.readInput(input_attackFirst, 9,9))));
+        assertTrue(Fifteen.canUnitAttack(g1, Fifteen.getInitialUnitPositions(Thirteen.readInput(input_attackFirst, 9,9))));
     }
 }
