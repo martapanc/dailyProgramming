@@ -176,23 +176,35 @@ class FifteenTest {
         Unit g3 = new Goblin(new Point(2,2));
         Unit e1 = new Elf(new Point(5,4));
 
-        assertEquals(7, Fifteen.findMinDistanceWithBFS(g1, e1.position, Thirteen.readInput(input_bfs, 7,7)));
-        assertEquals(7, Fifteen.findMinDistanceWithBFS(e1, g1.position, Thirteen.readInput(input_bfs, 7,7)));
-        assertEquals(7, Fifteen.findMinDistanceWithBFS(g2, e1.position, Thirteen.readInput(input_bfs, 7,7)));
-        assertEquals(7, Fifteen.findMinDistanceWithBFS(e1, g2.position, Thirteen.readInput(input_bfs, 7,7)));
-        assertEquals(5, Fifteen.findMinDistanceWithBFS(g3, e1.position, Thirteen.readInput(input_bfs, 7,7)));
-        assertEquals(5, Fifteen.findMinDistanceWithBFS(e1, g3.position, Thirteen.readInput(input_bfs, 7,7)));
+        char[][] inputMatrix = Thirteen.readInput(input_bfs, 7, 7);
 
-        assertEquals(6, Fifteen.findMinDistanceWithBFS(g1, new Point(5,5), Thirteen.readInput(input_bfs, 7,7)));
-        assertEquals(6, Fifteen.findMinDistanceWithBFS(g2, new Point(5,5), Thirteen.readInput(input_bfs, 7,7)));
-        assertEquals(4, Fifteen.findMinDistanceWithBFS(g3, new Point(5,5), Thirteen.readInput(input_bfs, 7,7)));
+        assertEquals(7, Fifteen.findMinDistanceWithBFS(g1, e1.position, inputMatrix));
+        assertEquals(7, Fifteen.findMinDistanceWithBFS(e1, g1.position, inputMatrix));
+        assertEquals(7, Fifteen.findMinDistanceWithBFS(g2, e1.position, inputMatrix));
+        assertEquals(7, Fifteen.findMinDistanceWithBFS(e1, g2.position, inputMatrix));
+        assertEquals(5, Fifteen.findMinDistanceWithBFS(g3, e1.position, inputMatrix));
+        assertEquals(5, Fifteen.findMinDistanceWithBFS(e1, g3.position, inputMatrix));
 
-        assertEquals(2, Fifteen.findMinDistanceWithBFS(g3, new Point(2,4), Thirteen.readInput(input_bfs, 7,7)));
+        assertEquals(6, Fifteen.findMinDistanceWithBFS(g1, new Point(5,5), inputMatrix));
+        assertEquals(6, Fifteen.findMinDistanceWithBFS(g2, new Point(5,5), inputMatrix));
+        assertEquals(4, Fifteen.findMinDistanceWithBFS(g3, new Point(5,5), inputMatrix));
+
+        assertEquals(2, Fifteen.findMinDistanceWithBFS(g3, new Point(2,4), inputMatrix));
 
         Unit g4 = new Goblin(new Point(11, 11));
         Unit e2 = new Elf(new Point(19, 26));
 
         assertEquals(27, Fifteen.findMinDistanceWithBFS(g4, e2.position, Thirteen.readInput(input2, 32,32)));
         assertEquals(27, Fifteen.findMinDistanceWithBFS(e2, g4.position, Thirteen.readInput(input2, 32,32)));
+    }
+
+    @Test
+    public void testGetDistance() {
+        char[][] matrix = Thirteen.readInput(input_bfs, 7, 7);
+
+        assertEquals(9, Fifteen.getDistanceWithBFS(new Point(5,1), new Point(5,4), matrix));
+        assertEquals(9, Fifteen.getDistanceWithBFS(new Point(5,4), new Point(5,1), matrix));
+        assertEquals(5, Fifteen.getDistanceWithBFS(new Point(2,1), new Point(1,5), matrix));
+        assertEquals(4, Fifteen.getDistanceWithBFS(new Point(1,1), new Point(1,5), matrix));
     }
 }

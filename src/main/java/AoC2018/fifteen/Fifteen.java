@@ -270,7 +270,7 @@ public class Fifteen {
         Map<Point, Integer> pointAndDistances = Arrays
                 .stream(directionArray)
                 .filter(p -> matrix[p.y][p.x] == '.')
-                .collect(Collectors.toMap(p -> p, p -> getManhattanDistance(p, target), (a, b) -> b));
+                .collect(Collectors.toMap(p -> p, p -> getDistanceWithBFS(p, target, matrix), (a, b) -> b));
 
         int minDistance = Collections.min(pointAndDistances.values());
         return pointAndDistances.entrySet().stream().filter(entry -> entry.getValue() == minDistance)
@@ -346,5 +346,74 @@ public class Fifteen {
         }
 //        return Character.getNumericValue(edge);
         return count;
+    }
+
+    public static int getDistanceWithBFS(Point sourceCell, Point targetCell, char[][] inputMatrix){
+
+        char[][] matrix = new char[inputMatrix[0].length][inputMatrix.length];
+
+        IntStream.range(0, matrix.length).forEach(i -> System.arraycopy(inputMatrix[i], 0, matrix[i], 0, matrix[i].length));
+
+        int count = 1;
+        int edge = '1';
+        Point[] targetAdjacentPoints = getAdjacentPoints(targetCell);
+        List<Point> edgeList = Arrays.stream(targetAdjacentPoints).filter(p -> matrix[p.y][p.x] == '.').collect(Collectors.toList());
+        List<Point> visitedList;
+
+        matrix[targetCell.y][targetCell.x] = 'T';
+        matrix[sourceCell.y][sourceCell.x] = 'S';
+        int matrixCheckSum = calcMatrixChecksum(matrix);
+
+        Thirteen.printMatrix(matrix);
+
+        boolean reachedSource = false;
+
+        while (!reachedSource) {
+
+            if (matrixCheckSum == calcMatrixChecksum(matrix)) {
+                return 'e';
+            } else {
+                matrixCheckSum = calcMatrixChecksum(matrix);
+            }
+            visitedList = new ArrayList<>();
+            for (Point p : edgeList) {
+                matrix[p.y][p.x] = (char) edge;
+                visitedList.add(p);
+            }
+            Thirteen.printMatrix(matrix);
+
+            edgeList = new ArrayList<>();
+
+            for (Point v : visitedList) {
+                targetAdjacentPoints = getAdjacentPoints(v);
+                for (Point a : targetAdjacentPoints) {
+                    if (!edgeList.contains(a) && matrix[a.y][a.x] == '.') {
+                        edgeList.add(a);
+                    }
+
+                    if (a.equals(sourceCell)) {
+                        reachedSource = true;
+                    }
+                }
+            }
+            if (!reachedSource) {
+                count += 1;
+                edge += 1;
+                if (edge == 58) {
+                    edge = '0';
+                }
+            }
+        }
+        return count+1;
+    }
+
+    private static int calcMatrixChecksum(char[][] matrix) {
+        int matrixCheckSum = 0;
+        for (char[] y : matrix) {
+            for (char x : y) {
+                matrixCheckSum += x;
+            }
+        }
+        return matrixCheckSum;
     }
 }
