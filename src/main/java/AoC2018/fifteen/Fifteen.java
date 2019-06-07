@@ -127,6 +127,27 @@ public class Fifteen {
             };
     }
 
+    private static Point[] getFreeAdjacentPoints(Point currPos, char[][] matrix) {
+        List<Point> freePoints = new ArrayList<>();
+        Point[] adjacentPoints = new Point[]{
+                    new Point(currPos.x, currPos.y - 1),
+                    new Point(currPos.x, currPos.y + 1),
+                    new Point(currPos.x + 1, currPos.y),
+                    new Point(currPos.x - 1, currPos.y)
+        };
+        for (Point p : adjacentPoints) {
+            if (matrix[p.y][p.x] == '.') {
+                freePoints.add(p);
+            }
+        }
+
+        Point[] points = new Point[freePoints.size()];
+        for (int i = 0; i < freePoints.size(); i++) {
+            points[i] = freePoints.get(i);
+        }
+        return points;
+    }
+
     public static List<Point> findPossibleTargets(Unit playingUnit, List<Unit> unitList, char[][] matrix) {
         // Enemies belong to the opposite category (e.g. Elf for Goblin, and vice versa)
         // For each enemy, create a list of the adjacent (four) cells that are free (.)
@@ -276,100 +297,50 @@ public class Fifteen {
         char[][] matrix = new char[inputMatrix[0].length][inputMatrix.length];
         IntStream.range(0, matrix.length).forEach(i -> System.arraycopy(inputMatrix[i], 0, matrix[i], 0, matrix[i].length));
 
-        Thirteen.printMatrix(matrix);
-
+        int count = 0;
         int edge = '0';
-        Point[] adjacentPoints = getAdjacentPoints(targetCell);
-        List<Point> edgeList = Arrays.stream(adjacentPoints).filter(p -> matrix[p.y][p.x] == '.').collect(Collectors.toList());
+        Point[] targetAdjacentPoints = getAdjacentPoints(targetCell);
+//        Point[] sourceAdjacentPoints = getFreeAdjacentPoints(playingUnit.position, matrix);
+        List<Point> edgeList = Arrays.stream(targetAdjacentPoints).filter(p -> matrix[p.y][p.x] == '.').collect(Collectors.toList());
+        List<Point> visitedList;
+//        List<Point> nextCellsList = new ArrayList<>();
 
-        List<Point> visitedList = new ArrayList<>();
-        for (Point p : edgeList) {
-            matrix[p.y][p.x] = (char) edge;
-            visitedList.add(p);
-        }
+        boolean reachedStart = false;
 
-        Thirteen.printMatrix(matrix);
+        while (!reachedStart) {
+//            nextCellsList = new ArrayList<>();
+            visitedList = new ArrayList<>();
+            for (Point p : edgeList) {
+                matrix[p.y][p.x] = (char) edge;
+                visitedList.add(p);
+//                for (Point sap : sourceAdjacentPoints) {
+//                    if (p.equals(sap)) {
+//                        nextCellsList.add(p);
+//                    }
+//                }
+            }
+            Thirteen.printMatrix(matrix);
+            count += 1;
+            edge += 1;
+            if (edge == 58) {
+                edge = '0';
+            }
+            edgeList = new ArrayList<>();
 
-        edge += 1;
+            for (Point v : visitedList) {
+                targetAdjacentPoints = getAdjacentPoints(v);
+                for (Point a : targetAdjacentPoints) {
+                    if (!edgeList.contains(a) && matrix[a.y][a.x] == '.') {
+                        edgeList.add(a);
+                    }
 
-        edgeList = new ArrayList<>();
-        for (Point v : visitedList) {
-            adjacentPoints = getAdjacentPoints(v);
-            for (Point a : adjacentPoints) {
-                if (!edgeList.contains(a) && matrix[a.y][a.x] == '.') {
-                    edgeList.add(a);
+                    if (matrix[a.y][a.x] == playingUnit.getIdChar() && a.equals(playingUnit.position)) {
+                        reachedStart = true;
+                    }
                 }
             }
         }
-
-        visitedList = new ArrayList<>();
-        for (Point p : edgeList) {
-            matrix[p.y][p.x] = (char) edge;
-            visitedList.add(p);
-        }
-
-        Thirteen.printMatrix(matrix);
-
-        edge += 1;
-
-        edgeList = new ArrayList<>();
-        for (Point v : visitedList) {
-            adjacentPoints = getAdjacentPoints(v);
-            for (Point a : adjacentPoints) {
-                if (!edgeList.contains(a) && matrix[a.y][a.x] == '.') {
-                    edgeList.add(a);
-                }
-            }
-        }
-
-        visitedList = new ArrayList<>();
-        for (Point p : edgeList) {
-            matrix[p.y][p.x] = (char) edge;
-            visitedList.add(p);
-        }
-
-        Thirteen.printMatrix(matrix);
-
-        edge += 1;
-
-        edgeList = new ArrayList<>();
-        for (Point v : visitedList) {
-            adjacentPoints = getAdjacentPoints(v);
-            for (Point a : adjacentPoints) {
-                if (!edgeList.contains(a) && matrix[a.y][a.x] == '.') {
-                    edgeList.add(a);
-                }
-            }
-        }
-
-        visitedList = new ArrayList<>();
-        for (Point p : edgeList) {
-            matrix[p.y][p.x] = (char) edge;
-            visitedList.add(p);
-        }
-
-        Thirteen.printMatrix(matrix);
-
-        edge += 1;
-
-        edgeList = new ArrayList<>();
-        for (Point v : visitedList) {
-            adjacentPoints = getAdjacentPoints(v);
-            for (Point a : adjacentPoints) {
-                if (!edgeList.contains(a) && matrix[a.y][a.x] == '.') {
-                    edgeList.add(a);
-                }
-            }
-        }
-
-        visitedList = new ArrayList<>();
-        for (Point p : edgeList) {
-            matrix[p.y][p.x] = (char) edge;
-            visitedList.add(p);
-        }
-
-        Thirteen.printMatrix(matrix);
-
-        return 0;
+//        return Character.getNumericValue(edge);
+        return count;
     }
 }

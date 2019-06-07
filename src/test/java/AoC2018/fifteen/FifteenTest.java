@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class FifteenTest {
 
     private final String input1 = "src/test/java/AoC2018/fifteen/input1";
+    private final String input2 = "src/test/java/AoC2018/fifteen/input2";
     private final String input_flood = "src/test/java/AoC2018/fifteen/input_flood";
     private final String input_attackFirst = "src/test/java/AoC2018/fifteen/input_attackFirst";
     private final String input_progress = "src/test/java/AoC2018/fifteen/input_progress";
@@ -171,8 +172,21 @@ class FifteenTest {
     @Test
     public void testBFS() {
         Unit g1 = new Goblin(new Point(5,1));
+        Unit g2 = new Goblin(new Point(5,3));
+        Unit g3 = new Goblin(new Point(2,2));
         Unit e1 = new Elf(new Point(5,4));
 
-        Fifteen.findMinDistanceWithBFS(g1, e1.position, Thirteen.readInput(input_bfs, 7,7));
+        assertEquals(8, Fifteen.findMinDistanceWithBFS(g1, e1.position, Thirteen.readInput(input_bfs, 7,7)));
+        assertEquals(8, Fifteen.findMinDistanceWithBFS(e1, g1.position, Thirteen.readInput(input_bfs, 7,7)));
+        assertEquals(8, Fifteen.findMinDistanceWithBFS(g2, e1.position, Thirteen.readInput(input_bfs, 7,7)));
+        assertEquals(8, Fifteen.findMinDistanceWithBFS(e1, g2.position, Thirteen.readInput(input_bfs, 7,7)));
+        assertEquals(6, Fifteen.findMinDistanceWithBFS(g3, e1.position, Thirteen.readInput(input_bfs, 7,7)));
+        assertEquals(6, Fifteen.findMinDistanceWithBFS(e1, g3.position, Thirteen.readInput(input_bfs, 7,7)));
+
+        Unit g4 = new Goblin(new Point(11, 11));
+        Unit e2 = new Elf(new Point(19, 26));
+
+        assertEquals(28, Fifteen.findMinDistanceWithBFS(g4, e2.position, Thirteen.readInput(input2, 32,32)));
+        assertEquals(28, Fifteen.findMinDistanceWithBFS(e2, g4.position, Thirteen.readInput(input2, 32,32)));
     }
 }
