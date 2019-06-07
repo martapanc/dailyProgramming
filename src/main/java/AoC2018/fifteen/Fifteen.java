@@ -320,11 +320,7 @@ public class Fifteen {
 //                }
             }
             Thirteen.printMatrix(matrix);
-            count += 1;
-            edge += 1;
-            if (edge == 58) {
-                edge = '0';
-            }
+
             edgeList = new ArrayList<>();
 
             for (Point v : visitedList) {
@@ -337,6 +333,14 @@ public class Fifteen {
                     if (matrix[a.y][a.x] == playingUnit.getIdChar() && a.equals(playingUnit.position)) {
                         reachedStart = true;
                     }
+                }
+            }
+
+            if (!reachedStart) {
+                count += 1;
+                edge += 1;
+                if (edge == 58) {
+                    edge = '0';
                 }
             }
         }
