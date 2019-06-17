@@ -364,8 +364,11 @@ public class Fifteen {
         matrix[sourceCell.y][sourceCell.x] = 'S';
         int matrixCheckSum = calcMatrixChecksum(matrix);
 
-        Thirteen.printMatrix(matrix);
+//        Thirteen.printMatrix(matrix);
 
+        if (sourceCell.getLocation().equals(targetCell.getLocation())) {
+            return 0;
+        }
         if (areCellsAdiacents(sourceCell, targetCell)) {
             return 1;
         }
@@ -380,7 +383,7 @@ public class Fifteen {
                 matrix[p.y][p.x] = (char) edge;
                 visitedList.add(p);
             }
-            Thirteen.printMatrix(matrix);
+//            Thirteen.printMatrix(matrix);
 
             edgeList = new ArrayList<>();
 

@@ -20,6 +20,7 @@ class FifteenTest {
     private final String input_attackFirst = "src/test/java/AoC2018/fifteen/input_attackFirst";
     private final String input_progress = "src/test/java/AoC2018/fifteen/input_progress";
     private final String input_bfs = "src/test/java/AoC2018/fifteen/input_bfs";
+    private final String input28 = "src/test/java/AoC2018/fifteen/input28";
 
     @Test
     public void testReadInputAndPrintMatrix(){
@@ -154,11 +155,14 @@ class FifteenTest {
 
     @Test
     public void moveEverything() {
-        Fifteen.moveEverything(Fifteen.getInitialUnitPositions(Thirteen.readInput(input1, 9, 9)),
-                Thirteen.readInput(input1, 9, 9), 4);
+        char[][] matrix1 = Thirteen.readInput(input1, 9, 9);
+        Fifteen.moveEverything(Fifteen.getInitialUnitPositions(matrix1), matrix1, 4);
 
-        Fifteen.moveEverything(Fifteen.getInitialUnitPositions(Thirteen.readInput(input_progress, 7, 7)),
-                Thirteen.readInput(input_progress, 7, 7), 47);
+        char[][] matrix2 = Thirteen.readInput(input_progress, 7, 7);
+        Fifteen.moveEverything(Fifteen.getInitialUnitPositions(matrix2), matrix2, 47);
+
+        char[][] matrix3 = Thirteen.readInput(input28, 7, 7);
+        Fifteen.moveEverything(Fifteen.getInitialUnitPositions(matrix3), matrix3, 10);
     }
 
     @Test
