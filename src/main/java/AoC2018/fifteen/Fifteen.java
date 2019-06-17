@@ -264,7 +264,7 @@ public class Fifteen {
         // Next cell is a free cell (.) with the minimum distance to the target cell (adjacent to enemy)
         // If multiple such cells are found, pick the first in reading order (top-down, left-right)
         Point currPos = playingUnit.position;
-        Point[] directionArray = getAdjacentPoints(currPos);
+        Point[] directionArray = getFreeAdjacentPoints(currPos, matrix);
 
         // TODO: fix function that finds path
         Map<Point, Integer> pointAndDistances = Arrays
@@ -366,15 +366,15 @@ public class Fifteen {
 
         Thirteen.printMatrix(matrix);
 
+        if (areCellsAdiacents(sourceCell, targetCell)) {
+            return 1;
+        }
+
         boolean reachedSource = false;
 
         while (!reachedSource) {
 
-            if (matrixCheckSum == calcMatrixChecksum(matrix)) {
-                return 'e';
-            } else {
-                matrixCheckSum = calcMatrixChecksum(matrix);
-            }
+
             visitedList = new ArrayList<>();
             for (Point p : edgeList) {
                 matrix[p.y][p.x] = (char) edge;
@@ -403,6 +403,12 @@ public class Fifteen {
                     edge = '0';
                 }
             }
+
+            if (matrixCheckSum == calcMatrixChecksum(matrix)) {
+                return 'e';
+            } else {
+                matrixCheckSum = calcMatrixChecksum(matrix);
+            }
         }
         return count+1;
     }
@@ -415,5 +421,10 @@ public class Fifteen {
             }
         }
         return matrixCheckSum;
+    }
+
+    private static boolean areCellsAdiacents(Point one, Point two) {
+        return ((one.x == two.x && (one.y == two.y + 1 || one.y == two.y -1)) ||
+                (one.y == two.y && (one.x == two.x + 1 || one.x == two.x -1)));
     }
 }
