@@ -25,13 +25,21 @@ public class Fifteen {
         return unitList;
     }
 
-    public static void moveEverything(List<Unit> unitList, char[][] matrix, int turns) {
+    public static int moveEverything(List<Unit> unitList, char[][] matrix, int turns) {
 
         int times = 0;
         while (times < turns) {
             System.out.println(" *** Round " + (times + 1) + " ***");
             List<Unit> movingUnits = new ArrayList<>(unitList);
             for (Unit unit : unitList) {
+                if (!areThereEnemiesLeft(unit, unitList)) {
+                    int HPsum = 0;
+                    for (Unit u : movingUnits) {
+                        HPsum += u.getHitPoints();
+                    }
+                    return (times-1) * (HPsum + 6);
+                }
+
                 if (!canUnitAttack(unit, unitList))
                     move(unit, movingUnits, matrix);
 
@@ -50,6 +58,8 @@ public class Fifteen {
 
             times += 1;
         }
+
+        return -1;
     }
 
     public static void attack(Unit playingUnit, List<Unit> unitList, char[][] matrix){
@@ -98,6 +108,15 @@ public class Fifteen {
                 }
             }
         }
+    }
+
+    public static boolean areThereEnemiesLeft(Unit playingUnit, List<Unit> unitList) {
+        boolean areThereEnemiesLeft = false;
+        Class targetType = playingUnit instanceof Elf ? Goblin.class : Elf.class;
+        for (Unit u : unitList) {
+            if (targetType.isInstance(u)) areThereEnemiesLeft = true;
+        }
+        return areThereEnemiesLeft;
     }
 
     public static boolean canUnitAttack(Unit playingUnit, List<Unit> unitList) {

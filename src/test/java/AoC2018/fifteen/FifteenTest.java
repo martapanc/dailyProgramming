@@ -22,6 +22,10 @@ class FifteenTest {
     private final String input_bfs = "src/test/java/AoC2018/fifteen/input_bfs";
     private final String input28 = "src/test/java/AoC2018/fifteen/input28";
 
+    private final String fight1 = "src/test/java/AoC2018/fifteen/fight1";
+    private final String fight2 = "src/test/java/AoC2018/fifteen/fight2";
+    private final String fight3 = "src/test/java/AoC2018/fifteen/fight3";
+
     @Test
     public void testReadInputAndPrintMatrix(){
 //        Thirteen.printMatrix(Thirteen.readInput(input1, 9,9));
@@ -155,14 +159,26 @@ class FifteenTest {
 
     @Test
     public void moveEverything() {
-        char[][] matrix1 = Thirteen.readInput(input1, 9, 9);
-        Fifteen.moveEverything(Fifteen.getInitialUnitPositions(matrix1), matrix1, 4);
+//        char[][] matrix1 = Thirteen.readInput(input1, 9, 9);
+//        Fifteen.moveEverything(Fifteen.getInitialUnitPositions(matrix1), matrix1, 4);
+//
+//        char[][] matrix2 = Thirteen.readInput(input_progress, 7, 7);
+//        assertEquals(27730, Fifteen.moveEverything(Fifteen.getInitialUnitPositions(matrix2), matrix2, 48));
+//
+//        char[][] matrix3 = Thirteen.readInput(input28, 7, 7);
+//        Fifteen.moveEverything(Fifteen.getInitialUnitPositions(matrix3), matrix3, 10);
 
-        char[][] matrix2 = Thirteen.readInput(input_progress, 7, 7);
-        Fifteen.moveEverything(Fifteen.getInitialUnitPositions(matrix2), matrix2, 47);
+//        char[][] matrix4 = Thirteen.readInput(fight1, 7, 7);
+//        assertEquals(36334, Fifteen.moveEverything(Fifteen.getInitialUnitPositions(matrix4), matrix4, 40));
 
-        char[][] matrix3 = Thirteen.readInput(input28, 7, 7);
-        Fifteen.moveEverything(Fifteen.getInitialUnitPositions(matrix3), matrix3, 10);
+//        char[][] matrix5 = Thirteen.readInput(fight2, 7, 7);
+//        assertEquals(39514, Fifteen.moveEverything(Fifteen.getInitialUnitPositions(matrix5), matrix5, 50));
+//
+//        char[][] matrix6 = Thirteen.readInput(fight3, 7, 7);
+//        assertEquals(27755, Fifteen.moveEverything(Fifteen.getInitialUnitPositions(matrix6), matrix6, 40));
+
+        char[][] matrix7 = Thirteen.readInput(input2, 32, 32);
+        assertEquals(27755, Fifteen.moveEverything(Fifteen.getInitialUnitPositions(matrix7), matrix7, 500));
     }
 
     @Test
