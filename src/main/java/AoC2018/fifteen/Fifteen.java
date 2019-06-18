@@ -18,8 +18,11 @@ public class Fifteen {
             System.out.println(" *** Round " + (times + 1) + " ***");
             List<Unit> movingUnits = new ArrayList<>(unitList);
             for (Unit unit : unitList) {
-                if (!areThereEnemiesLeft(unit, movingUnits))
-                    return times * movingUnits.stream().mapToInt(Unit::getHitPoints).sum();
+                if (!areThereEnemiesLeft(unit, movingUnits)) {
+                    int sum = movingUnits.stream().mapToInt(Unit::getHitPoints).sum();
+                    System.out.println("Rounds completed: " + times + "; Total points = " + sum);
+                    return times * sum;
+                }
 
                 if (!canUnitAttack(unit, unitList))
                     move(unit, movingUnits, matrix);
