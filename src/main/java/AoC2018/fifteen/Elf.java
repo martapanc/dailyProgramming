@@ -11,14 +11,13 @@ public class Elf extends Unit {
         super(position);
     }
 
-    @Override
-    public int getAttackPoints() {
-        return attackPoints;
+    public Elf(Point position, String name) {
+        super(position, name);
     }
 
     @Override
-    public void setAttackPoints(int attackPoints) {
-        this.attackPoints = attackPoints;
+    public int getAttackPoints() {
+        return attackPoints;
     }
 
     @Override
@@ -42,21 +41,6 @@ public class Elf extends Unit {
     }
 
     @Override
-    public String toString() {
-        return "Elf[" + hitPoints + "](" + position.x + "," + position.y + ")";
-    }
-
-    @Override
-    public boolean isAlive() {
-        return super.isAlive();
-    }
-
-    @Override
-    public void setDead() {
-        super.setDead();
-    }
-
-    @Override
     public char getIdChar() {
         return 'E';
     }
@@ -64,5 +48,20 @@ public class Elf extends Unit {
     @Override
     public void setIdChar(char idChar) {
         super.setIdChar(idChar);
+    }
+
+    @Override
+    public String getName() {
+        return super.getName();
+    }
+
+    @Override
+    public void setName(String name) {
+        super.setName(name);
+    }
+
+    @Override
+    public String toString() {
+        return name + "[" + hitPoints + "](" + position.x + "," + position.y + ")";
     }
 }

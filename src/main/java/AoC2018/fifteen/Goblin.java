@@ -11,14 +11,13 @@ public class Goblin extends Unit {
         super(position);
     }
 
-    @Override
-    public int getAttackPoints() {
-        return attackPoints;
+    public Goblin(Point position, String name) {
+        super(position, name);
     }
 
     @Override
-    public void setAttackPoints(int attackPoints) {
-        this.attackPoints = attackPoints;
+    public int getAttackPoints() {
+        return attackPoints;
     }
 
     @Override
@@ -42,16 +41,6 @@ public class Goblin extends Unit {
     }
 
     @Override
-    public boolean isAlive() {
-        return super.isAlive();
-    }
-
-    @Override
-    public void setDead() {
-        super.setDead();
-    }
-
-    @Override
     public char getIdChar() {
         return 'G';
     }
@@ -62,7 +51,17 @@ public class Goblin extends Unit {
     }
 
     @Override
+    public String getName() {
+        return super.getName();
+    }
+
+    @Override
+    public void setName(String name) {
+        super.setName(name);
+    }
+
+    @Override
     public String toString() {
-        return "Goblin[" + hitPoints + "](" + position.x + "," + position.y + ")";
+        return name + "[" + hitPoints + "](" + position.x + "," + position.y + ")";
     }
 }

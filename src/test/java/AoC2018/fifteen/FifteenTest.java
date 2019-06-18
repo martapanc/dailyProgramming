@@ -45,7 +45,7 @@ class FifteenTest {
         unitList.add(new Goblin(new Point(7, 7)));
 
         List<Unit> actual = Fifteen.getInitialUnitPositions(Thirteen.readInput(input1, 9,9));
-        IntStream.range(0, unitList.size()).forEach(i -> assertEquals(unitList.get(i).toString(), actual.get(i).toString()));
+        IntStream.range(0, unitList.size()).forEach(i -> assertEquals(unitList.get(i).position, actual.get(i).position));
     }
 
     @Test

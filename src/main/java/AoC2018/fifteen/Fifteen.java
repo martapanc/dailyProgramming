@@ -10,15 +10,39 @@ import java.util.stream.IntStream;
 
 public class Fifteen {
 
+    public static List<String> elfNameInitialiser() {
+        List<String> elfList = Arrays.asList("Eustachio", "Eusebio", "Ermenegildo", "Ermengarda", "Ernesto", "Edgardo", "Ermete",
+                "Eleuterio", "Egidio", "Elmerico", "Ermanno", "Eufronio", "Evandro", "Ezechiele", "Edmondo", "Eliodoro", "Erasmo",
+                "Ercolino", "Efesto", "Eraclide", "Ennio", "Eufrasia", "Egizia", "Enea", "Enzo", "Elmo", "Elpidio", "Esaù");
+        Collections.shuffle(elfList);
+        return elfList;
+    }
+
+    public static List<String> goblinNameInitialiser() {
+        List<String> goblinList = Arrays.asList("Gioacchino", "Girolamo", "Geronimo", "Gandolfo", "Giacobbe", "Gollum", "Gennaro", "Giuditta",
+                "Gianbattista", "Gianvincenzo", "Guendalina", "Goffredo", "Giustiniano", "Gregorio", "Gustavo", "Gianfilippo", "Gedeone",
+                "Guidalberto", "Giove", "Giosuè", "Giasone", "Giampietro", "Graziella", "Gertrude", "Genoveffa", "Germano", "Giotto");
+        Collections.shuffle(goblinList);
+        return goblinList;
+    }
+
     public static List<Unit> getInitialUnitPositions(char[][] matrix){
+        List<String> elves = elfNameInitialiser();
+        List<String> goblins = goblinNameInitialiser();
+
+        int elfCount = 0;
+        int goblinCount = 0;
+
         List<Unit> unitList = new ArrayList<>();
         for (int y = 0; y < matrix.length; y++) {
             for (int x = 0; x < matrix[y].length; x++) {
                 if (matrix[y][x] == 'G') {
-                    unitList.add(new Goblin(new Point(x, y)));
+                    unitList.add(new Goblin(new Point(x, y), goblins.get(goblinCount)));
+                    goblinCount += 1;
                 }
                 if (matrix[y][x] == 'E') {
-                    unitList.add(new Elf(new Point(x, y)));
+                    unitList.add(new Elf(new Point(x, y), elves.get(elfCount)));
+                    elfCount += 1;
                 }
             }
         }

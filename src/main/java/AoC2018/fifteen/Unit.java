@@ -7,19 +7,20 @@ public class Unit {
     private int attackPoints;
     private int hitPoints;
     Point position;
-    private boolean alive = true;
     private char idChar = 'U';
+    String name;
 
     public Unit(Point position) {
         this.position = position;
     }
 
-    public int getAttackPoints() {
-        return attackPoints;
+    public Unit(Point position, String name) {
+        this.position = position;
+        this.name = name;
     }
 
-    public void setAttackPoints(int attackPoints) {
-        this.attackPoints = attackPoints;
+    public int getAttackPoints() {
+        return attackPoints;
     }
 
     public int getHitPoints() {
@@ -38,14 +39,6 @@ public class Unit {
         this.position = position;
     }
 
-    public boolean isAlive() {
-        return alive;
-    }
-
-    public void setDead() {
-        this.alive = false;
-    }
-
     public char getIdChar() {
         return idChar;
     }
@@ -54,8 +47,16 @@ public class Unit {
         this.idChar = idChar;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public String toString() {
-        return "Unit[" + hitPoints + "](" + position.x + "," + position.y + ")";
+        return name + "[" + hitPoints + "](" + position.x + "," + position.y + ")";
     }
 }
