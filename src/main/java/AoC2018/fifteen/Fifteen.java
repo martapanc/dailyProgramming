@@ -32,12 +32,12 @@ public class Fifteen {
             System.out.println(" *** Round " + (times + 1) + " ***");
             List<Unit> movingUnits = new ArrayList<>(unitList);
             for (Unit unit : unitList) {
-                if (!areThereEnemiesLeft(unit, unitList)) {
+                if (!areThereEnemiesLeft(unit, movingUnits)) {
                     int HPsum = 0;
                     for (Unit u : movingUnits) {
                         HPsum += u.getHitPoints();
                     }
-                    return (times-1) * (HPsum + 6);
+                    return times * HPsum;
                 }
 
                 if (!canUnitAttack(unit, unitList))
