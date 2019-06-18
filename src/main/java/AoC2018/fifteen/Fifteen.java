@@ -20,6 +20,7 @@ public class Fifteen {
             for (Unit unit : unitList) {
                 if (!areThereEnemiesLeft(unit, movingUnits)) {
                     int sum = movingUnits.stream().mapToInt(Unit::getHitPoints).sum();
+                    System.out.println("Final points: " + movingUnits);
                     System.out.println("Rounds completed: " + times + "; Total points = " + sum);
                     return times * sum;
                 }

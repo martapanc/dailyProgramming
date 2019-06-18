@@ -15,12 +15,13 @@ public class MoveEverythingTests {
     private final String fight1 = "src/test/java/AoC2018/fifteen/fight1";
     private final String fight2 = "src/test/java/AoC2018/fifteen/fight2";
     private final String fight3 = "src/test/java/AoC2018/fifteen/fight3";
+    private final String fight4 = "src/test/java/AoC2018/fifteen/fight4";
+    private final String fight5 = "src/test/java/AoC2018/fifteen/fight5";
 
     @Test
     public void moveEverything_1() {
         char[][] matrix1 = Thirteen.readInput(input1, 9, 9);
-        Fifteen.moveEverything(Utils.getInitialUnitPositions(matrix1), matrix1, 4);
-        assertEquals(24784, Fifteen.moveEverything(Utils.getInitialUnitPositions(matrix1), matrix1, 30));
+        assertEquals(27774, Fifteen.moveEverything(Utils.getInitialUnitPositions(matrix1), matrix1, 30));
     }
 
     @Test
@@ -32,7 +33,7 @@ public class MoveEverythingTests {
     @Test
     public void moveEverything_3(){
         char[][] matrix3 = Thirteen.readInput(input28, 7, 7);
-        Fifteen.moveEverything(Utils.getInitialUnitPositions(matrix3), matrix3, 10);
+        assertEquals(23630, Fifteen.moveEverything(Utils.getInitialUnitPositions(matrix3), matrix3, 40));
     }
 
     @Test
@@ -54,8 +55,22 @@ public class MoveEverythingTests {
     }
 
     @Test
+    public void moveEverything_7(){
+        char[][] matrix = Thirteen.readInput(fight4, 7, 7);
+        assertEquals(28944, Fifteen.moveEverything(Utils.getInitialUnitPositions(matrix), matrix, 60));
+    }
+
+    @Test
+    public void moveEverything_8(){
+        char[][] matrix = Thirteen.readInput(fight5, 9, 9);
+        assertEquals(18740, Fifteen.moveEverything(Utils.getInitialUnitPositions(matrix), matrix, 25));
+    }
+
+    @Test
     public void moveEverything_final(){
         char[][] matrix7 = Thirteen.readInput(input2, 32, 32);
         assertEquals(197538, Fifteen.moveEverything(Utils.getInitialUnitPositions(matrix7), matrix7, 1000));
     }
 }
+
+// [Gianbattista[200](1,1), Esaù[200](5,1), Evandro[200](1,2), Ernesto[200](3,2), Ezechiele[200](5,2), Giuditta[200](1,3), Eliodoro[200](5,4), Eleuterio[200](4,5)]

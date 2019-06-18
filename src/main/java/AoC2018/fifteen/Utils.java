@@ -29,6 +29,9 @@ public class Utils {
                 }
             }
         }
+        System.out.println("*** Initial positions ***");
+        Thirteen.printMatrix(matrix);
+        System.out.println(unitList);
         return unitList;
     }
 
