@@ -104,39 +104,39 @@ class FifteenTest {
     }
 
     @Test
-    public void testGetManhattanDistance() {
-        assertEquals(5, Fifteen.getManhattanDistance(new Point(1, 1), new Point(3, 4)));
-        assertEquals(4, Fifteen.getManhattanDistance(new Point(-1, -1), new Point(1, 1)));
-    }
-
-    @Test
     public void testGetClosestTargetInReadingOrder() {
         Unit e1 = new Elf(new Point(4,4));
+        Unit e2 = new Elf(new Point(4,7));
+        char[][] matrix1 = Thirteen.readInput(input_flood, 9, 9);
+
         assertEquals(new Point(1, 5), Fifteen.getClosestTargetInReadingOrder(e1,
                 Fifteen.findReachableTargets(e1,
-                        Fifteen.getInitialUnitPositions(Thirteen.readInput(input_flood, 9, 9)),
-                        Thirteen.readInput(input_flood, 9, 9)))
+                        Fifteen.getInitialUnitPositions(matrix1),
+                        matrix1),
+                matrix1)
         );
-
-        Unit e2 = new Elf(new Point(4,7));
         assertEquals(new Point(2, 7), Fifteen.getClosestTargetInReadingOrder(e2,
                 Fifteen.findReachableTargets(e2,
-                        Fifteen.getInitialUnitPositions(Thirteen.readInput(input_flood, 9, 9)),
-                        Thirteen.readInput(input_flood, 9, 9)))
+                        Fifteen.getInitialUnitPositions(matrix1),
+                        matrix1),
+                matrix1)
         );
 
         Unit e3 = new Elf(new Point(4,4));
+        Unit g1 = new Goblin(new Point(1,1));
+        char[][] matrix2 = Thirteen.readInput(input1, 9, 9);
+
         assertEquals(new Point(4, 2), Fifteen.getClosestTargetInReadingOrder(e3,
                 Fifteen.findReachableTargets(e3,
-                        Fifteen.getInitialUnitPositions(Thirteen.readInput(input1, 9, 9)),
-                        Thirteen.readInput(input1, 9, 9)))
+                        Fifteen.getInitialUnitPositions(matrix2),
+                        matrix2),
+                matrix2)
         );
-
-        Unit g1 = new Goblin(new Point(1,1));
         assertEquals(new Point(4,3), Fifteen.getClosestTargetInReadingOrder(g1,
                 Fifteen.findReachableTargets(g1,
-                        Fifteen.getInitialUnitPositions(Thirteen.readInput(input1, 9, 9)),
-                        Thirteen.readInput(input1, 9, 9)))
+                        Fifteen.getInitialUnitPositions(matrix2),
+                        matrix2),
+                matrix2)
         );
     }
 
@@ -169,18 +169,18 @@ class FifteenTest {
 
         char[][] matrix3 = Thirteen.readInput(input28, 7, 7);
         Fifteen.moveEverything(Fifteen.getInitialUnitPositions(matrix3), matrix3, 10);
-//
+
 //        char[][] matrix4 = Thirteen.readInput(fight1, 7, 7);
 //        assertEquals(36334, Fifteen.moveEverything(Fifteen.getInitialUnitPositions(matrix4), matrix4, 40));
 
 //        char[][] matrix5 = Thirteen.readInput(fight2, 7, 7);
 //        assertEquals(39514, Fifteen.moveEverything(Fifteen.getInitialUnitPositions(matrix5), matrix5, 50));
-////
+
         char[][] matrix6 = Thirteen.readInput(fight3, 7, 7);
         assertEquals(27755, Fifteen.moveEverything(Fifteen.getInitialUnitPositions(matrix6), matrix6, 40));
 
-//        char[][] matrix7 = Thirteen.readInput(input2, 32, 32);
-//        assertEquals(27755, Fifteen.moveEverything(Fifteen.getInitialUnitPositions(matrix7), matrix7, 500));
+        char[][] matrix7 = Thirteen.readInput(input2, 32, 32);
+        assertEquals(197538, Fifteen.moveEverything(Fifteen.getInitialUnitPositions(matrix7), matrix7, 1000));
     }
 
     @Test

@@ -26,26 +26,19 @@ public class Fifteen {
     }
 
     public static int moveEverything(List<Unit> unitList, char[][] matrix, int turns) {
-
         int times = 0;
         while (times < turns) {
             System.out.println(" *** Round " + (times + 1) + " ***");
             List<Unit> movingUnits = new ArrayList<>(unitList);
             for (Unit unit : unitList) {
-                if (!areThereEnemiesLeft(unit, movingUnits)) {
-                    int HPsum = 0;
-                    for (Unit u : movingUnits) {
-                        HPsum += u.getHitPoints();
-                    }
-                    return times * HPsum;
-                }
+                if (!areThereEnemiesLeft(unit, movingUnits))
+                    return times * movingUnits.stream().mapToInt(Unit::getHitPoints).sum();
 
                 if (!canUnitAttack(unit, unitList))
                     move(unit, movingUnits, matrix);
 
-                if (canUnitAttack(unit, movingUnits)) {
+                if (canUnitAttack(unit, movingUnits))
                     attack(unit, movingUnits, matrix);
-                }
             }
             // Sort cursor list by y and then by x (increasing)
             unitList = movingUnits.stream().sorted(Comparator
@@ -58,7 +51,6 @@ public class Fifteen {
 
             times += 1;
         }
-
         return -1;
     }
 
@@ -96,45 +88,32 @@ public class Fifteen {
         List<Point> reachableTargets = findReachableTargets(playingUnit, unitList, matrix);
         // Get cell next to targets with shortest distance.
         // If no such cell is found (i.e. all four cells around target are occupied, skip moving turn
-        Point closestTargetCell = getClosestTargetInReadingOrder(playingUnit, reachableTargets);
+        Point closestTargetCell = getClosestTargetInReadingOrder(playingUnit, reachableTargets, matrix);
         if (!closestTargetCell.equals(new Point(-1,-1))) { // case when unit cannot find any cell in range of a target
             Point nextPosition = getNextPositionInReadingOrder(playingUnit, closestTargetCell, matrix);
             matrix[playingUnit.position.y][playingUnit.position.x] = '.';
             matrix[nextPosition.y][nextPosition.x] = playingUnit.getIdChar();
 
-            for (Unit u : unitList) {
-                if (u.position.equals(playingUnit.position)) {
-                    u.position = nextPosition;
-                }
-            }
+            unitList.stream().filter(u -> u.position.equals(playingUnit.position)).forEach(u -> u.position = nextPosition);
         }
     }
 
     public static boolean areThereEnemiesLeft(Unit playingUnit, List<Unit> unitList) {
         boolean areThereEnemiesLeft = false;
         Class targetType = playingUnit instanceof Elf ? Goblin.class : Elf.class;
-        for (Unit u : unitList) {
-            if (targetType.isInstance(u)) areThereEnemiesLeft = true;
-        }
+        for (Unit u : unitList)
+            if (targetType.isInstance(u))
+                areThereEnemiesLeft = true;
         return areThereEnemiesLeft;
     }
 
     public static boolean canUnitAttack(Unit playingUnit, List<Unit> unitList) {
         // If a unit has an enemy in any adjacent cell, it can attack without moving
-        Point currPos = playingUnit.position;
         Point[] directionArray = getAdjacentPoints(playingUnit.position);
         Class targetType = playingUnit instanceof Elf ? Goblin.class : Elf.class;
-
         List<Unit> enemies = unitList.stream().filter(targetType::isInstance).collect(Collectors.toList());
 
-        for (Unit enemy : enemies) {
-            for (Point adjacentPt: directionArray) {
-                if (adjacentPt.equals(enemy.position)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return enemies.stream().anyMatch(enemy -> Arrays.stream(directionArray).anyMatch(adjacentPt -> adjacentPt.equals(enemy.position)));
     }
 
     private static Point[] getAdjacentPoints(Point currPos) {
@@ -147,24 +126,15 @@ public class Fifteen {
     }
 
     private static Point[] getFreeAdjacentPoints(Point currPos, char[][] matrix) {
-        List<Point> freePoints = new ArrayList<>();
+        List<Point> freePoints;
         Point[] adjacentPoints = new Point[]{
                     new Point(currPos.x, currPos.y - 1),
                     new Point(currPos.x, currPos.y + 1),
                     new Point(currPos.x + 1, currPos.y),
                     new Point(currPos.x - 1, currPos.y)
         };
-        for (Point p : adjacentPoints) {
-            if (matrix[p.y][p.x] == '.') {
-                freePoints.add(p);
-            }
-        }
-
-        Point[] points = new Point[freePoints.size()];
-        for (int i = 0; i < freePoints.size(); i++) {
-            points[i] = freePoints.get(i);
-        }
-        return points;
+        freePoints = Arrays.stream(adjacentPoints).filter(p -> matrix[p.y][p.x] == '.').collect(Collectors.toList());
+        return freePoints.stream().toArray(Point[]::new);
     }
 
     public static List<Point> findPossibleTargets(Unit playingUnit, List<Unit> unitList, char[][] matrix) {
@@ -184,11 +154,9 @@ public class Fifteen {
                         matrix[pointArray[2].y][pointArray[2].x],
                         matrix[pointArray[3].y][pointArray[3].x]
                 };
-                for (int i = 0; i < pointArray.length; i++) {
-                    if (!pointList.contains(pointArray[i]) && charArray[i] == '.') {
-                        pointList.add(pointArray[i]);
-                    }
-                }
+                IntStream.range(0, pointArray.length)
+                        .filter(i -> !pointList.contains(pointArray[i]) && charArray[i] == '.')
+                        .forEach(i -> pointList.add(pointArray[i]));
             }
         }
         return pointList;
@@ -250,7 +218,6 @@ public class Fifteen {
 
     public static List<Point> findReachableTargets(Unit playingUnit, List<Unit> unitPositions, char[][] matrix) {
         // Reachable targets (i.e. cells adjacent to enemies) are the intersection of the set of reachable cells and the set of target cells
-
         List<Point> possibleTargets = findPossibleTargets(playingUnit, unitPositions, matrix);
         List<Point> allAccessiblePointsFromUnit = getAllAccessibleTargets(playingUnit, matrix);
 
@@ -260,11 +227,11 @@ public class Fifteen {
         return reachableTargets;
     }
 
-    public static Point getClosestTargetInReadingOrder(Unit playingUnit, List<Point> reachableTargets) {
+    public static Point getClosestTargetInReadingOrder(Unit playingUnit, List<Point> reachableTargets, char[][] matrix) {
         // Among all reachable targets, pick the closest (reading order is the deal breaker)
         Map<Point, Integer> distanceMap = reachableTargets
                 .stream()
-                .collect(Collectors.toMap(target -> target, target -> getManhattanDistance(playingUnit.position, target), (a, b) -> b));
+                .collect(Collectors.toMap(target -> target, target -> getDistanceWithBFS(playingUnit.position, target, matrix), (a, b) -> b));
         if (distanceMap.size() == 0) {
             return new Point(-1, -1);
         }
@@ -285,7 +252,6 @@ public class Fifteen {
         Point currPos = playingUnit.position;
         Point[] directionArray = getFreeAdjacentPoints(currPos, matrix);
 
-        // TODO: fix function that finds path
         Map<Point, Integer> pointAndDistances = Arrays
                 .stream(directionArray)
                 .filter(p -> matrix[p.y][p.x] == '.')
@@ -294,10 +260,6 @@ public class Fifteen {
         int minDistance = Collections.min(pointAndDistances.values());
         return pointAndDistances.entrySet().stream().filter(entry -> entry.getValue() == minDistance)
                 .map(Map.Entry::getKey).sorted(pointComparator()).collect(Collectors.toList()).get(0);
-    }
-
-    public static int getManhattanDistance(Point p1, Point p2) {
-        return Math.abs(p1.x - p2.x) + Math.abs(p1.y - p2.y);
     }
 
     private static Comparator<Point> pointComparator() {
@@ -312,34 +274,22 @@ public class Fifteen {
     }
 
     public static int findMinDistanceWithBFS(Unit playingUnit, Point targetCell, char[][] inputMatrix) {
-
         char[][] matrix = new char[inputMatrix[0].length][inputMatrix.length];
         IntStream.range(0, matrix.length).forEach(i -> System.arraycopy(inputMatrix[i], 0, matrix[i], 0, matrix[i].length));
-
         int count = 0;
         int edge = '0';
+        boolean reachedStart = false;
         Point[] targetAdjacentPoints = getAdjacentPoints(targetCell);
-//        Point[] sourceAdjacentPoints = getFreeAdjacentPoints(playingUnit.position, matrix);
         List<Point> edgeList = Arrays.stream(targetAdjacentPoints).filter(p -> matrix[p.y][p.x] == '.').collect(Collectors.toList());
         List<Point> visitedList;
-//        List<Point> nextCellsList = new ArrayList<>();
-
-        boolean reachedStart = false;
 
         while (!reachedStart) {
-//            nextCellsList = new ArrayList<>();
             visitedList = new ArrayList<>();
             for (Point p : edgeList) {
                 matrix[p.y][p.x] = (char) edge;
                 visitedList.add(p);
-//                for (Point sap : sourceAdjacentPoints) {
-//                    if (p.equals(sap)) {
-//                        nextCellsList.add(p);
-//                    }
-//                }
             }
             Thirteen.printMatrix(matrix);
-
             edgeList = new ArrayList<>();
 
             for (Point v : visitedList) {
@@ -354,7 +304,6 @@ public class Fifteen {
                     }
                 }
             }
-
             if (!reachedStart) {
                 count += 1;
                 edge += 1;
@@ -363,14 +312,12 @@ public class Fifteen {
                 }
             }
         }
-//        return Character.getNumericValue(edge);
         return count;
     }
 
     public static int getDistanceWithBFS(Point sourceCell, Point targetCell, char[][] inputMatrix){
 
         char[][] matrix = new char[inputMatrix[0].length][inputMatrix.length];
-
         IntStream.range(0, matrix.length).forEach(i -> System.arraycopy(inputMatrix[i], 0, matrix[i], 0, matrix[i].length));
 
         int count = 1;
@@ -382,28 +329,22 @@ public class Fifteen {
         matrix[targetCell.y][targetCell.x] = 'T';
         matrix[sourceCell.y][sourceCell.x] = 'S';
         int matrixCheckSum = calcMatrixChecksum(matrix);
-
 //        Thirteen.printMatrix(matrix);
 
-        if (sourceCell.getLocation().equals(targetCell.getLocation())) {
+        if (sourceCell.getLocation().equals(targetCell.getLocation()))
             return 0;
-        }
-        if (areCellsAdiacents(sourceCell, targetCell)) {
+        if (areCellsAdiacents(sourceCell, targetCell))
             return 1;
-        }
 
         boolean reachedSource = false;
 
         while (!reachedSource) {
-
-
             visitedList = new ArrayList<>();
             for (Point p : edgeList) {
                 matrix[p.y][p.x] = (char) edge;
                 visitedList.add(p);
             }
 //            Thirteen.printMatrix(matrix);
-
             edgeList = new ArrayList<>();
 
             for (Point v : visitedList) {
@@ -412,7 +353,6 @@ public class Fifteen {
                     if (!edgeList.contains(a) && matrix[a.y][a.x] == '.') {
                         edgeList.add(a);
                     }
-
                     if (a.equals(sourceCell)) {
                         reachedSource = true;
                     }
@@ -425,7 +365,6 @@ public class Fifteen {
                     edge = '0';
                 }
             }
-
             if (matrixCheckSum == calcMatrixChecksum(matrix)) {
                 return 'e';
             } else {
@@ -446,7 +385,7 @@ public class Fifteen {
     }
 
     private static boolean areCellsAdiacents(Point one, Point two) {
-        return ((one.x == two.x && (one.y == two.y + 1 || one.y == two.y -1)) ||
-                (one.y == two.y && (one.x == two.x + 1 || one.x == two.x -1)));
+        return (one.x == two.x && (one.y == two.y + 1 || one.y == two.y -1) ||
+                one.y == two.y && (one.x == two.x + 1 || one.x == two.x -1));
     }
 }
