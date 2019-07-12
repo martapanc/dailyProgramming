@@ -39,7 +39,7 @@ public class Utils {
         List<String> elfList = Arrays.asList("Eustachio", "Eusebio", "Ermenegildo", "Ermengarda", "Ernesto", "Edgardo", "Ermete",
                 "Eleuterio", "Egidio", "Elmerico", "Ermanno", "Eufronio", "Evandro", "Ezechiele", "Edmondo", "Eliodoro", "Erasmo",
                 "Ercolino", "Efesto", "Eraclide", "Ennio", "Eufrasia", "Egizia", "Enea", "Enzo", "Elmo", "Elpidio", "Esaù");
-        Collections.shuffle(elfList);
+//        Collections.shuffle(elfList);
         return elfList;
     }
 
@@ -47,7 +47,7 @@ public class Utils {
         List<String> goblinList = Arrays.asList("Gioacchino", "Girolamo", "Geronimo", "Gandolfo", "Giacobbe", "Gollum", "Gennaro", "Giuditta",
                 "Gianbattista", "Gianvincenzo", "Guendalina", "Goffredo", "Giustiniano", "Gregorio", "Gustavo", "Gianfilippo", "Gedeone",
                 "Guidalberto", "Giove", "Giosuè", "Giasone", "Giampietro", "Graziella", "Gertrude", "Genoveffa", "Germano", "Giotto");
-        Collections.shuffle(goblinList);
+//        Collections.shuffle(goblinList);
         return goblinList;
     }
 

@@ -9,6 +9,8 @@ public class MoveEverythingTests {
 
     private final String input1 = "src/test/java/AoC2018/fifteen/input1";
     private final String input2 = "src/test/java/AoC2018/fifteen/input2";
+    private final String input3 = "src/test/java/AoC2018/fifteen/input3";
+
     private final String input_progress = "src/test/java/AoC2018/fifteen/input_progress";
     private final String input28 = "src/test/java/AoC2018/fifteen/input28";
 
@@ -69,6 +71,12 @@ public class MoveEverythingTests {
     @Test
     public void moveEverything_final(){
         char[][] matrix7 = Thirteen.readInput(input2, 32, 32);
+        assertEquals(197538, Fifteen.moveEverything(Utils.getInitialUnitPositions(matrix7), matrix7, 1000));
+    }
+
+    @Test
+    public void moveEverything_final_2(){
+        char[][] matrix7 = Thirteen.readInput(input3, 32, 32);
         assertEquals(197538, Fifteen.moveEverything(Utils.getInitialUnitPositions(matrix7), matrix7, 1000));
     }
 }
