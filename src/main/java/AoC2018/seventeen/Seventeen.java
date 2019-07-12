@@ -5,28 +5,29 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Seventeen {
 
-    static List<Point> readInput(String inputFile) {
+    static Set<Point> readInput(String inputFile) {
 
-        List<Point> coordinates = new ArrayList<>();
-        List<Point> lines = new ArrayList<>();
+        Set<Point> coordinates = new HashSet<>();
         BufferedReader reader;
         try {
             reader = new BufferedReader(new FileReader(inputFile));
             String line = reader.readLine();
-
-            List<Point> currPoints = processLine(line);
-
-            lines.addAll(currPoints);
+            while (line != null) {
+                coordinates.addAll(processLine(line));
+                line = reader.readLine();
+            }
             reader.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return lines;
+
+        return coordinates;
     }
 
     private static List<Point> processLine(String line) {
@@ -44,9 +45,9 @@ public class Seventeen {
                 points.add(new Point(x, i));
             }
         } else {
-            int y = Integer.parseInt(coor[0].replace("y=x", ""));
-            String x = coor[1].replace("x=", "");
-            String[] xNum = x.split("..");
+            int y = Integer.parseInt(coor[0].replace("y=", ""));
+            String x = coor[1].replace("x=", "").replace("..", " ");
+            String[] xNum = x.split(" ");
             for (int i = Integer.parseInt(xNum[0]); i <= Integer.parseInt(xNum[1]); i++) {
                 points.add(new Point(i, y));
             }
