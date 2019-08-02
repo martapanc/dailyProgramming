@@ -24,4 +24,18 @@ public class SeventeenTest {
 
         assertEquals(34, Seventeen.readInput(input2).size());
     }
+
+    @Test
+    public void test_maxCoordinates() {
+        assertEquals(new Point(564, 1880), Seventeen.getMaxCoordinates(Seventeen.readInput(input1)));
+        assertEquals(new Point(506, 13), Seventeen.getMaxCoordinates(Seventeen.readInput(input2)));
+        assertEquals(new Point(495, 5), Seventeen.getMaxCoordinates(Seventeen.readInput(input3)));
+    }
+
+    @Test
+    public void test_drawMatrix(){
+        Seventeen.drawMatrix(Seventeen.readInput(input3));
+        Seventeen.drawMatrix(Seventeen.readInput(input2));
+        Seventeen.drawMatrix(Seventeen.readInput(input1));
+    }
 }
