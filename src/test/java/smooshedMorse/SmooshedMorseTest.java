@@ -14,4 +14,14 @@ public class SmooshedMorseTest {
         assertEquals("-.....-...", SmooshedMorse.encode("bits"));
         assertEquals("-.....-...", SmooshedMorse.encode("three"));
     }
+
+    @Test
+    public void testFindEncodingWith15Dashes() {
+        SmooshedMorse.findEncodingWith15Dashes();
+    }
+
+    @Test
+    public void testFindSameSequenceFor13DifferentWords() {
+        SmooshedMorse.findSameSequenceFor13DifferentWords();
+    }
 }
