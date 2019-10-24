@@ -3,3 +3,6 @@
 
 target/
 *.iml
+
+${env.M2_HOME}/
+*/${env.M2_HOME}/
