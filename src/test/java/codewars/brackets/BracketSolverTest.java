@@ -8,13 +8,24 @@ public class BracketSolverTest {
 
     @Test
     public void areBracketsValid() {
+        assertTrue(BracketSolver.areBracketsValid(""));
         assertTrue(BracketSolver.areBracketsValid("()"));
         assertTrue(BracketSolver.areBracketsValid("([])"));
+        assertTrue(BracketSolver.areBracketsValid("({})"));
         assertTrue(BracketSolver.areBracketsValid("([]{})"));
+        assertTrue(BracketSolver.areBracketsValid("[{()}]"));
         assertTrue(BracketSolver.areBracketsValid("()[{()}[]]"));
+        assertTrue(BracketSolver.areBracketsValid("{[{}[]()[]{}{}{}{}{}{}()()()()()()()()]{{{[[[((()))]]]}}}}(())[[]]{{}}[][][][][][][]({[]})"));
         assertFalse(BracketSolver.areBracketsValid("("));
         assertFalse(BracketSolver.areBracketsValid("]"));
+        assertFalse(BracketSolver.areBracketsValid("(["));
         assertFalse(BracketSolver.areBracketsValid("([)]"));
         assertFalse(BracketSolver.areBracketsValid("([{])"));
+        assertFalse(BracketSolver.areBracketsValid("{(})"));
+        assertFalse(BracketSolver.areBracketsValid("([]"));
+        assertFalse(BracketSolver.areBracketsValid("[])"));
+        assertFalse(BracketSolver.areBracketsValid("{}{"));
+        assertFalse(BracketSolver.areBracketsValid("{{{{{{{{{{{((((((([])))))))}}}}}}}}}}"));
+        assertFalse(BracketSolver.areBracketsValid("<>"));
     }
 }
