@@ -1,6 +1,9 @@
 package codewars.brackets;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Stack;
 
 public class BracketSolver {
@@ -36,5 +39,14 @@ public class BracketSolver {
             s = s.replace("[]", "");
         } while (len != s.length());
         return s.length() == 0;
+    }
+
+    public static String createPhoneNumber(int[] numbers) {
+        StringBuilder builder = new StringBuilder();
+        List<Object> list  = new ArrayList(Arrays.asList(numbers));
+        list.add(0, "(");
+        list.add(4, ") ");
+        list.add(8, "-");
+        return  list.toString().replaceAll("[\\[\\]]", "").replaceAll(",", " ");
     }
 }
