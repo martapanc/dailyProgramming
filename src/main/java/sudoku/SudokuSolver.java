@@ -9,7 +9,6 @@ public class SudokuSolver {
 
     /*
     Matrix with indices:
-
     00 01 02 | 03 04 05 | 06 07 08
     10 11 12 | 13 14 15 | 16 17 18
     20 21 22 | 23 24 25 | 26 27 28
@@ -20,7 +19,7 @@ public class SudokuSolver {
     ---------+----------+---------
     60 61 62 | 63 64 65 | 66 67 68
     70 71 72 | 73 74 75 | 76 77 78
-    80 81 82 | 83 84 85 | 86 87 85
+    80 81 82 | 83 84 85 | 86 87 88
 
     Boxes are counted like this:
      1 | 2 | 3
@@ -35,11 +34,14 @@ public class SudokuSolver {
 
     public static String solveSudoku(String input) {
 
+        Map<Cell, List<Integer>> sudokuMap = readSudokuToMap(input);
+
         char[][] sudokuMatrix = readSudoku(input);
 
         Map<Integer, List<Cell>> boxMap = generateBoxPointMap();
 
         System.out.println(boxMap);
+        System.out.println(sudokuMap);
         return "";
     }
 
@@ -76,6 +78,28 @@ public class SudokuSolver {
             }
         }
         return sudokuMatrix;
+    }
+
+    static Map<Cell, List<Integer>> readSudokuToMap(String input) {
+        Map<Cell, List<Integer>> sudokuMap = new HashMap<>();
+        char[] chars = input.toCharArray();
+
+        int count = 0;
+
+        for (int x = 0; x < 9; x++) {
+            for (int y = 0; y < 9; y++) {
+                List<Integer> values = new ArrayList<>();
+
+                if (chars[count] == '0') {
+                    values.add(1);
+                } else {
+                    values.add(Character.getNumericValue(chars[count++]));
+                }
+                sudokuMap.put(new Cell(x, y), values);
+            }
+        }
+
+        return sudokuMap;
     }
 
     static void printSudoku(String input) {
