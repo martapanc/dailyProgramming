@@ -1,6 +1,5 @@
 package sudoku;
 
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,28 +7,55 @@ import java.util.Map;
 
 public class SudokuSolver {
 
+    /*
+    Matrix with indices:
+
+    00 01 02 | 03 04 05 | 06 07 08
+    10 11 12 | 13 14 15 | 16 17 18
+    20 21 22 | 23 24 25 | 26 27 28
+    ---------+----------+---------
+    30 31 32 | 33 34 35 | 36 37 38
+    40 41 42 | 43 44 45 | 46 47 48
+    50 51 52 | 53 54 55 | 56 57 58
+    ---------+----------+---------
+    60 61 62 | 63 64 65 | 66 67 68
+    70 71 72 | 73 74 75 | 76 77 78
+    80 81 82 | 83 84 85 | 86 87 85
+
+    Boxes are counted like this:
+     1 | 2 | 3
+    ---+---+---
+     4 | 5 | 6
+    ---+---+---
+     7 | 8 | 9
+
+    */
+
     private static final int horLines = 25;
 
     public static String solveSudoku(String input) {
 
         char[][] sudokuMatrix = readSudoku(input);
 
-        Map<Integer, List<Cell>> boxMap = new HashMap<>();
-        boxMap.put(1, generateBoxPointArray(0,0));
-        boxMap.put(2, generateBoxPointArray(0,3));
-        boxMap.put(3, generateBoxPointArray(0,6));
-        boxMap.put(4, generateBoxPointArray(3,0));
-        boxMap.put(5, generateBoxPointArray(3,3));
-        boxMap.put(6, generateBoxPointArray(3,6));
-        boxMap.put(7, generateBoxPointArray(6,0));
-        boxMap.put(8, generateBoxPointArray(6,3));
-        boxMap.put(9, generateBoxPointArray(6,6));
+        Map<Integer, List<Cell>> boxMap = generateBoxPointMap();
 
         System.out.println(boxMap);
         return "";
     }
 
-    static List<Cell> generateBoxPointArray(int startX, int startY) {
+    private static Map<Integer, List<Cell>> generateBoxPointMap() {
+        Map<Integer, List<Cell>> boxMap = new HashMap<>();
+
+        int count = 1;
+        for (int x = 0; x <= 6; x += 3) {
+            for (int y = 0; y <= 6; y += 3) {
+                boxMap.put(count++, generateBoxPointArray(x, y));
+            }
+        }
+        return boxMap;
+    }
+
+    private static List<Cell> generateBoxPointArray(int startX, int startY) {
         List<Cell> points = new ArrayList<>();
         for (int y = startY; y < startY + 3; y++) {
             for (int x = startX; x < startX + 3; x++) {
