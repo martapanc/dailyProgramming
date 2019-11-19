@@ -1,12 +1,43 @@
 package sudoku;
 
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class SudokuSolver {
 
     private static final int horLines = 25;
 
     public static String solveSudoku(String input) {
 
+        char[][] sudokuMatrix = readSudoku(input);
+
+        Map<Integer, List<Cell>> boxMap = new HashMap<>();
+        boxMap.put(1, generateBoxPointArray(0,0));
+        boxMap.put(2, generateBoxPointArray(0,3));
+        boxMap.put(3, generateBoxPointArray(0,6));
+        boxMap.put(4, generateBoxPointArray(3,0));
+        boxMap.put(5, generateBoxPointArray(3,3));
+        boxMap.put(6, generateBoxPointArray(3,6));
+        boxMap.put(7, generateBoxPointArray(6,0));
+        boxMap.put(8, generateBoxPointArray(6,3));
+        boxMap.put(9, generateBoxPointArray(6,6));
+
+        System.out.println(boxMap);
         return "";
+    }
+
+    static List<Cell> generateBoxPointArray(int startX, int startY) {
+        List<Cell> points = new ArrayList<>();
+        for (int y = startY; y < startY + 3; y++) {
+            for (int x = startX; x < startX + 3; x++) {
+                points.add(new Cell(x, y));
+            }
+        }
+
+        return points;
     }
 
     static char[][] readSudoku(String input) {
@@ -54,4 +85,6 @@ public class SudokuSolver {
 
         printSudoku(stringBuilder.toString());
     }
+
+
 }

@@ -6,7 +6,7 @@ public class SudokuSolverTest {
 
     @Test
     public void solveSudoku() {
-
+        SudokuSolver.solveSudoku("123456789".repeat(9));
     }
 
     @Test
