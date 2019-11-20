@@ -2,6 +2,11 @@ package sudoku;
 
 import org.junit.Test;
 
+import java.util.LinkedHashSet;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 public class SudokuSolverTest {
 
     private static final String ALL_NUMBERS = "123456789".repeat(9);
@@ -25,5 +30,35 @@ public class SudokuSolverTest {
     @Test
     public void readSudoku() {
         SudokuSolver.printSudoku(SudokuSolver.readSudoku(ALL_NUMBERS_REVERSED));
+    }
+
+    @Test
+    public void getColumnRowAndBoxCells() {
+        LinkedHashSet<Cell> columnsRowAndBoxCells = new LinkedHashSet<>();
+        columnsRowAndBoxCells.add(new Cell(0, 0));
+        columnsRowAndBoxCells.add(new Cell(0, 1));
+        columnsRowAndBoxCells.add(new Cell(0, 2));
+        columnsRowAndBoxCells.add(new Cell(1, 0));
+        columnsRowAndBoxCells.add(new Cell(1, 1));
+        columnsRowAndBoxCells.add(new Cell(2, 0));
+        columnsRowAndBoxCells.add(new Cell(2, 1));
+        columnsRowAndBoxCells.add(new Cell(2, 2));
+        columnsRowAndBoxCells.add(new Cell(3, 2));
+        columnsRowAndBoxCells.add(new Cell(4, 2));
+        columnsRowAndBoxCells.add(new Cell(5, 2));
+        columnsRowAndBoxCells.add(new Cell(6, 2));
+        columnsRowAndBoxCells.add(new Cell(7, 2));
+        columnsRowAndBoxCells.add(new Cell(8, 2));
+        columnsRowAndBoxCells.add(new Cell(1, 3));
+        columnsRowAndBoxCells.add(new Cell(1, 4));
+        columnsRowAndBoxCells.add(new Cell(1, 5));
+        columnsRowAndBoxCells.add(new Cell(1, 6));
+        columnsRowAndBoxCells.add(new Cell(1, 7));
+        columnsRowAndBoxCells.add(new Cell(1, 8));
+
+        LinkedHashSet<Cell> actual = SudokuSolver.getColumnRowAndBoxCells(new Cell(1, 2),
+                SudokuSolver.readSudokuToMap(ALL_NUMBERS_WITH_SOME_ZEROS));
+        assertEquals(20, actual.size());
+        assertTrue(columnsRowAndBoxCells.containsAll(actual));
     }
 }

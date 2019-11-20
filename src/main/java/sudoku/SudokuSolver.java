@@ -3,12 +3,10 @@ package sudoku;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -49,19 +47,21 @@ public class SudokuSolver {
         for (Map.Entry<Cell, List<Integer>> entry : sudokuMap.entrySet()) {
             if (entry.getValue().size() != 1) {
                 LinkedHashSet<Cell> columnRowAndBoxCells = getColumnRowAndBoxCells(entry.getKey(), sudokuMap);
+
+
                 System.out.println(columnRowAndBoxCells);
             }
         }
 
-        Map<Integer, List<Cell>> boxMap = generateBoxPointMap();
-        System.out.println(boxMap);
+
+//        System.out.println(boxMap);
         System.out.println(sudokuMap);
         return "";
     }
 
     // Get all cells that are on the same column or row, or in the same box, as the current cell,
     // (excluding the current cell itself)
-    private static LinkedHashSet<Cell> getColumnRowAndBoxCells(Cell current, LinkedHashMap<Cell, List<Integer>> sudokuMapCopy) {
+    static LinkedHashSet<Cell> getColumnRowAndBoxCells(Cell current, LinkedHashMap<Cell, List<Integer>> sudokuMapCopy) {
         LinkedHashSet<Cell> columnRowAndBoxCells = new LinkedHashSet<>();
 
         for (int i = 0; i < 9; i++) {
@@ -69,6 +69,11 @@ public class SudokuSolver {
             columnRowAndBoxCells.add(new Cell(i, current.y));
         }
 
+        // Add all cells in the box of the current cells
+        columnRowAndBoxCells.addAll(generateBoxPointMap()
+                .values()
+                .stream()
+                .filter(cells -> cells.contains(current)).collect(Collectors.toList()).get(0));
         columnRowAndBoxCells.remove(current);
         return columnRowAndBoxCells;
     }
