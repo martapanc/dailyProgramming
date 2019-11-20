@@ -3,8 +3,12 @@ package sudoku;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -37,15 +41,36 @@ public class SudokuSolver {
 
     public static String solveSudoku(String input) {
 
-        Map<Cell, List<Integer>> sudokuMap = readSudokuToMap(input);
+        // Use LinkedHashedMap to keep the insertion order (left-right, top-bottom)
+        LinkedHashMap<Cell, List<Integer>> sudokuMap = readSudokuToMap(input);
 
-        char[][] sudokuMatrix = readSudoku(input);
+        LinkedHashMap<Cell, List<Integer>> sudokuMapCopy = sudokuMap;
+
+        for (Map.Entry<Cell, List<Integer>> entry : sudokuMap.entrySet()) {
+            if (entry.getValue().size() != 1) {
+                LinkedHashSet<Cell> columnRowAndBoxCells = getColumnRowAndBoxCells(entry.getKey(), sudokuMap);
+                System.out.println(columnRowAndBoxCells);
+            }
+        }
 
         Map<Integer, List<Cell>> boxMap = generateBoxPointMap();
-
         System.out.println(boxMap);
         System.out.println(sudokuMap);
         return "";
+    }
+
+    // Get all cells that are on the same column or row, or in the same box, as the current cell,
+    // (excluding the current cell itself)
+    private static LinkedHashSet<Cell> getColumnRowAndBoxCells(Cell current, LinkedHashMap<Cell, List<Integer>> sudokuMapCopy) {
+        LinkedHashSet<Cell> columnRowAndBoxCells = new LinkedHashSet<>();
+
+        for (int i = 0; i < 9; i++) {
+            columnRowAndBoxCells.add(new Cell(current.x, i));
+            columnRowAndBoxCells.add(new Cell(i, current.y));
+        }
+
+        columnRowAndBoxCells.remove(current);
+        return columnRowAndBoxCells;
     }
 
     private static Map<Integer, List<Cell>> generateBoxPointMap() {
@@ -83,8 +108,8 @@ public class SudokuSolver {
         return sudokuMatrix;
     }
 
-    static Map<Cell, List<Integer>> readSudokuToMap(String input) {
-        Map<Cell, List<Integer>> sudokuMap = new HashMap<>();
+    static LinkedHashMap<Cell, List<Integer>> readSudokuToMap(String input) {
+        LinkedHashMap<Cell, List<Integer>> sudokuMap = new LinkedHashMap<>();
         char[] chars = input.toCharArray();
 
         int count = 0;
