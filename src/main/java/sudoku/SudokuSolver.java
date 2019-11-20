@@ -1,9 +1,12 @@
 package sudoku;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class SudokuSolver {
 
@@ -91,11 +94,14 @@ public class SudokuSolver {
                 List<Integer> values = new ArrayList<>();
 
                 if (chars[count] == '0') {
-                    values.add(1);
+                    // Add numbers 1-9, which represent all possibilities for an empty cell
+                    values = Arrays.stream(IntStream.range(1, 10).toArray()).boxed().collect(Collectors.toList());
                 } else {
-                    values.add(Character.getNumericValue(chars[count++]));
+                    values.add(Character.getNumericValue(chars[count]));
                 }
                 sudokuMap.put(new Cell(x, y), values);
+
+                count++;
             }
         }
 
@@ -135,6 +141,4 @@ public class SudokuSolver {
 
         printSudoku(stringBuilder.toString());
     }
-
-
 }
