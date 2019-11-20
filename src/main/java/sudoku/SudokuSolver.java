@@ -3,10 +3,12 @@ package sudoku;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -37,31 +39,57 @@ public class SudokuSolver {
 
     private static final int horLines = 25;
 
-    public static String solveSudoku(String input) {
+    static String solveSudoku(String input) {
 
         // Use LinkedHashedMap to keep the insertion order (left-right, top-bottom)
-        LinkedHashMap<Cell, List<Integer>> sudokuMap = readSudokuToMap(input);
+        LinkedHashMap<Cell, Set<Integer>> sudokuMap = readSudokuToMap(input);
+        LinkedHashMap<Cell, Set<Integer>> sudokuMapCopy;
 
-        LinkedHashMap<Cell, List<Integer>> sudokuMapCopy = sudokuMap;
+        do {
+            sudokuMapCopy = copySudokuMap(sudokuMap);
 
-        for (Map.Entry<Cell, List<Integer>> entry : sudokuMap.entrySet()) {
-            if (entry.getValue().size() != 1) {
-                LinkedHashSet<Cell> columnRowAndBoxCells = getColumnRowAndBoxCells(entry.getKey(), sudokuMap);
+            for (Map.Entry<Cell, Set<Integer>> entry : sudokuMap.entrySet()) {
+                if (entry.getValue().size() != 1) {
+                    LinkedHashSet<Cell> columnRowAndBoxCells = getColumnRowAndBoxCells(entry.getKey());
 
+                    Set<Integer> existingNumbers = getExistingNumbers(columnRowAndBoxCells, sudokuMap);
+                    Set<Integer> possibleValues = entry.getValue();
 
-                System.out.println(columnRowAndBoxCells);
+                    possibleValues.removeAll(existingNumbers);
+                    sudokuMap.put(entry.getKey(), possibleValues);
+                }
+            }
+        } while (!sudokuMap.equals(sudokuMapCopy));
+
+        return mapToString(sudokuMap);
+    }
+
+    private static String mapToString(LinkedHashMap<Cell, Set<Integer>> sudokuMap) {
+        StringBuilder sudokuString = new StringBuilder();
+
+        for (Set<Integer> values : sudokuMap.values()) {
+            if (values.size() == 1) {
+                sudokuString.append(new ArrayList<>(values).get(0));
+            } else {
+                sudokuString.append("0");
             }
         }
+        return sudokuString.toString();
+    }
 
+    private static LinkedHashMap<Cell, Set<Integer>> copySudokuMap(LinkedHashMap<Cell, Set<Integer>> sudokuMap) {
+        LinkedHashMap<Cell, Set<Integer>> copy = new LinkedHashMap<>();
 
-//        System.out.println(boxMap);
-        System.out.println(sudokuMap);
-        return "";
+        for (Map.Entry<Cell, Set<Integer>> entry : sudokuMap.entrySet()) {
+            copy.put(new Cell(entry.getKey().x, entry.getKey().y), new HashSet<>(entry.getValue()));
+        }
+
+        return copy;
     }
 
     // Get all cells that are on the same column or row, or in the same box, as the current cell,
     // (excluding the current cell itself)
-    static LinkedHashSet<Cell> getColumnRowAndBoxCells(Cell current, LinkedHashMap<Cell, List<Integer>> sudokuMapCopy) {
+    static LinkedHashSet<Cell> getColumnRowAndBoxCells(Cell current) {
         LinkedHashSet<Cell> columnRowAndBoxCells = new LinkedHashSet<>();
 
         for (int i = 0; i < 9; i++) {
@@ -78,8 +106,21 @@ public class SudokuSolver {
         return columnRowAndBoxCells;
     }
 
-    private static Map<Integer, List<Cell>> generateBoxPointMap() {
-        Map<Integer, List<Cell>> boxMap = new HashMap<>();
+    static Set<Integer> getExistingNumbers(LinkedHashSet<Cell> columnRowAndBoxCells, LinkedHashMap<Cell, Set<Integer>> sudokuMap) {
+        Set<Integer> existingValues = new HashSet<>();
+
+        for (Cell cell : columnRowAndBoxCells) {
+            List<Integer> values = new ArrayList<>(sudokuMap.get(cell));
+            if (values.size() == 1) {
+                existingValues.add(values.get(0));
+            }
+        }
+
+        return existingValues;
+    }
+
+    private static Map<Integer, Set<Cell>> generateBoxPointMap() {
+        Map<Integer, Set<Cell>> boxMap = new HashMap<>();
 
         int count = 1;
         for (int x = 0; x <= 6; x += 3) {
@@ -90,8 +131,8 @@ public class SudokuSolver {
         return boxMap;
     }
 
-    private static List<Cell> generateBoxPointArray(int startX, int startY) {
-        List<Cell> points = new ArrayList<>();
+    private static Set<Cell> generateBoxPointArray(int startX, int startY) {
+        Set<Cell> points = new HashSet<>();
         for (int y = startY; y < startY + 3; y++) {
             for (int x = startX; x < startX + 3; x++) {
                 points.add(new Cell(x, y));
@@ -113,19 +154,18 @@ public class SudokuSolver {
         return sudokuMatrix;
     }
 
-    static LinkedHashMap<Cell, List<Integer>> readSudokuToMap(String input) {
-        LinkedHashMap<Cell, List<Integer>> sudokuMap = new LinkedHashMap<>();
+    static LinkedHashMap<Cell, Set<Integer>> readSudokuToMap(String input) {
+        LinkedHashMap<Cell, Set<Integer>> sudokuMap = new LinkedHashMap<>();
         char[] chars = input.toCharArray();
-
         int count = 0;
 
         for (int x = 0; x < 9; x++) {
             for (int y = 0; y < 9; y++) {
-                List<Integer> values = new ArrayList<>();
+                Set<Integer> values = new HashSet<>();
 
                 if (chars[count] == '0') {
                     // Add numbers 1-9, which represent all possibilities for an empty cell
-                    values = Arrays.stream(IntStream.range(1, 10).toArray()).boxed().collect(Collectors.toList());
+                    values = Arrays.stream(IntStream.range(1, 10).toArray()).boxed().collect(Collectors.toSet());
                 } else {
                     values.add(Character.getNumericValue(chars[count]));
                 }
