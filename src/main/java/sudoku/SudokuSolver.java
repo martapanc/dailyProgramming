@@ -3,9 +3,11 @@ package sudoku;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -41,9 +43,42 @@ public class SudokuSolver {
 
     static String solveSudokuWithBacktracking(String input) {
         LinkedHashMap<Cell, Integer> sudokuMap = readSudokuToMapZerosOnly(input);
-
         printSudoku(mapToStringZerosOnly(sudokuMap));
+
+        ListIterator<Map.Entry<Cell, Integer>> iterator = new ArrayList<>(sudokuMap.entrySet()).listIterator();
+        Map.Entry<Cell, Integer> current = iterator.next();
+
+        while (iterator.hasNext()) {
+            current.setValue(current.getValue() + 1);
+
+            if (areConstraintsSatisfied(current, sudokuMap)) {
+                current = iterator.next();
+            } else {
+                if (current.getValue() <= 9) {
+
+                } else {
+                    current = iterator.previous();
+                }
+            }
+
+//            if (iterator.hasPrevious()) {
+//                System.out.print(iterator.previous() + " ");
+//                iterator.next();
+//            } else {
+//                System.out.print("no prev ");
+//            }
+            System.out.println(current);
+        }
+
         return "";
+    }
+
+    private static boolean areConstraintsSatisfied(Map.Entry<Cell, Integer> current, LinkedHashMap<Cell, Integer> sudokuMap) {
+
+        LinkedHashSet<Cell> constraintCells = getColumnRowAndBoxCells(current.getKey());
+        Set<Integer> existingNumbers = getExistingNumbersValuesOnly(constraintCells, sudokuMap);
+
+        return !existingNumbers.contains(current.getValue());
     }
 
     static String solveSudoku(String input) {
@@ -130,6 +165,13 @@ public class SudokuSolver {
             }
         }
         return existingValues;
+    }
+
+    static Set<Integer> getExistingNumbersValuesOnly(LinkedHashSet<Cell> columnRowAndBoxCells, LinkedHashMap<Cell, Integer> sudokuMap) {
+        return columnRowAndBoxCells.stream()
+                .map(sudokuMap::get)
+                .filter(integer -> !integer.equals(0))
+                .collect(Collectors.toSet());
     }
 
     private static Map<Integer, Set<Cell>> generateBoxPointMap() {
