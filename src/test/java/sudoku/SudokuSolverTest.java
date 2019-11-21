@@ -9,6 +9,7 @@ import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static sudoku.SudokuIO.printSudoku;
 import static sudoku.SudokuIO.readSudokuToMap;
 
 public class SudokuSolverTest {
@@ -90,6 +91,8 @@ public class SudokuSolverTest {
 
     @Test
     public void solveSudokuWithBacktracking() {
-        SudokuSolver.solveSudokuWithBacktracking(INPUT1);
+        assertEquals(SOLUTION2, SudokuSolver.solveSudokuWithBacktracking(INPUT2));
+        printSudoku(INPUT2.replaceAll("0", "."));
+        printSudoku(SudokuSolver.solveSudokuWithBacktracking(INPUT2));
     }
 }

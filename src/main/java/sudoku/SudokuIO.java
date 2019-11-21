@@ -51,6 +51,21 @@ public class SudokuIO {
 
         for (int x = 0; x < 9; x++) {
             for (int y = 0; y < 9; y++) {
+                if (chars[count++] == '0') {
+                    sudokuMap.put(new Cell(x, y), 0);
+                }
+            }
+        }
+        return sudokuMap;
+    }
+
+    static LinkedHashMap<Cell, Integer> readSudokuToMapZerosOnlyComplete(String input) {
+        LinkedHashMap<Cell, Integer> sudokuMap = new LinkedHashMap<>();
+        char[] chars = input.toCharArray();
+        int count = 0;
+
+        for (int x = 0; x < 9; x++) {
+            for (int y = 0; y < 9; y++) {
                 sudokuMap.put(new Cell(x, y), chars[count] == '0' ? 0 : Character.getNumericValue(chars[count]));
                 count++;
             }

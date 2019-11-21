@@ -3,18 +3,15 @@ package sudoku;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static sudoku.SudokuIO.printSudoku;
 import static sudoku.SudokuIO.readSudokuToMap;
-import static sudoku.SudokuIO.readSudokuToMapZerosOnly;
+import static sudoku.SudokuIO.readSudokuToMapZerosOnlyComplete;
 
 public class SudokuSolver {
 
@@ -42,35 +39,26 @@ public class SudokuSolver {
     */
 
     static String solveSudokuWithBacktracking(String input) {
-        LinkedHashMap<Cell, Integer> sudokuMap = readSudokuToMapZerosOnly(input);
-        printSudoku(mapToStringZerosOnly(sudokuMap));
+        LinkedHashMap<Cell, Integer> sudokuMapComplete = readSudokuToMapZerosOnlyComplete(input);
+        solveSudokuWithBacktracking(sudokuMapComplete);
+        return mapToStringZerosOnly(sudokuMapComplete);
+    }
 
-        ListIterator<Map.Entry<Cell, Integer>> iterator = new ArrayList<>(sudokuMap.entrySet()).listIterator();
-        Map.Entry<Cell, Integer> current = iterator.next();
+    static boolean solveSudokuWithBacktracking(LinkedHashMap<Cell, Integer> sudokuMapComplete) {
 
-        while (iterator.hasNext()) {
-            current.setValue(current.getValue() + 1);
-
-            if (areConstraintsSatisfied(current, sudokuMap)) {
-                current = iterator.next();
-            } else {
-                if (current.getValue() <= 9) {
-
-                } else {
-                    current = iterator.previous();
+        for (Map.Entry<Cell, Integer> entry : sudokuMapComplete.entrySet()) {
+            if (entry.getValue() == 0) {
+                for (int i = 1; i <= 9; i++) {
+                    entry.setValue(i);
+                    if (areConstraintsSatisfied(entry, sudokuMapComplete) && solveSudokuWithBacktracking(sudokuMapComplete)) {
+                        return true;
+                    }
+                    entry.setValue(0);
                 }
+                return false;
             }
-
-//            if (iterator.hasPrevious()) {
-//                System.out.print(iterator.previous() + " ");
-//                iterator.next();
-//            } else {
-//                System.out.print("no prev ");
-//            }
-            System.out.println(current);
         }
-
-        return "";
+        return true;
     }
 
     private static boolean areConstraintsSatisfied(Map.Entry<Cell, Integer> current, LinkedHashMap<Cell, Integer> sudokuMap) {
@@ -167,7 +155,7 @@ public class SudokuSolver {
         return existingValues;
     }
 
-    static Set<Integer> getExistingNumbersValuesOnly(LinkedHashSet<Cell> columnRowAndBoxCells, LinkedHashMap<Cell, Integer> sudokuMap) {
+    private static Set<Integer> getExistingNumbersValuesOnly(LinkedHashSet<Cell> columnRowAndBoxCells, LinkedHashMap<Cell, Integer> sudokuMap) {
         return columnRowAndBoxCells.stream()
                 .map(sudokuMap::get)
                 .filter(integer -> !integer.equals(0))
