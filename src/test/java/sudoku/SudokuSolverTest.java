@@ -9,35 +9,23 @@ import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static sudoku.SudokuIO.readSudokuToMap;
 
 public class SudokuSolverTest {
 
-    private static final String ALL_NUMBERS = "123456789".repeat(9);
-    private static final String ALL_NUMBERS_WITH_SOME_ZEROS = "08390261".repeat(10) + "0";
-    private static final String ALL_NUMBERS_WITH_MANY_ZEROS = "0004050017003000".repeat(5) + "0";
-    private static final String ALL_NUMBERS_REVERSED = "987654321".repeat(9);
-    private static final String ALL_ZEROS = "0".repeat(81);
-    private static final String ALL_ONES = "1".repeat(81);
-    private static final String INPUT1 = "000000200080007090602000500070060000000901000000020040005000603090400070006000000";
-    private static final String INPUT2 = "876900000010006000040305800400000210090500000050040306029000008004690173000001004";
-    private static final String SOLUTION2 = "876914532315286749942375861438769215691523487257148396129437658584692173763851924";
+    static final String ALL_NUMBERS = "123456789".repeat(9);
+    static final String ALL_NUMBERS_WITH_SOME_ZEROS = "08390261".repeat(10) + "0";
+    static final String ALL_NUMBERS_WITH_MANY_ZEROS = "0004050017003000".repeat(5) + "0";
+    static final String ALL_NUMBERS_REVERSED = "987654321".repeat(9);
+    static final String ALL_ZEROS = "0".repeat(81);
+    static final String ALL_ONES = "1".repeat(81);
+    static final String INPUT1 = "000000200080007090602000500070060000000901000000020040005000603090400070006000000";
+    static final String INPUT2 = "876900000010006000040305800400000210090500000050040306029000008004690173000001004";
+    static final String SOLUTION2 = "876914532315286749942375861438769215691523487257148396129437658584692173763851924";
 
     @Test
     public void solveSudoku() {
         assertEquals(SOLUTION2, SudokuSolver.solveSudoku(INPUT2));
-    }
-
-    @Test
-    public void printSudoku() {
-        SudokuSolver.printSudoku(ALL_ONES);
-        SudokuSolver.printSudoku(ALL_NUMBERS);
-        SudokuSolver.printSudoku(ALL_NUMBERS_WITH_SOME_ZEROS);
-        SudokuSolver.printSudoku(ALL_NUMBERS_WITH_MANY_ZEROS);
-    }
-
-    @Test
-    public void readSudoku() {
-        SudokuSolver.printSudoku(SudokuSolver.readSudoku(ALL_NUMBERS_REVERSED));
     }
 
     @Test
@@ -71,7 +59,7 @@ public class SudokuSolverTest {
 
     @Test
     public void getExistingNumbers() {
-        final LinkedHashMap<Cell, Set<Integer>> SUDOKU_MAP = SudokuSolver.readSudokuToMap(ALL_NUMBERS_WITH_MANY_ZEROS);
+        final LinkedHashMap<Cell, Set<Integer>> SUDOKU_MAP = readSudokuToMap(ALL_NUMBERS_WITH_MANY_ZEROS);
         LinkedHashSet<Cell> columnRowAndBoxCells = SudokuSolver.getColumnRowAndBoxCells(new Cell(1, 4));
         Set<Integer> actualExistingNumbers = SudokuSolver.getExistingNumbers(columnRowAndBoxCells, SUDOKU_MAP);
         Set<Integer> expectedExistingNumbers = new HashSet<>();
@@ -82,12 +70,12 @@ public class SudokuSolverTest {
         expectedExistingNumbers.add(7);
         assertEquals(expectedExistingNumbers, actualExistingNumbers);
 
-        final LinkedHashMap<Cell, Set<Integer>> SUDOKU_MAP2 = SudokuSolver.readSudokuToMap(ALL_ZEROS);
+        final LinkedHashMap<Cell, Set<Integer>> SUDOKU_MAP2 = readSudokuToMap(ALL_ZEROS);
         LinkedHashSet<Cell> columnRowAndBoxCells2 = SudokuSolver.getColumnRowAndBoxCells(new Cell(0, 0));
         Set<Integer> actualExistingNumbers2 = SudokuSolver.getExistingNumbers(columnRowAndBoxCells2, SUDOKU_MAP2);
         assertEquals(new HashSet<>(), actualExistingNumbers2);
 
-        final LinkedHashMap<Cell, Set<Integer>> SUDOKU_MAP3 = SudokuSolver.readSudokuToMap(INPUT1);
+        final LinkedHashMap<Cell, Set<Integer>> SUDOKU_MAP3 = readSudokuToMap(INPUT1);
         LinkedHashSet<Cell> columnRowAndBoxCells3 = SudokuSolver.getColumnRowAndBoxCells(new Cell(3, 3));
         Set<Integer> actualExistingNumbers3 = SudokuSolver.getExistingNumbers(columnRowAndBoxCells3, SUDOKU_MAP3);
         Set<Integer> expectedExistingNumbers3 = new HashSet<>();
