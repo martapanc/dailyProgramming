@@ -99,4 +99,9 @@ public class SudokuSolverTest {
         expectedExistingNumbers3.add(9);
         assertEquals(expectedExistingNumbers3, actualExistingNumbers3);
     }
+
+    @Test
+    public void solveSudokuWithBacktracking() {
+        SudokuSolver.solveSudokuWithBacktracking(INPUT1);
+    }
 }

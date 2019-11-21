@@ -37,6 +37,13 @@ public class SudokuSolver {
 
     */
 
+    static String solveSudokuWithBacktracking(String input) {
+        LinkedHashMap<Cell, Integer> sudokuMap = readSudokuToMapZerosOnly(input);
+
+        printSudoku(mapToStringZerosOnly(sudokuMap));
+        return "";
+    }
+
     static String solveSudoku(String input) {
 
         // Use LinkedHashedMap to keep the insertion order (left-right, top-bottom)
@@ -71,6 +78,14 @@ public class SudokuSolver {
             } else {
                 sudokuString.append("0");
             }
+        }
+        return sudokuString.toString();
+    }
+
+    private static String mapToStringZerosOnly(LinkedHashMap<Cell, Integer> sudokuMap) {
+        StringBuilder sudokuString = new StringBuilder();
+        for (Integer value : sudokuMap.values()) {
+            sudokuString.append((value.equals(0) ? "0" : value));
         }
         return sudokuString.toString();
     }
@@ -173,6 +188,20 @@ public class SudokuSolver {
             }
         }
 
+        return sudokuMap;
+    }
+
+    static LinkedHashMap<Cell, Integer> readSudokuToMapZerosOnly(String input) {
+        LinkedHashMap<Cell, Integer> sudokuMap = new LinkedHashMap<>();
+        char[] chars = input.toCharArray();
+        int count = 0;
+
+        for (int x = 0; x < 9; x++) {
+            for (int y = 0; y < 9; y++) {
+                sudokuMap.put(new Cell(x, y), chars[count] == '0' ? 0 : Character.getNumericValue(chars[count]));
+                count++;
+            }
+        }
         return sudokuMap;
     }
 
