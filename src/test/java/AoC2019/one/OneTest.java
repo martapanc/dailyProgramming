@@ -18,8 +18,16 @@ public class OneTest {
     }
 
     @Test
+    public void testCalculateTotalRecursiveFuel() {
+        assertEquals(2, One.calculateRecursiveFuel(14));
+        assertEquals(966, One.calculateRecursiveFuel(1969));
+        assertEquals(50346, One.calculateRecursiveFuel(100756));
+    }
+
+    @Test
     public void testCalculateTotalFuel() {
-        assertEquals(34241, One.calculateTotalFuel(INPUT2));
-        assertEquals(3147032, One.calculateTotalFuel(INPUT1));
+        assertEquals(34241, One.calculateTotalFuel(INPUT2, false));
+        assertEquals(3147032, One.calculateTotalFuel(INPUT1, false));
+        assertEquals(4717699, One.calculateTotalFuel(INPUT1, true));
     }
 }

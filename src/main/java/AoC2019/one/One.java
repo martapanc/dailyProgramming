@@ -12,15 +12,27 @@ public class One {
         return (mass / 3) - 2;
     }
 
-    static int calculateTotalFuel(String input) {
+    static int calculateTotalFuel(String input, boolean recursive) {
         List<Integer> list = readInput(input);
         int sum = 0;
 
         for (Integer i : list) {
-            sum += calculateFuelForModel(i);
+            sum += (recursive ? calculateRecursiveFuel(i) : calculateFuelForModel(i));
         }
 
         return sum;
+    }
+
+    static int calculateRecursiveFuel(int mass) {
+        int accumulator = 0;
+        int fuel = calculateFuelForModel(mass);
+
+        do  {
+            accumulator += fuel;
+            fuel = calculateFuelForModel(fuel);
+        } while (fuel > 0);
+
+        return accumulator;
     }
 
     public static List<Integer> readInput(String input) {
