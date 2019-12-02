@@ -11,6 +11,7 @@ public class TwoTest {
     private static final String INPUT3 = "src/test/java/AoC2019/two/input3";
     private static final String INPUT4 = "src/test/java/AoC2019/two/input4";
     private static final String INPUT5 = "src/test/java/AoC2019/two/input5";
+    private static final String INPUT1_2 = "src/test/java/AoC2019/two/input1_2";
 
     @Test
     public void testReadInput() {
@@ -19,10 +20,15 @@ public class TwoTest {
 
     @Test
     public void processInput() {
-        assertEquals(3500, Two.processInput(INPUT2));
-        assertEquals(2, Two.processInput(INPUT3));
-        assertEquals(2, Two.processInput(INPUT4));
-        assertEquals(30, Two.processInput(INPUT5));
-        assertEquals(5866714, Two.processInput(INPUT1));
+        assertEquals(3500, Two.processInput(Two.readInput(INPUT2)));
+        assertEquals(2, Two.processInput(Two.readInput(INPUT3)));
+        assertEquals(2, Two.processInput(Two.readInput(INPUT4)));
+        assertEquals(30, Two.processInput(Two.readInput(INPUT5)));
+        assertEquals(5866714, Two.processInput(Two.readInput(INPUT1)));
+    }
+
+    @Test
+    public void findPair() {
+        assertEquals(5208, Two.findPair(Two.readInput(INPUT1_2)));
     }
 }

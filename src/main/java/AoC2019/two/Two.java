@@ -25,8 +25,7 @@ public class Two {
         return list;
     }
 
-    public static int processInput(String input) {
-        ArrayList<Integer> numbers = readInput(input);
+    static int processInput(ArrayList<Integer> numbers) {
         for (int i = 0; i < numbers.size(); i += 4) {
             Integer key = numbers.get(i);
             if (key == 99) {
@@ -43,6 +42,20 @@ public class Two {
             }
         }
 
+        return numbers.get(0);
+    }
+
+    static int findPair(ArrayList<Integer> numbers) {
+        for (int a = 0; a < 100; a++) {
+            for (int b = 0; b < 100; b++) {
+                ArrayList<Integer> newNumbers = new ArrayList<>(numbers);
+                newNumbers.set(1, a);
+                newNumbers.set(2, b);
+                if (processInput(newNumbers) == 19690720) {
+                    return 100 * a + b;
+                }
+            }
+        }
         return numbers.get(0);
     }
 }
