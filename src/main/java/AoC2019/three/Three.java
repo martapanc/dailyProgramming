@@ -6,7 +6,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Three {
@@ -25,7 +27,6 @@ public class Three {
                             .map(s -> new Instruction(Direction.getDirectionFromId(s.substring(0, 1)), Integer.parseInt(s.substring(1))))
                             .collect(Collectors.toList())
             );
-
             reader.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -33,17 +34,14 @@ public class Three {
         return paths;
     }
 
-    public static List<Point> getPathCoordinates(Paths paths) {
+    static int getPathCoordinates(Paths paths) {
+        Point origin = new Point(0, 0);
 
+        List<Point> coordList1 = getCoordinates(paths.getPaths1(), origin);
+        List<Point> coordList2 = getCoordinates(paths.getPaths2(), origin);
+        Set<Point> intersections = coordList1.stream().filter(coordList2::contains).collect(Collectors.toSet());
 
-        List<Instruction> one = paths.getPaths1();
-        List<Instruction> two = paths.getPaths2();
-
-        Point origin = new Point(0,0);
-
-        List<Point> coordList1 = getCoordinates(one, origin);
-
-        return coordList1;
+        return Collections.min(intersections.stream().map(p -> Math.abs(p.x) + Math.abs(p.y)).collect(Collectors.toList()));
     }
 
     private static List<Point> getCoordinates(List<Instruction> one, Point origin) {
@@ -57,7 +55,6 @@ public class Three {
                         coordList.add(e);
                         lastPoint = e;
                     }
-                    origin = new Point(lastPoint);
                     break;
                 case DOWN:
                     for (int i = origin.y - 1; i >= origin.y - instruction.getValue(); i--) {
@@ -65,7 +62,6 @@ public class Three {
                         coordList.add(e1);
                         lastPoint = e1;
                     }
-                    origin = new Point(lastPoint);
                     break;
                 case RIGHT:
                     for (int i = origin.x + 1; i <= origin.x + instruction.getValue(); i++) {
@@ -73,7 +69,6 @@ public class Three {
                         coordList.add(e2);
                         lastPoint = e2;
                     }
-                    origin = new Point(lastPoint);
                     break;
                 case LEFT:
                     for (int i = origin.x - 1; i >= origin.x - instruction.getValue(); i--) {
@@ -81,11 +76,10 @@ public class Three {
                         coordList.add(e3);
                         lastPoint = e3;
                     }
-                    origin = new Point(lastPoint);
                     break;
             }
+            origin = new Point(lastPoint);
         }
-
         return coordList;
     }
 }
