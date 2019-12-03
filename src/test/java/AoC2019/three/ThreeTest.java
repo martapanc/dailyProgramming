@@ -17,6 +17,14 @@ public class ThreeTest {
     }
 
     @Test
+    public void testGetShortestDistances() {
+        assertEquals(30, Three.getShortestDistances(Three.readInput(INPUT2)));
+        assertEquals(410, Three.getShortestDistances(Three.readInput(INPUT3)));
+        assertEquals(610, Three.getShortestDistances(Three.readInput(INPUT4)));
+        assertEquals(37390, Three.getShortestDistances(Three.readInput(INPUT1)));
+    }
+
+    @Test
     public void testGetPathCoordinates() {
         assertEquals(6, Three.getPathCoordinates(Three.readInput(INPUT2)));
         assertEquals(135, Three.getPathCoordinates(Three.readInput(INPUT3)));

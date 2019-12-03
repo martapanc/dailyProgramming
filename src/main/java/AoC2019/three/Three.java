@@ -44,6 +44,74 @@ public class Three {
         return Collections.min(intersections.stream().map(p -> Math.abs(p.x) + Math.abs(p.y)).collect(Collectors.toList()));
     }
 
+    static int getShortestDistances(Paths paths) {
+        Point origin = new Point(0, 0);
+
+        List<Instruction> paths1 = paths.getPaths1();
+        List<Instruction> paths2 = paths.getPaths2();
+
+        Set<Point> intersections = getCoordinates(paths1, origin).stream()
+                .filter(getCoordinates(paths2, origin)::contains)
+                .collect(Collectors.toSet());
+
+        List<Integer> distances = intersections.stream()
+                .map(p -> getDistanceToIntersection(paths1, origin, p) + getDistanceToIntersection(paths2, origin, p))
+                .collect(Collectors.toList());
+        return Collections.min(distances);
+    }
+
+    private static int getDistanceToIntersection(List<Instruction> list, Point origin, Point intersection) {
+        int distance = 0;
+
+        for (Instruction instruction : list) {
+            Point lastPoint = new Point(origin);
+            switch (instruction.getDirection()) {
+                case UP:
+                    for (int u = origin.y + 1; u <= origin.y + instruction.getValue(); u++) {
+                        Point e = new Point(origin.x, u);
+                        distance++;
+                        if (e.equals(intersection)) {
+                            return distance;
+                        }
+                        lastPoint = e;
+                    }
+                    break;
+                case DOWN:
+                    for (int i = origin.y - 1; i >= origin.y - instruction.getValue(); i--) {
+                        Point e1 = new Point(origin.x, i);
+                        distance++;
+                        if (e1.equals(intersection)) {
+                            return distance;
+                        }
+                        lastPoint = e1;
+                    }
+                    break;
+                case RIGHT:
+                    for (int i = origin.x + 1; i <= origin.x + instruction.getValue(); i++) {
+                        Point e2 = new Point(i, origin.y);
+                        distance++;
+                        if (e2.equals(intersection)) {
+                            return distance;
+                        }
+                        lastPoint = e2;
+                    }
+                    break;
+                case LEFT:
+                    for (int i = origin.x - 1; i >= origin.x - instruction.getValue(); i--) {
+                        Point e3 = new Point(i, origin.y);
+                        distance++;
+                        if (e3.equals(intersection)) {
+                            return distance;
+                        }
+                        lastPoint = e3;
+                    }
+                    break;
+            }
+            origin = new Point(lastPoint);
+        }
+        return distance;
+    }
+
     private static List<Point> getCoordinates(List<Instruction> one, Point origin) {
         List<Point> coordList = new ArrayList<>();
         for (Instruction instruction : one) {
