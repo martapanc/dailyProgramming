@@ -6,9 +6,9 @@ import java.util.Map;
 public class Instruction {
 
     private Direction direction;
-    private String value;
+    private int value;
 
-    public Instruction(Direction direction, String value) {
+    public Instruction(Direction direction, int value) {
         this.direction = direction;
         this.value = value;
     }
@@ -17,6 +17,14 @@ public class Instruction {
     public String toString() {
         return "{" + direction +
                 ", " + value + "}";
+    }
+
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public int getValue() {
+        return value;
     }
 }
 
