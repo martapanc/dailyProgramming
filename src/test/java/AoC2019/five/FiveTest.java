@@ -13,8 +13,15 @@ public class FiveTest {
 
     @Test
     public void testReadInput() {
+        // Reusing the read method written for Day2, as it's identical
         ArrayList<Integer> list = Two.readInput(INPUT1);
         assertEquals(678, list.size());
         System.out.println(list);
+    }
+
+
+    @Test
+    public void testProcessInput() {
+        assertEquals(3500, Five.processInput(Two.readInput(INPUT1)));
     }
 }
