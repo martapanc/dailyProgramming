@@ -23,7 +23,6 @@ public class FiveTest {
 
     @Test
     public void testProcessInput() {
-//        assertEquals(3500, Five.processInput(Two.readInput(INPUT2)));
-        assertEquals(3500, Five.processInput(Two.readInput(INPUT1)));
+        assertEquals(7988899, Five.processInput(Two.readInput(INPUT1)));
     }
 }

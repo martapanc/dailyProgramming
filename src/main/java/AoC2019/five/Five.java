@@ -10,15 +10,23 @@ public class Five {
     // 2: multiply values at addresses (1) and (2), stores result at address (3)
     // 3: read input and save it at address (1)
     // 4: output value of address (1)
+    // 5: (1) != 0 set the pointer to the value of (2)
+    // 6: (1) == 0 set the pointer to the value of (2)
+    // 7: ((1) < (2) ? store 1 : store 0 ) at value of (3)
+    // 8: ((1) == (2) ? store 1 : store 0 ) at value of (3)
 
     // 0 = position mode
     // 1 = immediate mode
     // Parameters that an instruction writes to will never be in immediate mode.
 
-    // Immediate mode for 4 (104) should output the value of the parameter (e.g. 104,0 -> out: 0)
-    // Otherwise it should output the value at index 0 (e.g. 3,...,104,0 -> out: 3)
+    // PARAMETER MODE DETAILS:
+    // - Immediate mode for 4 (104) should output the value of the parameter (e.g. 104,0 -> out: 0). Otherwise it should output the
+    //      value at index 0 (e.g. 3,...,104,0 -> out: 3)
+    // - 5,6: 105 - only (1) can be in immediate mode
+    // - 7,8: 1107 - only (1) and (2) can be in immediate mode
 
-    // The pointer should increment based on the number of parameters (e.g. 4 for Codes 1 and 2, 2 for Codes 3 and 4)
+    // The pointer should increment based on the number of parameters (e.g. 4 for Codes 1 and 2, 2 for Codes 3 and 4),
+    // except for 5 and 6 where the pointer is updated as described
 
     static int processInput(ArrayList<Integer> numbers) {
 
