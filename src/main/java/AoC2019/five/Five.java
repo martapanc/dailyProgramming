@@ -15,6 +15,9 @@ public class Five {
     // 1 = immediate mode
     // Parameters that an instruction writes to will never be in immediate mode.
 
+    // Immediate mode for 4 (104) should output the value of the parameter (e.g. 104,0 -> out: 0)
+    // Otherwise it should output the value at index 0 (e.g. 3,...,104,0 -> out: 3)
+
     // The pointer should increment based on the number of parameters (e.g. 4 for Codes 1 and 2, 2 for Codes 3 and 4)
 
     static int processInput(ArrayList<Integer> numbers) {
@@ -40,7 +43,13 @@ public class Five {
                     i += 2;
                     break;
                 default:
-                    processParameterMode(opCode);
+                    outputBuilder.append(processParameterMode(numbers, i, opCode));
+                    int lastDigit = opCode % 10;
+                    if (lastDigit == 1 || lastDigit == 2) {
+                        i += 4;
+                    } else {
+                        i += 2;
+                    }
             }
         }
 
@@ -58,6 +67,23 @@ public class Five {
         }
     }
 
+    private static void sumAndSubtractParam(ArrayList<Integer> numbers, int index, int opCode, Map<Integer, Integer> map) {
+        Integer input1Pos = numbers.get(index + 1);
+        Integer input2Pos = numbers.get(index + 2);
+        Integer outputPos = numbers.get(index + 3);
+        if (opCode == 1) {
+            numbers.set(
+                    (map.get(3) == 0 ? outputPos : index + 3),
+                    numbers.get((map.get(1) == 0 ? input1Pos : index + 1)) +
+                    numbers.get((map.get(2) == 0 ? input2Pos : index + 2)));
+        } else {
+            numbers.set(
+                    (map.get(3) == 0 ? outputPos : index + 3),
+                    numbers.get((map.get(1) == 0 ? input1Pos : index + 1)) *
+                    numbers.get((map.get(2) == 0 ? input2Pos : index + 2)));
+        }
+    }
+
     private static String inputAndOutput(ArrayList<Integer> numbers, int index, int opCode) {
         Integer pos = numbers.get(index + 1);
         if (opCode == 3) {
@@ -68,13 +94,31 @@ public class Five {
         }
     }
 
-    private static void processParameterMode(int input) {
-        int opCode = input % 100;
-        Map<Integer, Integer> parameterModeMap = new HashMap<>();
-        parameterModeMap.put(1, (input / 100) % 10);
-        parameterModeMap.put(2, (input / 1000) % 10);
-        parameterModeMap.put(3, (input / 10000) % 10);
+    private static String inputAndOutputParam(ArrayList<Integer> numbers, int index, int opCode, Map<Integer, Integer> map) {
+        Integer pos = numbers.get(index + 1);
+        if (opCode == 3) {
+            numbers.set(pos, getInput(1));
+            return "";
+        } else {
+            return numbers.get((map.get(1) == 0 ? pos : index + 1)) + "";
+        }
     }
+
+    private static String processParameterMode(ArrayList<Integer> numbers, int index, int opCode) {
+        int reducedOpCode = opCode % 100;
+        Map<Integer, Integer> parameterModeMap = new HashMap<>();
+        parameterModeMap.put(1, (opCode / 100) % 10);
+        parameterModeMap.put(2, (opCode / 1000) % 10);
+        parameterModeMap.put(3, (opCode / 10000) % 10);
+
+        if (reducedOpCode == 1 || reducedOpCode == 2) {
+            sumAndSubtractParam(numbers, index, reducedOpCode, parameterModeMap);
+            return "";
+        } else {
+            return inputAndOutputParam(numbers, index, reducedOpCode, parameterModeMap);
+        }
+    }
+
     private static int getInput(int input) {
         return input;
     }

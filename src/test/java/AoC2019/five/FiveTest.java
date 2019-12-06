@@ -10,6 +10,7 @@ import static org.junit.Assert.assertEquals;
 public class FiveTest {
 
     private static final String INPUT1 = "src/test/java/AoC2019/five/input1";
+    private static final String INPUT2 = "src/test/java/AoC2019/five/input2";
 
     @Test
     public void testReadInput() {
@@ -22,6 +23,7 @@ public class FiveTest {
 
     @Test
     public void testProcessInput() {
+//        assertEquals(3500, Five.processInput(Two.readInput(INPUT2)));
         assertEquals(3500, Five.processInput(Two.readInput(INPUT1)));
     }
 }
