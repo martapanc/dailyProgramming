@@ -29,7 +29,6 @@ public class Five {
     // except for 5 and 6 where the pointer is updated as described
 
     static int processInput(ArrayList<Integer> numbers) {
-
         int i = 0;
         StringBuilder outputBuilder = new StringBuilder();
 
@@ -39,40 +38,16 @@ public class Five {
                 break;
             }
 
-            switch (opCode) {
-                case 1:
-                case 2:
-                    sumAndSubtract(numbers, i, opCode);
-                    i += 4;
-                    break;
-                case 3:
-                case 4:
-                    outputBuilder.append(inputAndOutput(numbers, i, opCode));
-                    i += 2;
-                    break;
-                default:
-                    outputBuilder.append(processParameterMode(numbers, i, opCode));
-                    int lastDigit = opCode % 10;
-                    if (lastDigit == 1 || lastDigit == 2) {
-                        i += 4;
-                    } else {
-                        i += 2;
-                    }
+            outputBuilder.append(processParameterMode(numbers, i, opCode));
+            int lastDigit = opCode % 10;
+            if (lastDigit == 1 || lastDigit == 2) {
+                i += 4;
+            } else {
+                i += 2;
             }
         }
 
         return Integer.parseInt(outputBuilder.toString());
-    }
-
-    private static void sumAndSubtract(ArrayList<Integer> numbers, int index, int opCode) {
-        Integer input1Pos = numbers.get(index + 1);
-        Integer input2Pos = numbers.get(index + 2);
-        Integer outputPos = numbers.get(index + 3);
-        if (opCode == 1) {
-            numbers.set(outputPos, numbers.get(input1Pos) + numbers.get(input2Pos));
-        } else {
-            numbers.set(outputPos, numbers.get(input1Pos) * numbers.get(input2Pos));
-        }
     }
 
     private static void sumAndSubtractParam(ArrayList<Integer> numbers, int index, int opCode, Map<Integer, Integer> map) {
@@ -89,16 +64,6 @@ public class Five {
                     (map.get(3) == 0 ? outputPos : index + 3),
                     numbers.get((map.get(1) == 0 ? input1Pos : index + 1)) *
                     numbers.get((map.get(2) == 0 ? input2Pos : index + 2)));
-        }
-    }
-
-    private static String inputAndOutput(ArrayList<Integer> numbers, int index, int opCode) {
-        Integer pos = numbers.get(index + 1);
-        if (opCode == 3) {
-            numbers.set(pos, getInput(1));
-            return "";
-        } else {
-            return numbers.get(pos) + "";
         }
     }
 
