@@ -28,6 +28,22 @@ public class Five {
     // The pointer should increment based on the number of parameters (e.g. 4 for Codes 1 and 2, 2 for Codes 3 and 4),
     // except for 5 and 6 where the pointer is updated as described
 
+    private static int jumpIf(ArrayList<Integer> numbers, int index, int opCode, Map<Integer, Integer> map) {
+        Integer input1Pos = numbers.get(index + 1);
+        Integer input2Pos = numbers.get(index + 2);
+        if (opCode == 5) {
+            if (map.get(1) == 0 ? input1Pos != 0 : index + 1 != 0) {
+                return input2Pos;
+            }
+        } else {
+            if (map.get(1) == 0 ? input1Pos == 0 : index + 1 != 0) {
+                return input2Pos;
+            }
+        }
+
+        return index + 3;
+    }
+
     static int processInput(ArrayList<Integer> numbers) {
         int i = 0;
         StringBuilder outputBuilder = new StringBuilder();
@@ -38,7 +54,8 @@ public class Five {
                 break;
             }
 
-            outputBuilder.append(processParameterMode(numbers, i, opCode));
+            Output output = processParameterMode(numbers, i, opCode);
+            outputBuilder.append(output.getCode());
             int lastDigit = opCode % 10;
             if (lastDigit == 1 || lastDigit == 2) {
                 i += 4;
@@ -67,28 +84,36 @@ public class Five {
         }
     }
 
-    private static String inputAndOutputParam(ArrayList<Integer> numbers, int index, int opCode, Map<Integer, Integer> map) {
+    private static Output inputAndOutputParam(ArrayList<Integer> numbers, int index, int opCode, Map<Integer, Integer> map) {
         Integer pos = numbers.get(index + 1);
         if (opCode == 3) {
             numbers.set(pos, getInput(1));
-            return "";
+            return new Output("");
         } else {
-            return numbers.get((map.get(1) == 0 ? pos : index + 1)) + "";
+            return new Output(numbers.get((map.get(1) == 0 ? pos : index + 1)) + "");
         }
     }
 
-    private static String processParameterMode(ArrayList<Integer> numbers, int index, int opCode) {
+    private static Output processParameterMode(ArrayList<Integer> numbers, int index, int opCode) {
         int reducedOpCode = opCode % 100;
         Map<Integer, Integer> parameterModeMap = new HashMap<>();
         parameterModeMap.put(1, (opCode / 100) % 10);
         parameterModeMap.put(2, (opCode / 1000) % 10);
         parameterModeMap.put(3, (opCode / 10000) % 10);
 
-        if (reducedOpCode == 1 || reducedOpCode == 2) {
-            sumAndSubtractParam(numbers, index, reducedOpCode, parameterModeMap);
-            return "";
-        } else {
-            return inputAndOutputParam(numbers, index, reducedOpCode, parameterModeMap);
+        switch (reducedOpCode) {
+            case 1:
+            case 2:
+                sumAndSubtractParam(numbers, index, reducedOpCode, parameterModeMap);
+                return new Output("");
+            case 3:
+            case 4:
+                return inputAndOutputParam(numbers, index, reducedOpCode, parameterModeMap);
+            case 5:
+            case 6:
+                jumpIf(numbers, index, reducedOpCode, parameterModeMap);
+            default:
+                return new Output("err");
         }
     }
 
