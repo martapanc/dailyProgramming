@@ -2,10 +2,11 @@ package AoC2019.ten;
 
 import org.junit.Test;
 
-import java.awt.*;
+import java.awt.Point;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.testng.AssertJUnit.assertNull;
 
 public class TenTest {
 
@@ -34,5 +35,18 @@ public class TenTest {
         assertEquals("y = 0.18181818181818182x + 0.6363636363636364", Ten.getLineEquationFromTwoPoints(new Point(2,1), new Point(13, 3)));
 
         assertEquals("The points overlap", Ten.getLineEquationFromTwoPoints(new Point(0,3), new Point(0, 3)));
+    }
+
+    @Test
+    public void getLineFromTwoPoints() {
+        assertEquals(new Line(0, 4, true, false), Ten.getLineFromTwoPoints(new Point(4,1), new Point(4, 15)));
+        assertEquals(new Line(0, 3, false, true), Ten.getLineFromTwoPoints(new Point(0,3), new Point(2, 3)));
+
+        assertEquals(new Line(2, 0), Ten.getLineFromTwoPoints(new Point(0,0), new Point(1, 2)));
+        assertEquals(new Line(2, 1), Ten.getLineFromTwoPoints(new Point(0,1), new Point(1, 3)));
+        assertEquals(new Line(-1.45, 34.45), Ten.getLineFromTwoPoints(new Point(23,1), new Point(12, 17)));
+        assertEquals(new Line(0.18, 0.64), Ten.getLineFromTwoPoints(new Point(2,1), new Point(13, 3)));
+
+        assertNull(Ten.getLineFromTwoPoints(new Point(0,3), new Point(0, 3)));
     }
 }
