@@ -6,6 +6,8 @@ import java.awt.Point;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.testng.AssertJUnit.assertNull;
 
 public class TenTest {
@@ -26,27 +28,38 @@ public class TenTest {
 
     @Test
     public void getLineEquationFromTwoPoints() {
-        assertEquals("x = 4.0", Ten.getLineEquationFromTwoPoints(new Point(4,1), new Point(4, 15)));
-        assertEquals("y = 3.0", Ten.getLineEquationFromTwoPoints(new Point(0,3), new Point(2, 3)));
+        assertEquals("x = 4.0", Line.getLineEquationFromTwoPoints(new Point(4,1), new Point(4, 15)));
+        assertEquals("y = 3.0", Line.getLineEquationFromTwoPoints(new Point(0,3), new Point(2, 3)));
 
-        assertEquals("y = 2.0x", Ten.getLineEquationFromTwoPoints(new Point(0,0), new Point(1, 2)));
-        assertEquals("y = 2.0x + 1.0", Ten.getLineEquationFromTwoPoints(new Point(0,1), new Point(1, 3)));
-        assertEquals("y = -1.4545454545454546x + 34.45454545454545", Ten.getLineEquationFromTwoPoints(new Point(23,1), new Point(12, 17)));
-        assertEquals("y = 0.18181818181818182x + 0.6363636363636364", Ten.getLineEquationFromTwoPoints(new Point(2,1), new Point(13, 3)));
+        assertEquals("y = 2.0x", Line.getLineEquationFromTwoPoints(new Point(0,0), new Point(1, 2)));
+        assertEquals("y = 2.0x + 1.0", Line.getLineEquationFromTwoPoints(new Point(0,1), new Point(1, 3)));
+        assertEquals("y = -1.4545454545454546x + 34.45454545454545", Line.getLineEquationFromTwoPoints(new Point(23,1), new Point(12, 17)));
+        assertEquals("y = 0.18181818181818182x + 0.6363636363636364", Line.getLineEquationFromTwoPoints(new Point(2,1), new Point(13, 3)));
 
-        assertEquals("The points overlap", Ten.getLineEquationFromTwoPoints(new Point(0,3), new Point(0, 3)));
+        assertEquals("The points overlap", Line.getLineEquationFromTwoPoints(new Point(0,3), new Point(0, 3)));
     }
 
     @Test
     public void getLineFromTwoPoints() {
-        assertEquals(new Line(0, 4, true, false), Ten.getLineFromTwoPoints(new Point(4,1), new Point(4, 15)));
-        assertEquals(new Line(0, 3, false, true), Ten.getLineFromTwoPoints(new Point(0,3), new Point(2, 3)));
+        assertEquals(new Line(0, 4, true, false), Line.getLineFromTwoPoints(new Point(4,1), new Point(4, 15)));
+        assertEquals(new Line(0, 3, false, true), Line.getLineFromTwoPoints(new Point(0,3), new Point(2, 3)));
 
-        assertEquals(new Line(2, 0), Ten.getLineFromTwoPoints(new Point(0,0), new Point(1, 2)));
-        assertEquals(new Line(2, 1), Ten.getLineFromTwoPoints(new Point(0,1), new Point(1, 3)));
-        assertEquals(new Line(-1.45, 34.45), Ten.getLineFromTwoPoints(new Point(23,1), new Point(12, 17)));
-        assertEquals(new Line(0.18, 0.64), Ten.getLineFromTwoPoints(new Point(2,1), new Point(13, 3)));
+        assertEquals(new Line(2, 0), Line.getLineFromTwoPoints(new Point(0,0), new Point(1, 2)));
+        assertEquals(new Line(2, 1), Line.getLineFromTwoPoints(new Point(0,1), new Point(1, 3)));
+        assertEquals(new Line(-1.45, 34.45), Line.getLineFromTwoPoints(new Point(23,1), new Point(12, 17)));
+        assertEquals(new Line(0.18, 0.64), Line.getLineFromTwoPoints(new Point(2,1), new Point(13, 3)));
 
-        assertNull(Ten.getLineFromTwoPoints(new Point(0,3), new Point(0, 3)));
+        assertNull(Line.getLineFromTwoPoints(new Point(0,3), new Point(0, 3)));
+    }
+
+    @Test
+    public void testDoesPointBelongToLine() {
+        assertTrue(Line.doesPointBelongToLine(new Point(0,0), new Line(2, 0)));
+        assertTrue(Line.doesPointBelongToLine(new Point(3,0), new Line(0, 3, true, false)));
+        assertTrue(Line.doesPointBelongToLine(new Point(1,4), new Line(0, 4, false, true)));
+
+        assertFalse(Line.doesPointBelongToLine(new Point(0,0), new Line(2, 1)));
+        assertFalse(Line.doesPointBelongToLine(new Point(4,1), new Line(0, 3, true, false)));
+        assertFalse(Line.doesPointBelongToLine(new Point(1,3), new Line(0, 4, false, true)));
     }
 }

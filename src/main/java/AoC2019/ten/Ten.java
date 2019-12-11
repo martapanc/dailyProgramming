@@ -38,51 +38,5 @@ public class Ten {
                 p1.getCoordinate().y == p2.getCoordinate().y;
     }
 
-    static String getLineEquationFromTwoPoints(Point p1, Point p2) {
-        double x1 = p1.getX();
-        double x2 = p2.getX();
-        double y1 = p1.getY();
-        double y2 = p2.getY();
 
-        if (p1.equals(p2)) {
-            return "The points overlap";
-        }
-
-        if (y1 == y2) {
-            return "y = " + y1;
-        }
-
-        if (x1 == x2) {
-            return "x = " + x1;
-        }
-
-        double angularCoefficient = (y2 - y1) / (x2 - x1);
-        double constant = (x2 * y1 - x1 * y2) / (x2 - x1);
-
-        return "y = " + angularCoefficient + "x" + (constant != 0 ? " + " + constant : "");
-    }
-
-    static Line getLineFromTwoPoints(Point p1, Point p2) {
-        double x1 = p1.getX();
-        double x2 = p2.getX();
-        double y1 = p1.getY();
-        double y2 = p2.getY();
-
-        if (p1.equals(p2)) {
-            return null;
-        }
-
-        if (y1 == y2) {
-            return new Line(0, y1, false, true);
-        }
-
-        if (x1 == x2) {
-            return new Line(0, x1, true, false);
-        }
-
-        double angularCoefficient = (y2 - y1) / (x2 - x1);
-        double constant = (x2 * y1 - x1 * y2) / (x2 - x1);
-
-        return new Line(angularCoefficient, constant);
-    }
 }
