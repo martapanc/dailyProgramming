@@ -75,4 +75,15 @@ public class TenTest {
         assertEquals(210, Ten.findLocationsOfBestAsteroid(Ten.findAsteroids(Ten.listAsteroids(Ten.readInput(INPUT5)))));
         assertEquals(230, Ten.findLocationsOfBestAsteroid(Ten.findAsteroids(Ten.listAsteroids(Ten.readInput(INPUT6)))));
     }
+
+    @Test
+    public void testFindBestAsteroids() {
+        assertEquals(new SpacePoint(new Point(3,4), SpaceItem.ASTEROID), Ten.findBestAsteroid(Ten.findAsteroids(Ten.listAsteroids(Ten.readInput(INPUT1)))));
+        assertEquals(new SpacePoint(new Point(5,8), SpaceItem.ASTEROID), Ten.findBestAsteroid(Ten.findAsteroids(Ten.listAsteroids(Ten.readInput(INPUT2)))));
+        assertEquals(new SpacePoint(new Point(1,2), SpaceItem.ASTEROID), Ten.findBestAsteroid(Ten.findAsteroids(Ten.listAsteroids(Ten.readInput(INPUT3)))));
+        assertEquals(new SpacePoint(new Point(6,3), SpaceItem.ASTEROID), Ten.findBestAsteroid(Ten.findAsteroids(Ten.listAsteroids(Ten.readInput(INPUT4)))));
+        assertEquals(new SpacePoint(new Point(11,13), SpaceItem.ASTEROID), Ten.findBestAsteroid(Ten.findAsteroids(Ten.listAsteroids(Ten.readInput(INPUT5)))));
+        assertEquals(new SpacePoint(new Point(19,11), SpaceItem.ASTEROID), Ten.findBestAsteroid(Ten.findAsteroids(Ten.listAsteroids(Ten.readInput(INPUT6)))));
+
+    }
 }

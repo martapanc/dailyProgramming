@@ -3,6 +3,7 @@ package AoC2019.ten;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class SpacePoint {
 
@@ -25,6 +26,20 @@ public class SpacePoint {
 
     public SpaceItem getSpaceItem() {
         return spaceItem;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SpacePoint that = (SpacePoint) o;
+        return getCoordinate().equals(that.getCoordinate()) &&
+                getSpaceItem() == that.getSpaceItem();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getCoordinate(), getSpaceItem());
     }
 }
 

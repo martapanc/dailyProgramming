@@ -82,4 +82,17 @@ public class Ten {
     static int findLocationsOfBestAsteroid(Map<SpacePoint, List<Line>> map) {
         return map.values().stream().mapToInt(List::size).max().orElse(0);
     }
+
+    static SpacePoint findBestAsteroid(Map<SpacePoint, List<Line>> map) {
+        int max = 0;
+        SpacePoint bestAsteroid = new SpacePoint(new Point(0,0), SpaceItem.VOID);
+        for (Map.Entry<SpacePoint, List<Line>> entry : map.entrySet()) {
+            if (entry.getValue().size() > max) {
+                max = entry.getValue().size();
+                bestAsteroid = entry.getKey();
+            }
+        }
+
+        return bestAsteroid;
+    }
 }
