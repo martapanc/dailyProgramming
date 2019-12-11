@@ -39,19 +39,6 @@ public class TenTest {
     }
 
     @Test
-    public void getLineEquationFromTwoPoints() {
-        assertEquals("x = 4.0", Line.getLineEquationFromTwoPoints(new Point(4, 1), new Point(4, 15)));
-        assertEquals("y = 3.0", Line.getLineEquationFromTwoPoints(new Point(0, 3), new Point(2, 3)));
-
-        assertEquals("y = 2.0x", Line.getLineEquationFromTwoPoints(new Point(0, 0), new Point(1, 2)));
-        assertEquals("y = 2.0x + 1.0", Line.getLineEquationFromTwoPoints(new Point(0, 1), new Point(1, 3)));
-        assertEquals("y = -1.4545454545454546x + 34.45454545454545", Line.getLineEquationFromTwoPoints(new Point(23, 1), new Point(12, 17)));
-        assertEquals("y = 0.18181818181818182x + 0.6363636363636364", Line.getLineEquationFromTwoPoints(new Point(2, 1), new Point(13, 3)));
-
-        assertEquals("The points overlap", Line.getLineEquationFromTwoPoints(new Point(0, 3), new Point(0, 3)));
-    }
-
-    @Test
     public void getLineFromTwoPoints() {
         assertEquals(new Line(0, 4, true, false), Line.getLineFromTwoPoints(new Point(4, 1), new Point(4, 15)));
         assertEquals(new Line(0, 3, false, true), Line.getLineFromTwoPoints(new Point(0, 3), new Point(2, 3)));

@@ -14,7 +14,6 @@ import java.util.Set;
 public class Ten {
 
     public static List<SpacePoint> readInput(String input) {
-
         List<SpacePoint> list = new ArrayList<>();
         BufferedReader reader;
         try {
@@ -46,35 +45,20 @@ public class Ten {
         }
         return asteroids;
     }
-    static boolean arePointsAlignedWithOrigin(SpacePoint origin, SpacePoint p1, SpacePoint p2) {
-        return p1.getCoordinate().x == p2.getCoordinate().x ||
-                p1.getCoordinate().y == p2.getCoordinate().y;
-    }
 
     // For each asteroid, find the numbers of unique lines between it and the others (if two other asteroids are aligned, the line is added only once)
     static Map<SpacePoint, List<Line>> findAsteroids(List<SpacePoint> asteroids) {
 
-
         Map<SpacePoint, List<Line>> lineMap = new HashMap<>();
-        Map<SpacePoint, List<SpacePoint>> spacePointListMap = new HashMap<>();
         for (SpacePoint asteroid : asteroids) {
-
-
             Set<Line> topLinesSet = new HashSet<>();
             Set<Line> bottomLinesSet = new HashSet<>();
-
-
-            List<SpacePoint> spacePointList = new ArrayList<>();
             for (SpacePoint other : asteroids) {
                 Line lineFromTwoPoints = Line.getLineFromTwoPoints(asteroid.getCoordinate(), other.getCoordinate());
                 if (lineFromTwoPoints != null) {
-
-                    // Top
-                    if (other.getCoordinate().getY() < asteroid.getCoordinate().getY()) {
+                    if (other.getCoordinate().getY() < asteroid.getCoordinate().getY()) { // Top
                         topLinesSet.add(lineFromTwoPoints);
-
                     } else if (other.getCoordinate().getY() > asteroid.getCoordinate().getY()) { // Bottom
-
                         bottomLinesSet.add(lineFromTwoPoints);
                     } else { // Same row
                         // If the current point is on the left of the asteroid, add it to the top set; otherwise, add it to the bottom set
@@ -84,7 +68,6 @@ public class Ten {
                             bottomLinesSet.add(lineFromTwoPoints);
                         }
                     }
-
                 }
             }
 
@@ -92,8 +75,6 @@ public class Ten {
             lines.addAll(topLinesSet);
             lines.addAll(bottomLinesSet);
             lineMap.put(asteroid, lines);
-
-            spacePointListMap.put(asteroid, spacePointList);
         }
         return lineMap;
     }
