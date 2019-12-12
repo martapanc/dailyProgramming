@@ -12,9 +12,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 
 public class Ten {
+
+    private static final int MAX = 200;
 
     public static List<SpacePoint> readInput(String input) {
         List<SpacePoint> list = new ArrayList<>();
@@ -147,6 +148,88 @@ public class Ten {
         q2List.sort(Collections.reverseOrder());
         q3List.sort(Collections.reverseOrder());
         q4List.sort(Collections.reverseOrder());
+
+        int i = 0;
+
+        do {
+            double prevCoeff = 99999999;
+            for (SpacePoint sp : q1List) {
+                if (!sp.isDestroyed() && prevCoeff != sp.getRelativeAngularCoeff()) {
+                    i++;
+                    if (i == MAX) {
+                        System.out.println(sp);
+                    }
+                    for (SpacePoint s : q1List) {
+                        if (!s.equals(sp) && s.getRelativeAngularCoeff() == sp.getRelativeAngularCoeff()) {
+                            SpacePoint sameCoeff = q1List.stream()
+                                    .filter(a -> a.getRelativeAngularCoeff() == sp.getRelativeAngularCoeff())
+                                    .max(Comparator.comparingInt(SpacePoint::getY))
+                                    .orElse(null);
+                            q1List.get(q1List.indexOf(sameCoeff)).setDestroyed(true);
+                            prevCoeff = sameCoeff.getRelativeAngularCoeff();
+                            break;
+                        }
+                    }
+                }
+            }
+            for (SpacePoint sp : q2List) {
+                if (!sp.isDestroyed() && prevCoeff != sp.getRelativeAngularCoeff()) {
+                    i++;
+                    if (i == MAX) {
+                        System.out.println(sp);
+                    }
+                    for (SpacePoint s : q2List) {
+                        if (!s.equals(sp) && s.getRelativeAngularCoeff() == sp.getRelativeAngularCoeff()) {
+                            SpacePoint sameCoeff = q2List.stream()
+                                    .filter(a -> a.getRelativeAngularCoeff() == sp.getRelativeAngularCoeff())
+                                    .min(Comparator.comparingInt(SpacePoint::getY))
+                                    .orElse(null);
+                            q2List.get(q2List.indexOf(sameCoeff)).setDestroyed(true);
+                            prevCoeff = sameCoeff.getRelativeAngularCoeff();
+                            break;
+                        }
+                    }
+                }
+            }
+            for (SpacePoint sp : q3List) {
+                if (!sp.isDestroyed() && prevCoeff != sp.getRelativeAngularCoeff()) {
+                    i++;
+                    if (i == MAX) {
+                        System.out.println(sp);
+                    }
+                    for (SpacePoint s : q3List) {
+                        if (!s.equals(sp) && s.getRelativeAngularCoeff() == sp.getRelativeAngularCoeff()) {
+                            SpacePoint sameCoeff = q3List.stream()
+                                    .filter(a -> a.getRelativeAngularCoeff() == sp.getRelativeAngularCoeff())
+                                    .max(Comparator.comparingInt(SpacePoint::getY))
+                                    .orElse(null);
+                            q3List.get(q3List.indexOf(sameCoeff)).setDestroyed(true);
+                            prevCoeff = sameCoeff.getRelativeAngularCoeff();
+                            break;
+                        }
+                    }
+                }
+            }
+            for (SpacePoint sp : q4List) {
+                if (!sp.isDestroyed() && prevCoeff != sp.getRelativeAngularCoeff()) {
+                    i++;
+                    if (i == MAX) {
+                        System.out.println(sp);
+                    }
+                    for (SpacePoint s : q4List) {
+                        if (!s.equals(sp) && s.getRelativeAngularCoeff() == sp.getRelativeAngularCoeff()) {
+                            SpacePoint sameCoeff = q4List.stream()
+                                    .filter(a -> a.getRelativeAngularCoeff() == sp.getRelativeAngularCoeff())
+                                    .min(Comparator.comparingInt(SpacePoint::getY))
+                                    .orElse(null);
+                            q4List.get(q4List.indexOf(sameCoeff)).setDestroyed(true);
+                            prevCoeff = sameCoeff.getRelativeAngularCoeff();
+                            break;
+                        }
+                    }
+                }
+            }
+        } while (i < MAX);
 
         return angularCoefficientMap;
     }

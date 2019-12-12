@@ -89,8 +89,8 @@ public class TenTest {
 
     @Test
     public void testGetAngularCoefficientMap() {
-        System.out.println(Ten.getAngularCoefficientMap(new Point(11,13), Ten.listAsteroids(Ten.readInput(INPUT5))));
         System.out.println(Ten.getAngularCoefficientMap(new Point(19,11), Ten.listAsteroids(Ten.readInput(INPUT6))));
+        System.out.println(Ten.getAngularCoefficientMap(new Point(11,13), Ten.listAsteroids(Ten.readInput(INPUT5))));
         System.out.println(Ten.getAngularCoefficientMap(new Point(8,3), Ten.listAsteroids(Ten.readInput(INPUT8))));
         System.out.println(Ten.getAngularCoefficientMap(new Point(3,2), Ten.listAsteroids(Ten.readInput(INPUT1))));
         System.out.println(Ten.getAngularCoefficientMap(new Point(3,4), Ten.listAsteroids(Ten.readInput(INPUT1))));

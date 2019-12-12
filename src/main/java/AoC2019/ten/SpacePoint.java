@@ -11,6 +11,7 @@ public class SpacePoint implements Comparable<SpacePoint> {
     private SpaceItem spaceItem;
     private Quadrant quadrant = Quadrant.ONE;
     private double relativeAngularCoeff = -1;
+    private boolean destroyed = false;
 
     public SpacePoint(Point coordinate, SpaceItem spaceItem) {
         this.coordinate = coordinate;
@@ -24,6 +25,14 @@ public class SpacePoint implements Comparable<SpacePoint> {
 
     public Point getCoordinate() {
         return coordinate;
+    }
+
+    public int getX() {
+        return coordinate.x;
+    }
+
+    public int getY() {
+        return coordinate.y;
     }
 
     public SpaceItem getSpaceItem() {
@@ -53,6 +62,14 @@ public class SpacePoint implements Comparable<SpacePoint> {
 
     public void setRelativeAngularCoeff(double relativeAngularCoeff) {
         this.relativeAngularCoeff = relativeAngularCoeff;
+    }
+
+    public boolean isDestroyed() {
+        return destroyed;
+    }
+
+    public void setDestroyed(boolean destroyed) {
+        this.destroyed = destroyed;
     }
 
     @Override
