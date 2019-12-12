@@ -95,4 +95,35 @@ public class Ten {
 
         return bestAsteroid;
     }
+
+    static Map<SpacePoint, Double> getAngularCoefficientMap(Point origin, List<SpacePoint> asteroids) {
+        Map<SpacePoint, Double> angularCoefficientMap = new HashMap<>();
+        for (SpacePoint asteroid : asteroids) {
+            double x1 = asteroid.getCoordinate().getX();
+            double y1 = asteroid.getCoordinate().getY();
+            double x0 = origin.getX();
+            double y0 = origin.getY();
+
+            Line lineFromTwoPoints = Line.getLineFromTwoPoints(origin, asteroid.getCoordinate());
+            if (lineFromTwoPoints != null) {
+
+                if (y1 < y0 && x1 >= x0) {
+                    asteroid.setQuadrant(Quadrant.ONE);
+                }
+                if (y1 >= y0 && x1 > x0) {
+                    asteroid.setQuadrant(Quadrant.TWO);
+                }
+                if (y1 > y0 && x1 <= x0) {
+                    asteroid.setQuadrant(Quadrant.THREE);
+                }
+                if (y1 <= y0 && x1 < x0) {
+                    asteroid.setQuadrant(Quadrant.FOUR);
+                }
+
+                angularCoefficientMap.put(asteroid, lineFromTwoPoints.getAngularCoefficient());
+            }
+        }
+
+        return angularCoefficientMap;
+    }
 }

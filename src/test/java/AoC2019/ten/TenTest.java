@@ -84,6 +84,11 @@ public class TenTest {
         assertEquals(new SpacePoint(new Point(6,3), SpaceItem.ASTEROID), Ten.findBestAsteroid(Ten.findAsteroids(Ten.listAsteroids(Ten.readInput(INPUT4)))));
         assertEquals(new SpacePoint(new Point(11,13), SpaceItem.ASTEROID), Ten.findBestAsteroid(Ten.findAsteroids(Ten.listAsteroids(Ten.readInput(INPUT5)))));
         assertEquals(new SpacePoint(new Point(19,11), SpaceItem.ASTEROID), Ten.findBestAsteroid(Ten.findAsteroids(Ten.listAsteroids(Ten.readInput(INPUT6)))));
+    }
 
+    @Test
+    public void testGetAngularCoefficientMap() {
+        System.out.println(Ten.getAngularCoefficientMap(new Point(3,2), Ten.listAsteroids(Ten.readInput(INPUT1))));
+        System.out.println(Ten.getAngularCoefficientMap(new Point(3,4), Ten.listAsteroids(Ten.readInput(INPUT1))));
     }
 }

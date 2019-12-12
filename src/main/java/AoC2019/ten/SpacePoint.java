@@ -9,6 +9,7 @@ public class SpacePoint {
 
     private Point coordinate;
     private SpaceItem spaceItem;
+    private Quadrant quadrant = Quadrant.ONE;
 
     public SpacePoint(Point coordinate, SpaceItem spaceItem) {
         this.coordinate = coordinate;
@@ -17,7 +18,7 @@ public class SpacePoint {
 
     @Override
     public String toString() {
-        return "{(" + coordinate.x + "," + coordinate.y + "), " + spaceItem + "}";
+        return "{(" + coordinate.x + "," + coordinate.y + ")[" + quadrant.getId() + "], " + spaceItem + "}";
     }
 
     public Point getCoordinate() {
@@ -26,6 +27,14 @@ public class SpacePoint {
 
     public SpaceItem getSpaceItem() {
         return spaceItem;
+    }
+
+    public Quadrant getQuadrant() {
+        return quadrant;
+    }
+
+    public void setQuadrant(Quadrant quadrant) {
+        this.quadrant = quadrant;
     }
 
     @Override
@@ -65,6 +74,31 @@ enum SpaceItem {
     }
 
     static SpaceItem getSpaceItemFromId(char id) {
+        return map.get(id);
+    }
+}
+
+enum Quadrant {
+    ONE(1), TWO(2), THREE(3), FOUR(4);
+
+    private int id;
+    private static Map<Integer, Quadrant> map = new HashMap<>();
+
+    Quadrant(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
+    static {
+        for (Quadrant q : Quadrant.values()) {
+            map.put(q.getId(), q);
+        }
+    }
+
+    static Quadrant getSpaceItemFromId(int id) {
         return map.get(id);
     }
 }
