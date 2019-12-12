@@ -5,11 +5,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class SpacePoint {
+public class SpacePoint implements Comparable<SpacePoint> {
 
     private Point coordinate;
     private SpaceItem spaceItem;
     private Quadrant quadrant = Quadrant.ONE;
+    private double relativeAngularCoeff = -1;
 
     public SpacePoint(Point coordinate, SpaceItem spaceItem) {
         this.coordinate = coordinate;
@@ -18,7 +19,7 @@ public class SpacePoint {
 
     @Override
     public String toString() {
-        return "{(" + coordinate.x + "," + coordinate.y + ")[" + quadrant.getId() + "], " + spaceItem + "}";
+        return "{(" + coordinate.x + "," + coordinate.y + ")[" + quadrant.getId() + "], " + relativeAngularCoeff + "}";
     }
 
     public Point getCoordinate() {
@@ -46,9 +47,28 @@ public class SpacePoint {
                 getSpaceItem() == that.getSpaceItem();
     }
 
+    public double getRelativeAngularCoeff() {
+        return relativeAngularCoeff;
+    }
+
+    public void setRelativeAngularCoeff(double relativeAngularCoeff) {
+        this.relativeAngularCoeff = relativeAngularCoeff;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(getCoordinate(), getSpaceItem());
+    }
+
+
+    @Override
+    public int compareTo(SpacePoint that) {
+        if (this.relativeAngularCoeff < that.relativeAngularCoeff) {
+            return -1;
+        } else if (this.relativeAngularCoeff > that.relativeAngularCoeff) {
+            return 1;
+        }
+        return 0;
     }
 }
 

@@ -3,7 +3,7 @@ package AoC2019.ten;
 import java.awt.*;
 import java.util.Objects;
 
-public class Line {
+public class Line implements Comparable<Line> {
 
     private double angularCoefficient;
     private double constant;
@@ -85,7 +85,7 @@ public class Line {
         }
 
         if (x1 == x2) {
-            return new Line(0, x1, true, false);
+            return new Line(9999, x1, true, false);
         }
 
         double angularCoefficient = (y2 - y1) / (x2 - x1);
@@ -104,5 +104,16 @@ public class Line {
         }
 
         return p.getY() == line.getAngularCoefficient() * p.getX() + line.getConstant();
+    }
+
+
+    @Override
+    public int compareTo(Line that) {
+        if (this.angularCoefficient > that.angularCoefficient) {
+            return -1;
+        } else if (this.angularCoefficient < that.angularCoefficient) {
+            return 1;
+        }
+        return 0;
     }
 }

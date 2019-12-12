@@ -5,11 +5,14 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 public class Ten {
 
@@ -98,6 +101,11 @@ public class Ten {
 
     static Map<SpacePoint, Double> getAngularCoefficientMap(Point origin, List<SpacePoint> asteroids) {
         Map<SpacePoint, Double> angularCoefficientMap = new HashMap<>();
+        List<SpacePoint> q1List = new ArrayList<>();
+        List<SpacePoint> q2List = new ArrayList<>();
+        List<SpacePoint> q3List = new ArrayList<>();
+        List<SpacePoint> q4List = new ArrayList<>();
+
         for (SpacePoint asteroid : asteroids) {
             double x1 = asteroid.getCoordinate().getX();
             double y1 = asteroid.getCoordinate().getY();
@@ -107,22 +115,38 @@ public class Ten {
             Line lineFromTwoPoints = Line.getLineFromTwoPoints(origin, asteroid.getCoordinate());
             if (lineFromTwoPoints != null) {
 
+                double angularCoefficient = lineFromTwoPoints.getAngularCoefficient();
+
+                asteroid.setRelativeAngularCoeff(-angularCoefficient);
+                if (angularCoefficient == 9999 || angularCoefficient == 0) {
+                    asteroid.setRelativeAngularCoeff(angularCoefficient);
+                }
+
                 if (y1 < y0 && x1 >= x0) {
                     asteroid.setQuadrant(Quadrant.ONE);
+                    q1List.add(asteroid);
                 }
                 if (y1 >= y0 && x1 > x0) {
                     asteroid.setQuadrant(Quadrant.TWO);
+                    q2List.add(asteroid);
                 }
                 if (y1 > y0 && x1 <= x0) {
                     asteroid.setQuadrant(Quadrant.THREE);
+                    q3List.add(asteroid);
                 }
                 if (y1 <= y0 && x1 < x0) {
                     asteroid.setQuadrant(Quadrant.FOUR);
+                    q4List.add(asteroid);
                 }
 
-                angularCoefficientMap.put(asteroid, lineFromTwoPoints.getAngularCoefficient());
+                angularCoefficientMap.put(asteroid, -angularCoefficient);
             }
         }
+
+        q1List.sort(Collections.reverseOrder());
+        q2List.sort(Collections.reverseOrder());
+        q3List.sort(Collections.reverseOrder());
+        q4List.sort(Collections.reverseOrder());
 
         return angularCoefficientMap;
     }

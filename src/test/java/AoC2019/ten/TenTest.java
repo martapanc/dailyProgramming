@@ -20,6 +20,7 @@ public class TenTest {
     private static final String INPUT5 = "src/test/java/AoC2019/ten/input5";
     private static final String INPUT6 = "src/test/java/AoC2019/ten/input6";
     private static final String INPUT7 = "src/test/java/AoC2019/ten/input7";
+    private static final String INPUT8 = "src/test/java/AoC2019/ten/input8";
 
     @Test
     public void testReadInput() {
@@ -40,7 +41,7 @@ public class TenTest {
 
     @Test
     public void getLineFromTwoPoints() {
-        assertEquals(new Line(0, 4, true, false), Line.getLineFromTwoPoints(new Point(4, 1), new Point(4, 15)));
+        assertEquals(new Line(9999, 4, true, false), Line.getLineFromTwoPoints(new Point(4, 1), new Point(4, 15)));
         assertEquals(new Line(0, 3, false, true), Line.getLineFromTwoPoints(new Point(0, 3), new Point(2, 3)));
 
         assertEquals(new Line(2, 0), Line.getLineFromTwoPoints(new Point(0, 0), new Point(1, 2)));
@@ -88,7 +89,11 @@ public class TenTest {
 
     @Test
     public void testGetAngularCoefficientMap() {
+        System.out.println(Ten.getAngularCoefficientMap(new Point(11,13), Ten.listAsteroids(Ten.readInput(INPUT5))));
+        System.out.println(Ten.getAngularCoefficientMap(new Point(19,11), Ten.listAsteroids(Ten.readInput(INPUT6))));
+        System.out.println(Ten.getAngularCoefficientMap(new Point(8,3), Ten.listAsteroids(Ten.readInput(INPUT8))));
         System.out.println(Ten.getAngularCoefficientMap(new Point(3,2), Ten.listAsteroids(Ten.readInput(INPUT1))));
         System.out.println(Ten.getAngularCoefficientMap(new Point(3,4), Ten.listAsteroids(Ten.readInput(INPUT1))));
+        System.out.println(Ten.getAngularCoefficientMap(new Point(3,3), Ten.listAsteroids(Ten.readInput(INPUT2))));
     }
 }
