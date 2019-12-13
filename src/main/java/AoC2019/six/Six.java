@@ -77,4 +77,18 @@ public class Six {
     static int getListSizeSum(Map<String, Set<String>> orbitMap) {
         return orbitMap.values().stream().mapToInt(Set::size).sum();
     }
+
+    static Set<String> calculateJumps(Map<String, Set<String>> completeOrbitMap) {
+        Set<String> parents = new HashSet<>();
+
+        Map<String, Integer> map = new HashMap<>();
+
+        for (Map.Entry<String, Set<String>> entry : completeOrbitMap.entrySet()) {
+            if (entry.getValue().contains("SAN") && entry.getValue().contains("YOU")) {
+                parents.add(entry.getKey());
+                map.put(entry.getKey(), entry.getValue().size());
+            }
+        }
+        return parents;
+    }
 }

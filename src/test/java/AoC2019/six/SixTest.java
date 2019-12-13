@@ -33,4 +33,10 @@ public class SixTest {
         System.out.println(completeOrbitMap2);
         assertEquals(119831, Six.getListSizeSum(completeOrbitMap2));
     }
+
+    @Test
+    public void calculateJumps() {
+        Map<String, Set<String>> completeOrbitMap2 = Six.getCompleteOrbitMap(Six.readInput(INPUT2));
+        System.out.println(Six.calculateJumps(completeOrbitMap2));
+    }
 }
