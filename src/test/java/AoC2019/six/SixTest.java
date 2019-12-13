@@ -11,6 +11,7 @@ public class SixTest {
 
     private static final String INPUT1 = "src/test/java/AoC2019/six/input1";
     private static final String INPUT2 = "src/test/java/AoC2019/six/input2";
+    private static final String INPUT3 = "src/test/java/AoC2019/six/input3";
 
     @Test
     public void testReadInput() {
@@ -36,7 +37,7 @@ public class SixTest {
 
     @Test
     public void calculateJumps() {
-        Map<String, Set<String>> completeOrbitMap2 = Six.getCompleteOrbitMap(Six.readInput(INPUT2));
-        System.out.println(Six.calculateJumps(completeOrbitMap2));
+        assertEquals(4, Six.calculateJumps(Six.getCompleteOrbitMap(Six.readInput(INPUT3)), INPUT3));
+        assertEquals(322, Six.calculateJumps(Six.getCompleteOrbitMap(Six.readInput(INPUT2)), INPUT2));
     }
 }

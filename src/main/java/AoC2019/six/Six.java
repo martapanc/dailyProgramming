@@ -78,17 +78,40 @@ public class Six {
         return orbitMap.values().stream().mapToInt(Set::size).sum();
     }
 
-    static Set<String> calculateJumps(Map<String, Set<String>> completeOrbitMap) {
-        Set<String> parents = new HashSet<>();
+    static int calculateJumps(Map<String, Set<String>> completeOrbitMap, String inputFile) {
+        Map<String, Integer> mapOfCentersWithSantaAndYou = completeOrbitMap.entrySet().stream()
+                .filter(entry -> entry.getValue().contains("SAN") && entry.getValue().contains("YOU"))
+                .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().size(), (a, b) -> b));
 
-        Map<String, Integer> map = new HashMap<>();
+        int minSize = 999999;
+        String parent = "";
 
-        for (Map.Entry<String, Set<String>> entry : completeOrbitMap.entrySet()) {
-            if (entry.getValue().contains("SAN") && entry.getValue().contains("YOU")) {
-                parents.add(entry.getKey());
-                map.put(entry.getKey(), entry.getValue().size());
+        for (Map.Entry<String, Integer> entry : mapOfCentersWithSantaAndYou.entrySet()) {
+            if (entry.getValue() < minSize) {
+                minSize = entry.getValue();
+                parent = entry.getKey();
             }
         }
-        return parents;
+
+        List<OrbitSystem> orbitSystemList = readInput(inputFile);
+
+        return getCount("SAN", parent, orbitSystemList) + getCount("YOU", parent, orbitSystemList) - 2;
+    }
+
+    private static int getCount(String satellite, String parent, List<OrbitSystem> orbitSystemList) {
+        int santaQnt = 0;
+        String tempParent = "";
+        do {
+            for (OrbitSystem os : orbitSystemList) {
+                if (os.getSatellite().equals(satellite)) {
+                    tempParent = os.getCenter();
+                    break;
+                }
+            }
+            santaQnt++;
+            satellite = tempParent;
+        } while (!tempParent.equals(parent));
+
+        return santaQnt;
     }
 }
