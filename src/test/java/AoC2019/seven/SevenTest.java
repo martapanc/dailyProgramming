@@ -7,6 +7,8 @@ import static org.junit.Assert.assertEquals;
 
 public class SevenTest {
 
+    private static final String PHASE_SETTINGS = "01234";
+
     private static String INPUT1 = "src/test/java/AoC2019/seven/input1";
     private static String INPUT2 = "src/test/java/AoC2019/seven/input2";
     private static String INPUT3 = "src/test/java/AoC2019/seven/input3";
@@ -39,5 +41,35 @@ public class SevenTest {
         assertEquals(652, Seven.processInput(Two.readInput(INPUT3), 4, 65));
         assertEquals(6521, Seven.processInput(Two.readInput(INPUT3), 3, 652));
         assertEquals(65210, Seven.processInput(Two.readInput(INPUT3), 2, 6521));
+    }
+
+    @Test
+    public void setupAmplifiers() {
+        assertEquals(43210, Seven.setupAmplifiers(Two.readInput(INPUT1), new int[]{4, 3, 2, 1, 0}));
+        assertEquals(54321, Seven.setupAmplifiers(Two.readInput(INPUT2), new int[]{0, 1, 2, 3, 4}));
+        assertEquals(12345, Seven.setupAmplifiers(Two.readInput(INPUT2), new int[]{4, 3, 2, 1, 0}));
+        assertEquals(65210, Seven.setupAmplifiers(Two.readInput(INPUT3), new int[]{1, 0, 4, 3, 2}));
+        assertEquals(1265, Seven.setupAmplifiers(Two.readInput(INPUT3), new int[]{2, 3, 4, 1, 0}));
+    }
+
+    @Test
+    public void testGeneratePermutations() {
+        assertEquals(1, Seven.generatePermutations("0").size());
+        assertEquals(2, Seven.generatePermutations("01").size());
+        assertEquals(6, Seven.generatePermutations("012").size());
+        assertEquals(24, Seven.generatePermutations("1023").size());
+        assertEquals(120, Seven.generatePermutations("12345").size());
+        assertEquals(720, Seven.generatePermutations("123456").size());
+
+        Seven.generatePermutations("0123").forEach(System.out::println);
+    }
+
+    @Test
+    public void testFindBestResult() {
+        assertEquals(43210, Seven.findBestResult(Two.readInput(INPUT1), PHASE_SETTINGS));
+        assertEquals(54321, Seven.findBestResult(Two.readInput(INPUT2), PHASE_SETTINGS));
+        assertEquals(54321, Seven.findBestResult(Two.readInput(INPUT2), PHASE_SETTINGS));
+        assertEquals(65210, Seven.findBestResult(Two.readInput(INPUT3), PHASE_SETTINGS));
+        assertEquals(67023, Seven.findBestResult(Two.readInput(INPUT4), PHASE_SETTINGS));
     }
 }
