@@ -3,12 +3,18 @@ package AoC2019.seven;
 import AoC2019.five.Output;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static AoC2019.five.Five.processParameterMode;
+import static AoC2019.seven.PermutationUtil.generatePermutations;
+
+// PART 2
+// * 3,26,1001,26,-4,26,3,27,1002,27,2,27,1,27,26,27,4,27,1001,28,-1,28,1005,28,6,99,0,0,5
+// The instruction should finish after reaching 1005, which goes to 99 only if [28] == 0, otherwise it jumps back to 3,27
+// The input the latter should receive, after the initial 0, must come from the previous amplifier (e.g. E -> A)
+// The input that the current amplifier passes to the following one is after 4 ([27] in this case)
+// The amplifier's index should be saved so that the process can be continued after the end of the loop (e.g. 1001,28)
+// Eventually, the loop should halt
 
 public class Seven {
 
@@ -57,44 +63,11 @@ public class Seven {
         return maxResult;
     }
 
-    static int setupAmplifiers(ArrayList<Integer> numbers, int[] phaseSettings){
+    static int setupAmplifiers(ArrayList<Integer> numbers, int[] phaseSettings) {
         int input = 0;
         for (int phaseSetting : phaseSettings) {
             input = processInput(numbers, phaseSetting, input);
         }
         return input;
-    }
-
-    static List<String> generatePermutations(String array) {
-        ArrayList<String> permutations = new ArrayList<>();
-        if (array.length() == 0) {
-            return permutations;
-        }
-
-        permutations(array.toCharArray(), 0, array.length(), permutations);
-        return permutations;
-    }
-
-    private static void permutations(char[] arr, int loc, int len, ArrayList<String> result) {
-        if (loc == len) {
-            result.add(new String(arr));
-            return;
-        }
-
-        // Pick the element to put at arr[loc]
-        permutations(arr, loc + 1, len, result);
-        for (int i = loc + 1; i < len; i++) {
-            // Swap the current arr[loc] to position i
-            swap(arr, loc, i);
-            permutations(arr, loc + 1, len, result);
-            // Restore the status of arr to perform the next pick
-            swap(arr, loc, i);
-        }
-    }
-
-    private static void swap(char[] arr, int i, int j) {
-        char tmp = arr[i];
-        arr[i] = arr[j];
-        arr[j] = tmp;
     }
 }
