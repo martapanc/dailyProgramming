@@ -18,8 +18,38 @@ import static AoC2019.seven.PermutationUtil.generatePermutations;
 
 public class Seven {
 
-    static int processInput(ArrayList<Integer> numbers, int input1, int input2) {
-        int i = 0;
+    static int findBestResult(ArrayList<Integer> numbers, String phaseSettings) {
+
+        int maxResult = 0;
+        for (String ps : generatePermutations(phaseSettings)) {
+
+            int[] phaseSettingsArr = new int[phaseSettings.length()];
+            IntStream.range(0, ps.length())
+                    .forEach(i -> phaseSettingsArr[i] = Integer.parseInt(String.valueOf(ps.charAt(i))));
+
+            int result = setupAmplifiers(numbers, phaseSettingsArr);
+            if (result > maxResult) {
+                maxResult = result;
+            }
+        }
+        return maxResult;
+    }
+
+    static int setupAmplifiers(ArrayList<Integer> numbers, int[] phaseSettings) {
+        int input = 0;
+        for (int phaseSetting : phaseSettings) {
+            input = processInput(numbers, phaseSetting, input, 0);
+        }
+        return input;
+    }
+
+    static int setupLoopingAmplifiers(ArrayList<Integer> numbers, int[] phaseSettings) {
+        int input = 0;
+
+        return input;
+    }
+
+    static int processInput(ArrayList<Integer> numbers, int input1, int input2, int i) {
         StringBuilder outputBuilder = new StringBuilder();
 
         boolean firstInputUsed = false;
@@ -39,35 +69,15 @@ public class Seven {
             }
 
             Output output = processParameterMode(numbers, i, opCode, inputValue);
-            outputBuilder.append(output.getCode());
+
             i += output.getIndex();
+            //Save index and break loop
+            if (!output.getCode().equals("")) {
+                outputBuilder.append(output.getCode());
+                break;
+            }
         }
 
         return Integer.parseInt(outputBuilder.toString());
-    }
-
-    static int findBestResult(ArrayList<Integer> numbers, String phaseSettings) {
-
-        int maxResult = 0;
-        for (String phaseSetting : generatePermutations(phaseSettings)) {
-
-            int[] phaseSettingsArr = new int[phaseSettings.length()];
-            IntStream.range(0, phaseSetting.length())
-                    .forEach(i -> phaseSettingsArr[i] = Integer.parseInt(String.valueOf(phaseSetting.charAt(i))));
-
-            int result = setupAmplifiers(numbers, phaseSettingsArr);
-            if (result > maxResult) {
-                maxResult = result;
-            }
-        }
-        return maxResult;
-    }
-
-    static int setupAmplifiers(ArrayList<Integer> numbers, int[] phaseSettings) {
-        int input = 0;
-        for (int phaseSetting : phaseSettings) {
-            input = processInput(numbers, phaseSetting, input);
-        }
-        return input;
     }
 }

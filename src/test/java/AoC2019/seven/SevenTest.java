@@ -27,23 +27,23 @@ public class SevenTest {
 
     @Test
     public void testProcessInput() {
-        assertEquals(4, Seven.processInput(Two.readInput(INPUT1), 4, 0));
-        assertEquals(43, Seven.processInput(Two.readInput(INPUT1), 3, 4));
-        assertEquals(432, Seven.processInput(Two.readInput(INPUT1), 2, 43));
-        assertEquals(4321, Seven.processInput(Two.readInput(INPUT1), 1, 432));
-        assertEquals(43210, Seven.processInput(Two.readInput(INPUT1), 0, 4321));
+        assertEquals(4, Seven.processInput(Two.readInput(INPUT1), 4, 0, 0));
+        assertEquals(43, Seven.processInput(Two.readInput(INPUT1), 3, 4, 0));
+        assertEquals(432, Seven.processInput(Two.readInput(INPUT1), 2, 43, 0));
+        assertEquals(4321, Seven.processInput(Two.readInput(INPUT1), 1, 432, 0));
+        assertEquals(43210, Seven.processInput(Two.readInput(INPUT1), 0, 4321, 0));
 
-        assertEquals(5, Seven.processInput(Two.readInput(INPUT2), 0, 0));
-        assertEquals(54, Seven.processInput(Two.readInput(INPUT2), 1, 5));
-        assertEquals(543, Seven.processInput(Two.readInput(INPUT2), 2, 54));
-        assertEquals(5432, Seven.processInput(Two.readInput(INPUT2), 3, 543));
-        assertEquals(54321, Seven.processInput(Two.readInput(INPUT2), 4, 5432));
+        assertEquals(5, Seven.processInput(Two.readInput(INPUT2), 0, 0, 0));
+        assertEquals(54, Seven.processInput(Two.readInput(INPUT2), 1, 5, 0));
+        assertEquals(543, Seven.processInput(Two.readInput(INPUT2), 2, 54, 0));
+        assertEquals(5432, Seven.processInput(Two.readInput(INPUT2), 3, 543, 0));
+        assertEquals(54321, Seven.processInput(Two.readInput(INPUT2), 4, 5432, 0));
 
-        assertEquals(6, Seven.processInput(Two.readInput(INPUT3), 1, 0));
-        assertEquals(65, Seven.processInput(Two.readInput(INPUT3), 0, 6));
-        assertEquals(652, Seven.processInput(Two.readInput(INPUT3), 4, 65));
-        assertEquals(6521, Seven.processInput(Two.readInput(INPUT3), 3, 652));
-        assertEquals(65210, Seven.processInput(Two.readInput(INPUT3), 2, 6521));
+        assertEquals(6, Seven.processInput(Two.readInput(INPUT3), 1, 0, 0));
+        assertEquals(65, Seven.processInput(Two.readInput(INPUT3), 0, 6, 0));
+        assertEquals(652, Seven.processInput(Two.readInput(INPUT3), 4, 65, 0));
+        assertEquals(6521, Seven.processInput(Two.readInput(INPUT3), 3, 652, 0));
+        assertEquals(65210, Seven.processInput(Two.readInput(INPUT3), 2, 6521, 0));
     }
 
     @Test

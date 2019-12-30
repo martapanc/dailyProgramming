@@ -1,11 +1,10 @@
 package AoC2019.seven;
 
 import java.util.ArrayList;
-import java.util.List;
 
 class PermutationUtil {
 
-    static List<String> generatePermutations(String array) {
+    static ArrayList<String> generatePermutations(String array) {
         ArrayList<String> permutations = new ArrayList<>();
         if (array.length() == 0) {
             return permutations;
