@@ -46,7 +46,7 @@ public class Five {
         return Integer.parseInt(outputBuilder.toString());
     }
 
-    private static Output processParameterMode(ArrayList<Integer> numbers, int index, int opCode, int inputValue) {
+    public static Output processParameterMode(ArrayList<Integer> numbers, int index, int opCode, int inputValue) {
         int reducedOpCode = opCode % 100;
         Map<Integer, Integer> parameterModeMap = new HashMap<>();
         parameterModeMap.put(1, (opCode / 100) % 10);
