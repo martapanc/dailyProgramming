@@ -22,7 +22,6 @@ public class NineTest {
     private static final String INPUT5_five = "src/test/java/AoC2019/five/input5";
     private static final String INPUT6_five = "src/test/java/AoC2019/five/input6";
 
-
     @Test
     public void testReadInput() {
         ArrayList<Long> list = Nine.readInput(INPUT1);

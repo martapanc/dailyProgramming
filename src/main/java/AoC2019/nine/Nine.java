@@ -110,19 +110,14 @@ public class Nine {
     }
 
     private static void sumAndSubtractParam(ArrayList<Long> numbers, int index, int opCode, Map<Integer, Integer> map) {
-        int input1Pos = Math.toIntExact(numbers.get(index + 1));
-        int input2Pos = Math.toIntExact(numbers.get(index + 2));
-        int outputPos = Math.toIntExact(numbers.get(index + 3));
+        int input1Code = map.get(1) == 0 ? Math.toIntExact(numbers.get(index + 1)) : index + 1;
+        int input2Code = map.get(2) == 0 ? Math.toIntExact(numbers.get(index + 2)) : index + 2;
+        int outputCode = map.get(3) == 0 ? Math.toIntExact(numbers.get(index + 3)) : index + 3;
+
         if (opCode == 1) {
-            numbers.set(
-                    (map.get(3) == 0 ? outputPos : index + 3),
-                    numbers.get((map.get(1) == 0 ? input1Pos : index + 1)) +
-                            numbers.get((map.get(2) == 0 ? input2Pos : index + 2)));
+            numbers.set(outputCode, numbers.get(input1Code) + numbers.get(input2Code));
         } else {
-            numbers.set(
-                    (map.get(3) == 0 ? outputPos : index + 3),
-                    numbers.get((map.get(1) == 0 ? input1Pos : index + 1)) *
-                            numbers.get((map.get(2) == 0 ? input2Pos : index + 2)));
+            numbers.set(outputCode, numbers.get(input1Code) * numbers.get(input2Code));
         }
     }
 
@@ -137,15 +132,16 @@ public class Nine {
     }
 
     private static long jumpIf(ArrayList<Long> numbers, int index, int opCode, Map<Integer, Integer> map) {
-        int input1Pos = Math.toIntExact(numbers.get(index + 1));
-        int input2Pos = Math.toIntExact(numbers.get(index + 2));
+        int input1Code = map.get(1) == 0 ? Math.toIntExact(numbers.get(index + 1)) : index + 1;
+        int input2Code = map.get(2) == 0 ? Math.toIntExact(numbers.get(index + 2)) : index + 2;
+
         if (opCode == 5) {
-            if (numbers.get(map.get(1) == 0 ? input1Pos : index + 1) != 0) {
-                return numbers.get((map.get(2) == 0 ? input2Pos : index + 2)) - index;
+            if (numbers.get(input1Code) != 0) {
+                return numbers.get(input2Code) - index;
             }
         } else {
-            if (numbers.get(map.get(1) == 0 ? input1Pos : index + 1) == 0) {
-                return numbers.get((map.get(2) == 0 ? input2Pos : index + 2)) - index;
+            if (numbers.get(input1Code) == 0) {
+                return numbers.get(input2Code) - index;
             }
         }
 
@@ -153,24 +149,14 @@ public class Nine {
     }
 
     private static void lessThanOrEquals(ArrayList<Long> numbers, int index, int opCode, Map<Integer, Integer> map) {
-        int input1Pos = Math.toIntExact(numbers.get(index + 1));
-        int input2Pos = Math.toIntExact(numbers.get(index + 2));
+        int input1Code = map.get(1) == 0 ? Math.toIntExact(numbers.get(index + 1)) : index + 1;
+        int input2Code = map.get(2) == 0 ? Math.toIntExact(numbers.get(index + 2)) : index + 2;
         int outputPos = Math.toIntExact(numbers.get(index + 3));
+
         if (opCode == 7) {
-            if (numbers.get(map.get(1) == 0 ? input1Pos : index + 1) <
-                    numbers.get(map.get(2) == 0 ? input2Pos : index + 2)) {
-                numbers.set(outputPos, 1L);
-            } else {
-                numbers.set(outputPos, 0L);
-            }
+            numbers.set(outputPos, numbers.get(input1Code) < numbers.get(input2Code) ? 1L : 0L);
         } else {
-            if (numbers.get(map.get(1) == 0 ? input1Pos : index + 1).equals(
-                    numbers.get(map.get(2) == 0 ? input2Pos : index + 2))
-            ) {
-                numbers.set(outputPos, 1L);
-            } else {
-                numbers.set(outputPos, 0L);
-            }
+            numbers.set(outputPos, numbers.get(input1Code).equals(numbers.get(input2Code)) ? 1L : 0L);
         }
     }
 
