@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 public class Nine {
 
@@ -115,6 +116,8 @@ public class Nine {
         int input2Pos = getParamMode(2, index, relativeBase, numbers, map);
         int outputPos = getParamMode(3, index, relativeBase, numbers, map);
 
+        addMemoryIfNeeded(numbers, input1Pos, input2Pos, outputPos);
+
         if (opCode == 1) {
             numbers.set(outputPos, numbers.get(input1Pos) + numbers.get(input2Pos));
         } else {
@@ -184,6 +187,13 @@ public class Nine {
                 return index + paramNum;
             default:
                 return pos + relativeBase;
+        }
+    }
+
+    private static void addMemoryIfNeeded(ArrayList<Long> numbers, int input1Pos, int input2Pos, int outputPos) {
+        int maxIndex = Math.max(Math.max(input1Pos, input2Pos), outputPos);
+        if (maxIndex >= numbers.size()) {
+            IntStream.rangeClosed(numbers.size(), maxIndex).forEach(i -> numbers.add(i, 0L));
         }
     }
 

@@ -31,7 +31,7 @@ public class NineTest {
 
     @Test
     public void testProcessInput() {
-//        assertEquals(1, Nine.processInput(Nine.readInput(INPUT1), 1));
+        assertEquals(1, Nine.processInput(Nine.readInput(INPUT1), 1));
     }
 
     // Check that the code still work for previous versions
