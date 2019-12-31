@@ -42,4 +42,29 @@ public class Eight {
         }
         return checksumOfBestLayer;
     }
+
+    static String getRenderedImage(List<String> layers, int width, int height) {
+        StringBuilder renderedImage = new StringBuilder();
+        for (int i = 0; i < width * height; i++) {
+            for (String layer : layers) {
+                if (layer.charAt(i) != '2') {
+                    renderedImage.append(layer.charAt(i));
+                    break;
+                }
+            }
+        }
+
+        printImage(width, renderedImage);
+        return renderedImage.toString();
+    }
+
+    private static void printImage(int width, StringBuilder renderedImage) {
+        System.out.println();
+        String result = renderedImage.toString()
+                .replaceAll("0", " ")
+                .replaceAll("1", "█");
+        for (String s : Splitter.fixedLength(width).split(result)) {
+            System.out.println(s);
+        }
+    }
 }
