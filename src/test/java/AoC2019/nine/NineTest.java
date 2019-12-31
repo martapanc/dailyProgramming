@@ -29,6 +29,11 @@ public class NineTest {
         System.out.println(list);
     }
 
+    @Test
+    public void testProcessInput() {
+//        assertEquals(1, Nine.processInput(Nine.readInput(INPUT1), 1));
+    }
+
     // Check that the code still work for previous versions
     @Test
     public void testProcessInput_Regression() {
