@@ -17,6 +17,11 @@ public class Output {
         this.index = index;
     }
 
+    public Output(String code, long index) {
+        this.code = code;
+        this.index = (int) index;
+    }
+
     public String getCode() {
         return code;
     }

@@ -2,7 +2,11 @@ package AoC2019.nine;
 
 import AoC2019.five.Output;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,12 +42,29 @@ public class Nine {
     // - addresses can be beyond the initial code, if positive, and their initial parameter(s) is 0
     // - support for large numbers
 
-    static int processInput(ArrayList<Integer> numbers, int input) {
+    public static ArrayList<Long> readInput(String input) {
+        ArrayList<Long> list = new ArrayList<>();
+        BufferedReader reader;
+        try {
+            reader = new BufferedReader(new FileReader(input));
+            String line = reader.readLine();
+            while (line != null) {
+                Arrays.stream(line.split(",")).map(Long::parseLong).forEachOrdered(list::add);
+                line = reader.readLine();
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    static int processInput(ArrayList<Long> numbers, int input) {
         int i = 0;
         StringBuilder outputBuilder = new StringBuilder();
 
         while (i < numbers.size()) {
-            int opCode = numbers.get(i);
+            int opCode = Math.toIntExact(numbers.get(i));
             if (opCode == 99) {
                 break;
             }
@@ -56,12 +77,14 @@ public class Nine {
         return Integer.parseInt(outputBuilder.toString());
     }
 
-    public static Output processParameterMode(ArrayList<Integer> numbers, int index, int opCode, int inputValue) {
+    public static Output processParameterMode(ArrayList<Long> numbers, int index, int opCode, int inputValue) {
         int reducedOpCode = opCode % 100;
         Map<Integer, Integer> parameterModeMap = new HashMap<>();
         parameterModeMap.put(1, (opCode / 100) % 10);
         parameterModeMap.put(2, (opCode / 1000) % 10);
         parameterModeMap.put(3, (opCode / 10000) % 10);
+
+        int relativeBase = 0;
 
         switch (reducedOpCode) {
             case 1:
@@ -78,15 +101,18 @@ public class Nine {
             case 8:
                 lessThanOrEquals(numbers, index, reducedOpCode, parameterModeMap);
                 return new Output("", 4);
+            case 9:
+                updateRelativeBase(numbers, index, relativeBase, parameterModeMap);
+                return new Output("", 2);
             default:
                 return new Output("err");
         }
     }
 
-    private static void sumAndSubtractParam(ArrayList<Integer> numbers, int index, int opCode, Map<Integer, Integer> map) {
-        Integer input1Pos = numbers.get(index + 1);
-        Integer input2Pos = numbers.get(index + 2);
-        Integer outputPos = numbers.get(index + 3);
+    private static void sumAndSubtractParam(ArrayList<Long> numbers, int index, int opCode, Map<Integer, Integer> map) {
+        int input1Pos = Math.toIntExact(numbers.get(index + 1));
+        int input2Pos = Math.toIntExact(numbers.get(index + 2));
+        int outputPos = Math.toIntExact(numbers.get(index + 3));
         if (opCode == 1) {
             numbers.set(
                     (map.get(3) == 0 ? outputPos : index + 3),
@@ -100,8 +126,8 @@ public class Nine {
         }
     }
 
-    private static Output inputAndOutputParam(ArrayList<Integer> numbers, int index, int opCode, Map<Integer, Integer> map, int inputValue) {
-        Integer pos = numbers.get(index + 1);
+    private static Output inputAndOutputParam(ArrayList<Long> numbers, int index, int opCode, Map<Integer, Integer> map, int inputValue) {
+        int pos = Math.toIntExact(numbers.get(index + 1));
         if (opCode == 3) {
             numbers.set(pos, getInput(inputValue));
             return new Output("", 2);
@@ -110,9 +136,9 @@ public class Nine {
         }
     }
 
-    private static int jumpIf(ArrayList<Integer> numbers, int index, int opCode, Map<Integer, Integer> map) {
-        Integer input1Pos = numbers.get(index + 1);
-        Integer input2Pos = numbers.get(index + 2);
+    private static long jumpIf(ArrayList<Long> numbers, int index, int opCode, Map<Integer, Integer> map) {
+        int input1Pos = Math.toIntExact(numbers.get(index + 1));
+        int input2Pos = Math.toIntExact(numbers.get(index + 2));
         if (opCode == 5) {
             if (numbers.get(map.get(1) == 0 ? input1Pos : index + 1) != 0) {
                 return numbers.get((map.get(2) == 0 ? input2Pos : index + 2)) - index;
@@ -126,29 +152,33 @@ public class Nine {
         return 3;
     }
 
-    private static void lessThanOrEquals(ArrayList<Integer> numbers, int index, int opCode, Map<Integer, Integer> map) {
-        Integer input1Pos = numbers.get(index + 1);
-        Integer input2Pos = numbers.get(index + 2);
-        Integer outputPos = numbers.get(index + 3);
+    private static void lessThanOrEquals(ArrayList<Long> numbers, int index, int opCode, Map<Integer, Integer> map) {
+        int input1Pos = Math.toIntExact(numbers.get(index + 1));
+        int input2Pos = Math.toIntExact(numbers.get(index + 2));
+        int outputPos = Math.toIntExact(numbers.get(index + 3));
         if (opCode == 7) {
             if (numbers.get(map.get(1) == 0 ? input1Pos : index + 1) <
                     numbers.get(map.get(2) == 0 ? input2Pos : index + 2)) {
-                numbers.set(outputPos, 1);
+                numbers.set(outputPos, 1L);
             } else {
-                numbers.set(outputPos, 0);
+                numbers.set(outputPos, 0L);
             }
         } else {
             if (numbers.get(map.get(1) == 0 ? input1Pos : index + 1).equals(
                     numbers.get(map.get(2) == 0 ? input2Pos : index + 2))
             ) {
-                numbers.set(outputPos, 1);
+                numbers.set(outputPos, 1L);
             } else {
-                numbers.set(outputPos, 0);
+                numbers.set(outputPos, 0L);
             }
         }
     }
 
-    private static int getInput(int input) {
+    private static void updateRelativeBase(ArrayList<Long> numbers, int index, int relativeBase, Map<Integer, Integer> map) {
+
+    }
+
+    private static long getInput(int input) {
         return input;
     }
 }
