@@ -58,7 +58,7 @@ public class Nine {
         return list;
     }
 
-    static int processInput(ArrayList<Long> numbers, int input) {
+    static long processInput(ArrayList<Long> numbers, int input) {
         int i = 0;
         int relativeBase = 0;
         StringBuilder outputBuilder = new StringBuilder();
@@ -78,7 +78,7 @@ public class Nine {
             i += output.getIndex();
         }
 
-        return Integer.parseInt(outputBuilder.toString());
+        return Long.parseLong(outputBuilder.toString());
     }
 
     public static Output processParameterMode(ArrayList<Long> numbers, int index, int opCode, int inputValue, int relativeBase) {
@@ -116,7 +116,7 @@ public class Nine {
         int input2Pos = getParamMode(2, index, relativeBase, numbers, map);
         int outputPos = getParamMode(3, index, relativeBase, numbers, map);
 
-        addMemoryIfNeeded(numbers, input1Pos, input2Pos, outputPos);
+        addMemoryIfNeeded(numbers, Math.max(Math.max(input1Pos, input2Pos), outputPos));
 
         if (opCode == 1) {
             numbers.set(outputPos, numbers.get(input1Pos) + numbers.get(input2Pos));
@@ -127,11 +127,12 @@ public class Nine {
 
     // IntCodes 3 and 4
     private static Output inputAndOutputParam(ArrayList<Long> numbers, int index, int opCode, int relativeBase, Map<Integer, Integer> map, int inputValue) {
-        int pos = Math.toIntExact(numbers.get(index + 1));
         int outputPos = getParamMode(1, index, relativeBase, numbers, map);
 
+        addMemoryIfNeeded(numbers, outputPos);
+
         if (opCode == 3) {
-            numbers.set(pos, getInput(inputValue));
+            numbers.set(Math.toIntExact(numbers.get(index + 1)), getInput(inputValue));
             return new Output("", 2);
         } else {
             return new Output(numbers.get(outputPos) + "", 2);
@@ -142,6 +143,8 @@ public class Nine {
     private static long jumpIf(ArrayList<Long> numbers, int index, int opCode, int relativeBase, Map<Integer, Integer> map) {
         int input1Pos = getParamMode(1, index, relativeBase, numbers, map);
         int input2Pos = getParamMode(2, index, relativeBase, numbers, map);
+
+        addMemoryIfNeeded(numbers, Math.max(input1Pos, input2Pos));
 
         if (opCode == 5) {
             if (numbers.get(input1Pos) != 0) {
@@ -162,6 +165,7 @@ public class Nine {
         int input2Pos = getParamMode(2, index, relativeBase, numbers, map);
         int outputPos = getParamMode(3, index, relativeBase, numbers, map);
 
+        addMemoryIfNeeded(numbers, Math.max(Math.max(input1Pos, input2Pos), outputPos));
         if (opCode == 7) {
             numbers.set(outputPos, numbers.get(input1Pos) < numbers.get(input2Pos) ? 1L : 0L);
         } else {
@@ -179,19 +183,17 @@ public class Nine {
     }
 
     private static int getParamMode(int paramNum, int index, int relativeBase, ArrayList<Long> numbers, Map<Integer, Integer> map) {
-        int pos = Math.toIntExact(numbers.get(index + paramNum));
         switch (map.get(paramNum)) {
             case 0:
-                return pos;
+                return Math.toIntExact(numbers.get(index + paramNum));
             case 1:
                 return index + paramNum;
             default:
-                return pos + relativeBase;
+                return Math.toIntExact(numbers.get(index + paramNum)) + relativeBase;
         }
     }
 
-    private static void addMemoryIfNeeded(ArrayList<Long> numbers, int input1Pos, int input2Pos, int outputPos) {
-        int maxIndex = Math.max(Math.max(input1Pos, input2Pos), outputPos);
+    private static void addMemoryIfNeeded(ArrayList<Long> numbers, int maxIndex) {
         if (maxIndex >= numbers.size()) {
             IntStream.rangeClosed(numbers.size(), maxIndex).forEach(i -> numbers.add(i, 0L));
         }
