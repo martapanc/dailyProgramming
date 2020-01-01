@@ -3,6 +3,10 @@ package AoC2019.seven;
 import AoC2019.five.Output;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static AoC2019.five.Five.processParameterMode;
@@ -35,21 +39,53 @@ public class Seven {
         return maxResult;
     }
 
+    static int findBestResult2(ArrayList<Integer> numbers, String phaseSettings) {
+
+        int maxResult = 0;
+        for (String ps : generatePermutations(phaseSettings)) {
+
+            int[] phaseSettingsArr = new int[phaseSettings.length()];
+            IntStream.range(0, ps.length())
+                    .forEach(i -> phaseSettingsArr[i] = Integer.parseInt(String.valueOf(ps.charAt(i))));
+
+            int result = setupLoopingAmplifiers(numbers, phaseSettingsArr);
+            if (result > maxResult) {
+                maxResult = result;
+            }
+        }
+        return maxResult;
+    }
+
     static int setupAmplifiers(ArrayList<Integer> numbers, int[] phaseSettings) {
         int input = 0;
         for (int phaseSetting : phaseSettings) {
-            input = processInput(numbers, phaseSetting, input, 0);
+            input = processInput(numbers, phaseSetting, input, 0).getOutputValue();
         }
         return input;
     }
 
     static int setupLoopingAmplifiers(ArrayList<Integer> numbers, int[] phaseSettings) {
+        Map<Integer, AmplifierOutput> currentIndicesMap = Arrays.stream(phaseSettings).boxed()
+                .collect(Collectors.toMap(ps -> ps, ps -> new AmplifierOutput(0, 0), (a, b) -> b));
         int input = 0;
+        int index = 0;
+        int i = 0;
+
+        while (i++ < 100) {
+            for (int phaseSetting : phaseSettings) {
+                index = currentIndicesMap.get(phaseSetting).getLastIndex();
+
+                AmplifierOutput output = processInput(numbers, phaseSetting, input, index);
+                input = output.getOutputValue();
+
+                currentIndicesMap.put(phaseSetting, output);
+            }
+        }
 
         return input;
     }
 
-    static int processInput(ArrayList<Integer> numbers, int input1, int input2, int i) {
+    static AmplifierOutput processInput(ArrayList<Integer> numbers, int input1, int input2, int i) {
         StringBuilder outputBuilder = new StringBuilder();
 
         boolean firstInputUsed = false;
@@ -78,6 +114,6 @@ public class Seven {
             }
         }
 
-        return Integer.parseInt(outputBuilder.toString());
+        return new AmplifierOutput(Integer.parseInt(outputBuilder.toString()), i);
     }
 }
