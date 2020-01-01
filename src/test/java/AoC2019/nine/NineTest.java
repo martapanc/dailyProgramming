@@ -34,7 +34,7 @@ public class NineTest {
 //        assertEquals(1, Nine.processInput(Nine.readInput(INPUT1), 1));
         assertEquals(1219070632396864L, Nine.processInput(Nine.readInput(INPUT2), 1));
         assertEquals(1125899906842624L, Nine.processInput(Nine.readInput(INPUT3), 1));
-        assertEquals(1, Nine.processInput(Nine.readInput(INPUT4), 1));
+        assertEquals(2377080455L, Nine.processInput(Nine.readInput(INPUT4), 1));
     }
 
     // Check that the code still work for previous versions

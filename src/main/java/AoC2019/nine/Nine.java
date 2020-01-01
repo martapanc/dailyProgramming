@@ -32,7 +32,7 @@ public class Nine {
     //      value at index (e.g. 3,...,104,0 -> out: 3)
     // - 5,6: 105 - (1) and (2) can be in immediate mode
     // - 7,8: 1107 - only (1) and (2) can be in immediate mode
-    // - all IntCodes can be in relative mode except for 9
+    // - all IntCodes can be in relative mode
 
     // The pointer should increment based on the number of parameters (e.g. 4 for Codes 1 and 2, 2 for Codes 3 and 4),
     // except for 5 and 6 where the pointer is updated as described
@@ -132,7 +132,11 @@ public class Nine {
         addMemoryIfNeeded(numbers, outputPos);
 
         if (opCode == 3) {
-            numbers.set(Math.toIntExact(numbers.get(index + 1)), getInput(inputValue));
+            // If 3 is in position mode, the input is stored at the position of the parameter
+            // It it's in relative mode, the position is the outputPos (parameter value + relative base)
+            int outputIndex = map.get(1) == 2 ? outputPos : Math.toIntExact(numbers.get(index + 1));
+
+            numbers.set(outputIndex, getInput(inputValue));
             return new Output("", 2);
         } else {
             return new Output(numbers.get(outputPos) + "", 2);
@@ -175,8 +179,8 @@ public class Nine {
 
     // IntCode 9
     private static int updateRelativeBase(ArrayList<Long> numbers, int index, int relativeBase, Map<Integer, Integer> map) {
-        // IntCode 9 can be in position mode (0) or immediate mode (1)
-        int outputPos = map.get(1) == 0 ? Math.toIntExact(numbers.get(index + 1)) : index + 1;
+        int outputPos = getParamMode(1, index, relativeBase, numbers, map);
+        addMemoryIfNeeded(numbers, outputPos);
         relativeBase += numbers.get(outputPos);
 
         return relativeBase;
