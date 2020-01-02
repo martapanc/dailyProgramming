@@ -27,8 +27,7 @@ public class Eleven {
         StringBuilder outputBuilder = new StringBuilder();
         Point currentPos = new Point(0,0);
 
-        int paintedPanels = 0;
-        int existing = 0;
+        int paintedPanels = 1;
 
         while (i < numbers.size()) {
             int opCode = Math.toIntExact(numbers.get(i));
@@ -45,10 +44,8 @@ public class Eleven {
                 String outputVals = outputBuilder.toString();
 
                 if (outputVals.charAt(0) == '0') {
-                    paintedPanels++;
                     panelMap.get(currentPos).paintPanelBlack();
                 } else {
-                    paintedPanels++;
                     panelMap.get(currentPos).paintPanelWhite();
                 }
 
@@ -57,52 +54,40 @@ public class Eleven {
                         case UP:
                             currentPos = new Point(currentPos.x - 1, currentPos.y);
 
-                            System.out.println(Panel.Direction.LEFT);
-
                             if (panelMap.get(currentPos) == null) {
                                 panelMap.put(currentPos, new Panel(0, Panel.Direction.LEFT));
-//                                paintedPanels++;
+                                paintedPanels++;
                             } else {
-                                existing++;
                                 panelMap.get(currentPos).setDirection(Panel.Direction.LEFT);
                             }
                             break;
                         case DOWN:
                             currentPos = new Point(currentPos.x + 1, currentPos.y);
 
-                            System.out.println(Panel.Direction.RIGHT);
-
                             if (panelMap.get(currentPos) == null) {
                                 panelMap.put(currentPos, new Panel(0, Panel.Direction.RIGHT));
-//                                paintedPanels++;
+                                paintedPanels++;
                             } else {
-                                existing++;
                                 panelMap.get(currentPos).setDirection(Panel.Direction.RIGHT);
                             }
                             break;
                         case LEFT:
                             currentPos = new Point(currentPos.x, currentPos.y - 1);
 
-                            System.out.println(Panel.Direction.DOWN);
-
                             if (panelMap.get(currentPos) == null) {
                                 panelMap.put(currentPos, new Panel(0, Panel.Direction.DOWN));
-//                                paintedPanels++;
+                                paintedPanels++;
                             } else {
-                                existing++;
                                 panelMap.get(currentPos).setDirection(Panel.Direction.DOWN);
                             }
                             break;
                         case RIGHT:
                             currentPos = new Point(currentPos.x, currentPos.y + 1);
 
-                            System.out.println(Panel.Direction.UP);
-
                             if (panelMap.get(currentPos) == null) {
                                 panelMap.put(currentPos, new Panel(0, Panel.Direction.UP));
-//                                paintedPanels++;
+                                paintedPanels++;
                             } else {
-                                existing++;
                                 panelMap.get(currentPos).setDirection(Panel.Direction.UP);
                             }
                             break;
@@ -112,52 +97,40 @@ public class Eleven {
                         case UP:
                             currentPos = new Point(currentPos.x + 1, currentPos.y);
 
-                            System.out.println(Panel.Direction.RIGHT);
-
                             if (panelMap.get(currentPos) == null) {
                                 panelMap.put(currentPos, new Panel(0, Panel.Direction.RIGHT));
-//                                paintedPanels++;
+                                paintedPanels++;
                             } else {
-                                existing++;
                                 panelMap.get(currentPos).setDirection(Panel.Direction.RIGHT);
                             }
                             break;
                         case DOWN:
                             currentPos = new Point(currentPos.x - 1, currentPos.y);
 
-                            System.out.println(Panel.Direction.LEFT);
-
                             if (panelMap.get(currentPos) == null) {
                                 panelMap.put(currentPos, new Panel(0, Panel.Direction.LEFT));
-//                                paintedPanels++;
+                                paintedPanels++;
                             } else {
-                                existing++;
                                 panelMap.get(currentPos).setDirection(Panel.Direction.LEFT);
                             }
                             break;
                         case LEFT:
                             currentPos = new Point(currentPos.x, currentPos.y + 1);
 
-                            System.out.println(Panel.Direction.UP);
-
                             if (panelMap.get(currentPos) == null) {
                                 panelMap.put(currentPos, new Panel(0, Panel.Direction.UP));
-//                                paintedPanels++;
+                                paintedPanels++;
                             } else {
-                                existing++;
                                 panelMap.get(currentPos).setDirection(Panel.Direction.UP);
                             }
                             break;
                         case RIGHT:
                             currentPos = new Point(currentPos.x, currentPos.y - 1);
 
-                            System.out.println(Panel.Direction.DOWN);
-
                             if (panelMap.get(currentPos) == null) {
                                 panelMap.put(currentPos, new Panel(0, Panel.Direction.DOWN));
-//                                paintedPanels++;
+                                paintedPanels++;
                             } else {
-                                existing++;
                                 panelMap.get(currentPos).setDirection(Panel.Direction.DOWN);
                             }
                             break;

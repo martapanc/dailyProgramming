@@ -20,6 +20,6 @@ public class ElevenTest {
 
     @Test
     public void testProcessInput() {
-        System.out.println(Eleven.processInput(Nine.readInput(INPUT1)));
+        assertEquals(1951, Eleven.processInput(Nine.readInput(INPUT1)));
     }
 }
