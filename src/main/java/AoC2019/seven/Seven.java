@@ -43,8 +43,6 @@ public class Seven {
     }
 
     static int setupLoopingAmplifiers(ArrayList<Integer> numbers, int[] phaseSettings) {
-        // Start all Amplifiers, store the outputs and "pause" them when waiting for input
-        // When all outputs are available, continue all
         LoopAmplifierOutput A = processInput(new ArrayList<>(numbers), phaseSettings[0], 0, 0);
         LoopAmplifierOutput B = processInput(new ArrayList<>(numbers), phaseSettings[1], A.getOutputValue(), 0);
         LoopAmplifierOutput C = processInput(new ArrayList<>(numbers), phaseSettings[2], B.getOutputValue(), 0);

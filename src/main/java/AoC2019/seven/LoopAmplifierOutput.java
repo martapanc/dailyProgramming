@@ -8,17 +8,17 @@ public class LoopAmplifierOutput {
     private int lastIndex;
     private ArrayList<Integer> currentNumbers;
 
-    public LoopAmplifierOutput(int outputValue, int lastIndex, ArrayList<Integer> numbers) {
+    LoopAmplifierOutput(int outputValue, int lastIndex, ArrayList<Integer> numbers) {
         this.outputValue = outputValue;
         this.lastIndex = lastIndex;
         this.currentNumbers = numbers;
     }
 
-    public int getOutputValue() {
+    int getOutputValue() {
         return outputValue;
     }
 
-    public int getLastIndex() {
+    int getLastIndex() {
         return lastIndex;
     }
 
