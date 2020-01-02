@@ -16,19 +16,9 @@ import static AoC2019.seven.PermutationUtil.generatePermutations;
 // The amplifier's index, as well as the Amp's memory, should be saved so that the process can be continued after the end of the loop (e.g. 1001,28)
 // Eventually, the loop should halt when Amp E reaches 99
 
-// The five phase settings are used only once each, as well as the initial 0
-
-// Amp A: [1]=phaseSetting, [2]=0
-// Amp B: [1]=phaseSetting, [2]=A's output (after opcode 4)
-// Amp C: [1]=phaseSetting, [2]=B's output
-// Amp D: [1]=phaseSetting, [2]=C's output
-// Amp E: [1]=phaseSetting, [2]=D's output
-// Amp A: after 1005, it should go back to (6), which takes E's output as input. A can continue until it reaches 4, producing input for B
-// Continuing this way, all Amps should eventually reach 99. When E does, the final result is output
-
 public class Seven {
 
-    static int findBestResult(ArrayList<Integer> numbers, String phaseSettings) {
+    static int findBestResult(ArrayList<Integer> numbers, String phaseSettings, boolean withLoop) {
         int maxResult = 0;
         for (String ps : generatePermutations(phaseSettings)) {
 
@@ -36,23 +26,7 @@ public class Seven {
             IntStream.range(0, ps.length())
                     .forEach(i -> phaseSettingsArr[i] = Integer.parseInt(String.valueOf(ps.charAt(i))));
 
-            int result = setupAmplifiers(numbers, phaseSettingsArr);
-            if (result > maxResult) {
-                maxResult = result;
-            }
-        }
-        return maxResult;
-    }
-
-    static int findBestResultWithLoop(ArrayList<Integer> numbers, String phaseSettings) {
-        int maxResult = 0;
-        for (String ps : generatePermutations(phaseSettings)) {
-
-            int[] phaseSettingsArr = new int[phaseSettings.length()];
-            IntStream.range(0, ps.length())
-                    .forEach(i -> phaseSettingsArr[i] = Integer.parseInt(String.valueOf(ps.charAt(i))));
-
-            int result = setupLoopingAmplifiers(numbers, phaseSettingsArr);
+            int result = withLoop ? setupLoopingAmplifiers(numbers, phaseSettingsArr) : setupAmplifiers(numbers, phaseSettingsArr);
             if (result > maxResult) {
                 maxResult = result;
             }
