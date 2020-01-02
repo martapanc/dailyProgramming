@@ -77,7 +77,16 @@ public class SevenTest {
     }
 
     @Test
-    public void testFindBestResult2() {
-        assertEquals(67023, Seven.findBestResult2(Two.readInput(INPUT5), PHASE_SETTINGS_2));
+    public void setupLoopingAmplifiers() {
+        assertEquals(139629729, Seven.setupLoopingAmplifiers(Two.readInput(INPUT5), new int[]{9, 8, 7, 6, 5}));
+        assertEquals(18216, Seven.setupLoopingAmplifiers(Two.readInput(INPUT6), new int[]{9, 7, 8, 5, 6}));
+        assertEquals(3710683, Seven.setupLoopingAmplifiers(Two.readInput(INPUT4), new int[]{9, 8, 7, 6, 5}));
+    }
+
+    @Test
+    public void testFindBestResultWithLoop() {
+        assertEquals(139629729, Seven.findBestResultWithLoop(Two.readInput(INPUT5), PHASE_SETTINGS_2));
+        assertEquals(18216, Seven.findBestResultWithLoop(Two.readInput(INPUT6), PHASE_SETTINGS_2));
+        assertEquals(7818398, Seven.findBestResultWithLoop(Two.readInput(INPUT4), PHASE_SETTINGS_2));
     }
 }
