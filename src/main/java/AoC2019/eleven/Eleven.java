@@ -146,6 +146,12 @@ public class Eleven {
             i += output.getIndex();
         }
 
+        printPanels(panelMap);
+
+        return paintedPanels;
+    }
+
+    private static void printPanels(Map<Point, Panel> panelMap) {
         for (int y = 1; y > -7; y--) {
             for (int x = -2; x < 43; x++) {
                 if (panelMap.containsKey(new Point(x, y))) {
@@ -156,7 +162,5 @@ public class Eleven {
             }
             System.out.println();
         }
-
-        return paintedPanels;
     }
 }
