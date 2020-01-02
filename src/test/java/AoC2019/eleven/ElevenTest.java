@@ -20,6 +20,16 @@ public class ElevenTest {
 
     @Test
     public void testProcessInput() {
-        assertEquals(1951, Eleven.processInput(Nine.readInput(INPUT1)));
+        assertEquals(1951, Eleven.processInput(Nine.readInput(INPUT1), 0));
+        assertEquals(250, Eleven.processInput(Nine.readInput(INPUT1), 1));
     }
+
+    //
+    //   █  █ █  █   ██ ███   ██  █  █  ██  ███
+    //   █  █ █ █     █ █  █ █  █ █  █ █  █ █  █
+    //   ████ ██      █ ███  █  █ ████ █    █  █
+    //   █  █ █ █     █ █  █ ████ █  █ █    ███
+    //   █  █ █ █  █  █ █  █ █  █ █  █ █  █ █ █
+    //   █  █ █  █  ██  ███  █  █ █  █  ██  █  █
+    //
 }

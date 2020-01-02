@@ -18,9 +18,9 @@ public class Eleven {
     // 0 = paint black  |   1 = paint white
     // 0 = left         |   1 = right
 
-    static long processInput(ArrayList<Long> numbers) {
+    static long processInput(ArrayList<Long> numbers, int initial) {
         Map<Point, Panel> panelMap = new HashMap<>();
-        panelMap.put(new Point(0,0), new Panel(0, Panel.Direction.UP));
+        panelMap.put(new Point(0,0), new Panel(initial, Panel.Direction.UP));
 
         int i = 0;
         int relativeBase = 0;
@@ -144,6 +144,17 @@ public class Eleven {
                 relativeBase = output.getRelativeBase();
             }
             i += output.getIndex();
+        }
+
+        for (int y = 1; y > -7; y--) {
+            for (int x = -2; x < 43; x++) {
+                if (panelMap.containsKey(new Point(x, y))) {
+                    System.out.print(panelMap.get(new Point(x, y)).getCurrentPanel() == 0 ? " " : "█");
+                } else {
+                    System.out.print(" ");
+                }
+            }
+            System.out.println();
         }
 
         return paintedPanels;
