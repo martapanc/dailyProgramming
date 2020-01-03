@@ -52,4 +52,13 @@ public class Output {
     public void setRelativeBase(int relativeBase) {
         this.relativeBase = relativeBase;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "code='" + code + '\'' +
+                ", index=" + index +
+                ", relativeBase=" + relativeBase +
+                '}';
+    }
 }

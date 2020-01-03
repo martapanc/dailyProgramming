@@ -56,7 +56,7 @@ public class Nine {
         return Long.parseLong(outputBuilder.toString());
     }
 
-    private static Output processParameterMode(ArrayList<Long> numbers, int index, int opCode, int inputValue, int relativeBase) {
+    public static Output processParameterMode(ArrayList<Long> numbers, int index, int opCode, int inputValue, int relativeBase) {
         int reducedOpCode = opCode % 100;
         Map<Integer, Integer> parameterModeMap = new HashMap<>();
         parameterModeMap.put(1, (opCode / 100) % 10);
