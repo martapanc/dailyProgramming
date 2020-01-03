@@ -27,7 +27,7 @@ public class Twelve {
         return list;
     }
 
-    public static ArrayList<Point3d> computeMovements(ArrayList<Point3d> list, int steps) {
+    public static ArrayList<Point3d> computeMovements(ArrayList<Point3d> list, long steps) {
         while (steps-- > 0) {
             for (Point3d moon : list) {
                 ArrayList<Point3d> otherMoons = new ArrayList<>(list);
@@ -68,10 +68,49 @@ public class Twelve {
             }
         }
 
+//        System.out.println(list);
         return list;
     }
 
-    public static int computeTotalEnergyAfterNSteps(ArrayList<Point3d> list, int steps) {
+    static int computeTotalEnergyAfterNSteps(ArrayList<Point3d> list, long steps) {
         return computeMovements(list, steps).stream().mapToInt(moon -> moon.getPotentialEnergy() * moon.getKineticEnergy()).sum();
+    }
+
+    static int findMoonCyclePeriod(int moonIndex, ArrayList<Point3d> list) {
+        int cyclePeriod = 1;
+        Point3d initialPosition = list.get(moonIndex);
+        ArrayList<Point3d> newList = new ArrayList<>();
+        for (Point3d point3d : list) {
+            newList.add(new Point3d(point3d.getX(), point3d.getY(), point3d.getZ()));
+        }
+
+
+        do {
+            cyclePeriod++;
+            newList = computeMovements(newList, 1);
+        } while (!initialPosition.equalsPos(newList.get(moonIndex)));
+
+        System.out.println(newList.get(moonIndex));
+        return cyclePeriod;
+    }
+
+    static void findMoonCyclesPeriod(int moonIndex, long maxCycle, ArrayList<Point3d> list) {
+        int cyclePeriod = 0;
+        Point3d initialPosition = list.get(moonIndex);
+        ArrayList<Point3d> newList = new ArrayList<>();
+        for (Point3d point3d : list) {
+            newList.add(new Point3d(point3d.getX(), point3d.getY(), point3d.getZ()));
+        }
+
+        while (maxCycle-- > 0) {
+            cyclePeriod++;
+            newList = computeMovements(newList, 1);
+
+            if (initialPosition.equalsPos(newList.get(moonIndex))) {
+                System.out.println(cyclePeriod);
+            }
+        }
+
+        System.out.println();
     }
 }
