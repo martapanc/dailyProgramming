@@ -57,7 +57,6 @@ public class Twelve {
                         zSpeed--;
                     }
                 }
-
                 moon.setSpeed(xSpeed, ySpeed, zSpeed);
             }
 
@@ -67,8 +66,6 @@ public class Twelve {
                 moon.setZ(moon.getZ() + moon.getzSpeed());
             }
         }
-
-//        System.out.println(list);
         return list;
     }
 
@@ -76,41 +73,56 @@ public class Twelve {
         return computeMovements(list, steps).stream().mapToInt(moon -> moon.getPotentialEnergy() * moon.getKineticEnergy()).sum();
     }
 
-    static int findMoonCyclePeriod(int moonIndex, ArrayList<Point3d> list) {
-        int cyclePeriod = 1;
-        Point3d initialPosition = list.get(moonIndex);
-        ArrayList<Point3d> newList = new ArrayList<>();
-        for (Point3d point3d : list) {
-            newList.add(new Point3d(point3d.getX(), point3d.getY(), point3d.getZ()));
-        }
-
+    static long findXAxisCyclePeriod(ArrayList<Point3d> list) {
+        long axisPeriod = 1;
+        int[] xAxisInitial = new int[]{list.get(0).getX(), list.get(1).getX(), list.get(2).getX(), list.get(3).getX()};
+        ArrayList<Point3d> newList = getNewList(list);
 
         do {
-            cyclePeriod++;
+            axisPeriod++;
             newList = computeMovements(newList, 1);
-        } while (!initialPosition.equalsPos(newList.get(moonIndex)));
-
-        System.out.println(newList.get(moonIndex));
-        return cyclePeriod;
+        } while (xAxisInitial[0] != newList.get(0).getX()
+                || xAxisInitial[1] != newList.get(1).getX()
+                || xAxisInitial[2] != newList.get(2).getX()
+                || xAxisInitial[3] != newList.get(3).getX());
+        return axisPeriod;
     }
 
-    static void findMoonCyclesPeriod(int moonIndex, long maxCycle, ArrayList<Point3d> list) {
-        int cyclePeriod = 0;
-        Point3d initialPosition = list.get(moonIndex);
+    static long findYAxisCyclePeriod(ArrayList<Point3d> list) {
+        long axisPeriod = 1;
+        int[] yAxisInitial = new int[]{list.get(0).getY(), list.get(1).getY(), list.get(2).getY(), list.get(3).getY()};
+        ArrayList<Point3d> newList = getNewList(list);
+
+        do {
+            axisPeriod++;
+            newList = computeMovements(newList, 1);
+        } while (yAxisInitial[0] != newList.get(0).getY()
+                || yAxisInitial[1] != newList.get(1).getY()
+                || yAxisInitial[2] != newList.get(2).getY()
+                || yAxisInitial[3] != newList.get(3).getY());
+        return axisPeriod;
+    }
+
+    static long findZAxisCyclePeriod(ArrayList<Point3d> list) {
+        long axisPeriod = 1;
+        int[] zAxisInitial = new int[]{list.get(0).getZ(), list.get(1).getZ(), list.get(2).getZ(), list.get(3).getZ()};
+        ArrayList<Point3d> newList = getNewList(list);
+
+        do {
+            axisPeriod++;
+            newList = computeMovements(newList, 1);
+        } while (zAxisInitial[0] != newList.get(0).getZ()
+                || zAxisInitial[1] != newList.get(1).getZ()
+                || zAxisInitial[2] != newList.get(2).getZ()
+                || zAxisInitial[3] != newList.get(3).getZ());
+        return axisPeriod;
+    }
+
+    private static ArrayList<Point3d> getNewList(ArrayList<Point3d> list) {
         ArrayList<Point3d> newList = new ArrayList<>();
         for (Point3d point3d : list) {
             newList.add(new Point3d(point3d.getX(), point3d.getY(), point3d.getZ()));
         }
-
-        while (maxCycle-- > 0) {
-            cyclePeriod++;
-            newList = computeMovements(newList, 1);
-
-            if (initialPosition.equalsPos(newList.get(moonIndex))) {
-                System.out.println(cyclePeriod);
-            }
-        }
-
-        System.out.println();
+        return newList;
     }
 }

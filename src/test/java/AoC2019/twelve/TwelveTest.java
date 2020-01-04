@@ -33,28 +33,33 @@ public class TwelveTest {
     }
 
     @Test
-    public void testFindMoonCyclePeriod() {
-        assertEquals(924, Twelve.findMoonCyclePeriod(0, Twelve.readInput(INPUT2)));
-        assertEquals(617, Twelve.findMoonCyclePeriod(1, Twelve.readInput(INPUT2)));
-        assertEquals(2772, Twelve.findMoonCyclePeriod(2, Twelve.readInput(INPUT2)));
-        assertEquals(924, Twelve.findMoonCyclePeriod(3, Twelve.readInput(INPUT2)));
+    public void testFindAxisCyclePeriod() {
+        long xAxisCyclePeriod = Twelve.findXAxisCyclePeriod(Twelve.readInput(INPUT2));
+        long yAxisCyclePeriod = Twelve.findYAxisCyclePeriod(Twelve.readInput(INPUT2));
+        long zAxisCyclePeriod = Twelve.findZAxisCyclePeriod(Twelve.readInput(INPUT2));
 
-        assertEquals(3084600, Twelve.findMoonCyclePeriod(0, Twelve.readInput(INPUT3)));
-        assertEquals(1026086, Twelve.findMoonCyclePeriod(1, Twelve.readInput(INPUT3)));
-        assertEquals(194634, Twelve.findMoonCyclePeriod(2, Twelve.readInput(INPUT3)));
-        assertEquals(7661302, Twelve.findMoonCyclePeriod(3, Twelve.readInput(INPUT3)));
-    }
+        assertEquals(18, xAxisCyclePeriod);
+        assertEquals(28, yAxisCyclePeriod);
+        assertEquals(44, zAxisCyclePeriod);
 
-    @Test
-    public void testFindMoonCyclesPeriod() {
-        Twelve.findMoonCyclesPeriod(0, 3000, Twelve.readInput(INPUT2));
-        Twelve.findMoonCyclesPeriod(1, 3000, Twelve.readInput(INPUT2));
-        Twelve.findMoonCyclesPeriod(2, 3000, Twelve.readInput(INPUT2));
-        Twelve.findMoonCyclesPeriod(3, 3000, Twelve.readInput(INPUT2));
+        assertEquals(2772, MathUtil.lcm(new long[]{xAxisCyclePeriod, yAxisCyclePeriod, zAxisCyclePeriod}));
 
-        Twelve.findMoonCyclesPeriod(0, 4686775000L, Twelve.readInput(INPUT3));
-        Twelve.findMoonCyclesPeriod(1, 4686775000L, Twelve.readInput(INPUT3));
-        Twelve.findMoonCyclesPeriod(2, 4686775000L, Twelve.readInput(INPUT3));
-        Twelve.findMoonCyclesPeriod(3, 4686775000L, Twelve.readInput(INPUT3));
+        xAxisCyclePeriod = Twelve.findXAxisCyclePeriod(Twelve.readInput(INPUT3));
+        yAxisCyclePeriod = Twelve.findYAxisCyclePeriod(Twelve.readInput(INPUT3));
+        zAxisCyclePeriod = Twelve.findZAxisCyclePeriod(Twelve.readInput(INPUT3));
+        assertEquals(2028, xAxisCyclePeriod);
+        assertEquals(5898, yAxisCyclePeriod);
+        assertEquals(4702, zAxisCyclePeriod);
+
+        assertEquals(4686774924L, MathUtil.lcm(new long[]{xAxisCyclePeriod, yAxisCyclePeriod, zAxisCyclePeriod}));
+
+        xAxisCyclePeriod = Twelve.findXAxisCyclePeriod(Twelve.readInput(INPUT1));
+        yAxisCyclePeriod = Twelve.findYAxisCyclePeriod(Twelve.readInput(INPUT1));
+        zAxisCyclePeriod = Twelve.findZAxisCyclePeriod(Twelve.readInput(INPUT1));
+        assertEquals(28482, xAxisCyclePeriod);
+        assertEquals(231614, yAxisCyclePeriod);
+        assertEquals(193052, zAxisCyclePeriod);
+
+        assertEquals(318382803780324L, MathUtil.lcm(new long[]{xAxisCyclePeriod, yAxisCyclePeriod, zAxisCyclePeriod}));
     }
 }
