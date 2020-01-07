@@ -1,5 +1,7 @@
 package AoC2019.fourteen;
 
+import java.util.Objects;
+
 public class Chemical {
 
     private int quantity;
@@ -29,5 +31,26 @@ public class Chemical {
     @Override
     public String toString() {
         return name + "(" + quantity + ")";
+    }
+
+    public boolean equalsName(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Chemical chemical = (Chemical) o;
+        return Objects.equals(getName(), chemical.getName());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Chemical chemical = (Chemical) o;
+        return getQuantity() == chemical.getQuantity() &&
+                getName().equals(chemical.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName());
     }
 }

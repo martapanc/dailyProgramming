@@ -30,4 +30,11 @@ public class FourteenTest {
         System.out.println(map);
         assertEquals(56, map.size());
     }
+
+    @Test
+    public void computeChemicals() {
+        Fourteen.computeChemicals(Fourteen.readInput(INPUT4));
+        Fourteen.computeChemicals(Fourteen.readInput(INPUT2));
+        Fourteen.computeChemicals(Fourteen.readInput(INPUT3));
+    }
 }
