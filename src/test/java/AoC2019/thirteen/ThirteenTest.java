@@ -27,4 +27,9 @@ public class ThirteenTest {
     public void testCountTilesOfType() {
         assertEquals(357, Thirteen.countTilesOfType(Tile.BLOCK, Thirteen.processInput(Nine.readInput(INPUT1))));
     }
+
+    @Test
+    public void testPrintTileMap() {
+        Thirteen.printTileMap(Thirteen.processInput(Nine.readInput(INPUT1)));
+    }
 }

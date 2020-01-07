@@ -47,6 +47,25 @@ public class Thirteen {
         return tileMap;
     }
 
+    static void printTileMap(Map<Point, Tile> tileMap) {
+        int minX = tileMap.keySet().stream().mapToInt(p -> p.x).min().orElse(-1);
+        int maxX = tileMap.keySet().stream().mapToInt(p -> p.x).max().orElse(-1);
+        int minY = tileMap.keySet().stream().mapToInt(p -> p.y).min().orElse(-1);
+        int maxY = tileMap.keySet().stream().mapToInt(p -> p.y).max().orElse(-1);
+
+        for (int y = minY; y <= maxY; y++) {
+            for (int x = minX; x <= maxX; x++) {
+                Point key = new Point(x, y);
+                if (tileMap.containsKey(key)) {
+                    System.out.print(tileMap.get(key).getSymbol());
+                } else {
+                    System.out.print(" ");
+                }
+            }
+            System.out.println();
+        }
+    }
+
     static int countTilesOfType(Tile tileType, Map<Point, Tile> processInput) {
         return (int) processInput.values().stream().filter(tile -> tile.equals(tileType)).count();
     }
