@@ -37,4 +37,10 @@ public class FourteenTest {
         Fourteen.computeChemicals(Fourteen.readInput(INPUT2));
         Fourteen.computeChemicals(Fourteen.readInput(INPUT3));
     }
+
+    @Test
+    public void findConsumedWithQuantitiesFromMap() {
+        System.out.println(Fourteen.findConsumedWithQuantitiesFromMap(new Chemical(3, "STKFG"), Fourteen.readInput(INPUT4)));
+        System.out.println(Fourteen.findConsumedWithQuantitiesFromMap(new Chemical(6, "VPVL"), Fourteen.readInput(INPUT4)));
+    }
 }

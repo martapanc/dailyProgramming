@@ -1,5 +1,7 @@
 package AoC2019.fourteen;
 
+import org.checkerframework.checker.units.qual.C;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -43,22 +45,29 @@ public class Fourteen {
 
     public static void computeChemicals(Map<Chemical, List<Chemical>> map) {
         List<Chemical> neededChemicals = new ArrayList<>();
-        List<Chemical> initialChemicalList = map.get(new Chemical(1, "FUEL"));
+        List<Chemical> chemicalList = map.get(new Chemical(1, "FUEL"));
 
-        for (Chemical chemical : initialChemicalList) {
-            for (Map.Entry<Chemical, List<Chemical>> entry : map.entrySet()) {
-                if (entry.getKey().equalsName(chemical)) {
+        int i = 10;
+        while (i-- > 0) {
 
-                    int quantity = chemical.getQuantity() * entry.getKey().getQuantity();
+            int producedQuantity = 1;
+            for (Chemical chemical : chemicalList) {
+                for (Map.Entry<Chemical, List<Chemical>> entry : map.entrySet()) {
+                    if (entry.getKey().equalsName(chemical)) {
 
-                    Chemical chemicalSearch = findChemicalInList(chemical.getName(), neededChemicals);
-                    if (chemicalSearch != null) {
-                        neededChemicals.get(neededChemicals.indexOf(chemicalSearch)).setQuantity(chemicalSearch.getQuantity() +  quantity);
-                    } else {
-                        neededChemicals.add(new Chemical(quantity, chemical.getName()));
+                        int quantity = chemical.getQuantity() * producedQuantity;
+
+                        Chemical chemicalSearch = findChemicalInList(chemical.getName(), neededChemicals);
+                        if (chemicalSearch != null) {
+                            neededChemicals.get(neededChemicals.indexOf(chemicalSearch)).setQuantity(chemicalSearch.getQuantity() +  quantity);
+                        } else {
+                            neededChemicals.add(new Chemical(quantity, chemical.getName()));
+                        }
                     }
                 }
             }
+
+            chemicalList = new ArrayList<>(neededChemicals);
         }
 
         System.out.println(neededChemicals);
@@ -66,5 +75,22 @@ public class Fourteen {
 
     private static Chemical findChemicalInList(String name, List<Chemical> chemicals) {
         return chemicals.stream().filter(carnet -> carnet.getName().equals(name)).findFirst().orElse(null);
+    }
+
+    static List<Chemical> findConsumedWithQuantitiesFromMap(Chemical chemical, Map<Chemical, List<Chemical>> map) {
+        List<Chemical> consumedChems = new ArrayList<>();
+
+        Chemical chem = map.entrySet().stream()
+                .filter(entry -> entry.getKey().getName().equals(chemical.getName()))
+                .findFirst().map(Map.Entry::getKey).orElse(null);
+
+        if (chem != null) {
+            for (Chemical c : map.get(chem)) {
+                Chemical consumedWithQuantity = new Chemical(c.getQuantity() * chemical.getQuantity(), c.getName());
+                consumedChems.add(consumedWithQuantity);
+            }
+        }
+
+        return consumedChems;
     }
 }
