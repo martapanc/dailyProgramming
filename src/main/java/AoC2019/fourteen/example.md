@@ -17,6 +17,16 @@
     1 GPVTF     = 0 ORE (1 already in storage)
     8 PSHF      = 179 ORE (4 in storage, 7 still needed, so 3 new waste)
     
+    157 ORE => 5 NZVS
+    165 ORE => 6 DCFZ
+    165 ORE => 2 GPVTF
+    177 ORE => 5 HKGWZ
+    179 ORE => 7 PSHF
+    7 DCFZ, 7 PSHF => 2 XJWVT
+    12 HKGWZ, 1 GPVTF, 8 PSHF => 9 QDVJ
+    3 DCFZ, 7 NZVS, 5 HKGWZ, 10 PSHF => 8 KHKGT
+    44 XJWVT, 5 KHKGT, 1 QDVJ, 29 NZVS, 9 GPVTF, 48 HKGWZ => 1 FUEL
+    
     * STORAGE
     KHKGT 3
     QDVJ 8

@@ -33,9 +33,12 @@ public class FourteenTest {
 
     @Test
     public void computeChemicals() {
-        Fourteen.computeChemicals(Fourteen.readInput(INPUT4));
-        Fourteen.computeChemicals(Fourteen.readInput(INPUT2));
-        Fourteen.computeChemicals(Fourteen.readInput(INPUT3));
+//        assertEquals(41, Fourteen.computeChemicals(Fourteen.readInput(INPUT1)));
+        assertEquals(165, Fourteen.computeChemicals(Fourteen.readInput(INPUT2)));
+        assertEquals(13312, Fourteen.computeChemicals(Fourteen.readInput(INPUT3)));
+        assertEquals(180697, Fourteen.computeChemicals(Fourteen.readInput(INPUT4)));
+        assertEquals(2210736, Fourteen.computeChemicals(Fourteen.readInput(INPUT5)));
+//        assertEquals(64260, Fourteen.computeChemicals(Fourteen.readInput(INPUT6)));
     }
 
     @Test

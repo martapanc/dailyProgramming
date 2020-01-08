@@ -48,38 +48,78 @@ public class Fourteen {
         return chemicalListMap;
     }
 
-    public static void computeChemicals(Map<Chemical, List<Chemical>> map) {
+    public static int computeChemicals(Map<Chemical, List<Chemical>> map) {
         List<Chemical> neededChemicals = new ArrayList<>();
+        // TODO: needs to stop when all ORE
         List<Chemical> chemicalList = map.get(new Chemical(1, "FUEL"));
+        List<Chemical> storage = new ArrayList<>();
+        int oreTotal = 0;
 
-        int i = 10;
+        int i = 4;
         while (i-- > 0) {
+            neededChemicals = new ArrayList<>();
 
-            int producedQuantity = 1;
             for (Chemical chemical : chemicalList) {
-                for (Map.Entry<Chemical, List<Chemical>> entry : map.entrySet()) {
-                    if (entry.getKey().equalsName(chemical)) {
+                Map.Entry<Chemical, List<Chemical>> producerAndList = findProducersOfChemical(chemical.getName(), map);
+                Chemical producer = producerAndList.getKey();
 
-                        int quantity = chemical.getQuantity() * producedQuantity;
+                Chemical chemInStorage = findChemicalInList(producer.getName(), storage);
+                if (chemInStorage != null) {
+                    // TODO: this could be negative
+                    chemical = new Chemical(chemical.getQuantity() - chemInStorage.getQuantity(), chemical.getName());
+                    storage.remove(chemInStorage);
 
-                        Chemical chemicalSearch = findChemicalInList(chemical.getName(), neededChemicals);
-                        if (chemicalSearch != null) {
-                            neededChemicals.get(neededChemicals.indexOf(chemicalSearch)).setQuantity(chemicalSearch.getQuantity() + quantity);
-                        } else {
-                            neededChemicals.add(new Chemical(quantity, chemical.getName()));
-                        }
+                }
+                int remainder;
+                int multiplier = 1;
+
+                if (chemical.getQuantity() < producer.getQuantity()) {
+                    remainder = producer.getQuantity() - chemical.getQuantity();
+                    if (chemical.getQuantity() == 0) { //TODO: check
+                        multiplier = 0;
+                    }
+                } else {
+                    multiplier = (int) Math.ceil((double) chemical.getQuantity() / producer.getQuantity());
+                    remainder = multiplier * producer.getQuantity() - chemical.getQuantity();
+                }
+                if (remainder != 0 && chemical.getQuantity() != 0) { //TODO: check
+
+                    Chemical chem = findChemicalInList(producer.getName(), storage);
+                    if (chem != null) {
+                        int wasteSoFar = chem.getQuantity();
+                        storage.remove(chem);
+                        storage.add(new Chemical(wasteSoFar + remainder, producer.getName()));
+                    } else {
+                        storage.add(new Chemical(remainder, producer.getName()));
+                    }
+                }
+
+                for (Chemical chem : producerAndList.getValue()) {
+                    if (chem.getName().equals("ORE")) {
+                        oreTotal += chem.getQuantity() * multiplier;
+                    } else {
+                        neededChemicals.add(new Chemical(chem.getQuantity() * multiplier, chem.getName()));
                     }
                 }
             }
-
             chemicalList = new ArrayList<>(neededChemicals);
         }
 
-        System.out.println(neededChemicals);
+        return oreTotal;
     }
 
     private static Chemical findChemicalInList(String name, List<Chemical> chemicals) {
-        return chemicals.stream().filter(carnet -> carnet.getName().equals(name)).findFirst().orElse(null);
+        return chemicals.stream()
+                .filter(carnet -> carnet.getName().equals(name))
+                .findFirst()
+                .orElse(null);
+    }
+
+    private static Map.Entry<Chemical, List<Chemical>> findProducersOfChemical(String name, Map<Chemical, List<Chemical>> map) {
+        return map.entrySet().stream()
+                .filter(entry -> entry.getKey().getName().equals(name))
+                .findFirst()
+                .orElse(null);
     }
 
     static List<Chemical> findConsumedWithQuantitiesFromMap(Chemical chemical, Map<Chemical, List<Chemical>> map) {
