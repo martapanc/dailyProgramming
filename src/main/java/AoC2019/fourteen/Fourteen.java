@@ -1,7 +1,5 @@
 package AoC2019.fourteen;
 
-import org.checkerframework.checker.units.qual.C;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -11,6 +9,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+// Start from the list that produces 1 FUEL
+// For every chemical, find the list that produces it
+// Divide the needed amount by the quantity produced; if remainder != 0, take ceil(result).
+// Save ceil(result) - needed amount as a "storage" for the current element
+// For the following chem reductions, check if current chem is in storage. If so, subtract the stored value from the needed amount and continue
+// Continue until the "producers list" only contains ORE
 
 public class Fourteen {
     public static Map<Chemical, List<Chemical>> readInput(String input) {
@@ -59,7 +64,7 @@ public class Fourteen {
 
                         Chemical chemicalSearch = findChemicalInList(chemical.getName(), neededChemicals);
                         if (chemicalSearch != null) {
-                            neededChemicals.get(neededChemicals.indexOf(chemicalSearch)).setQuantity(chemicalSearch.getQuantity() +  quantity);
+                            neededChemicals.get(neededChemicals.indexOf(chemicalSearch)).setQuantity(chemicalSearch.getQuantity() + quantity);
                         } else {
                             neededChemicals.add(new Chemical(quantity, chemical.getName()));
                         }
