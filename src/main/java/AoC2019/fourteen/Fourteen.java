@@ -49,13 +49,12 @@ public class Fourteen {
     }
 
     public static int computeChemicals(Map<Chemical, List<Chemical>> map) {
-        List<Chemical> neededChemicals = new ArrayList<>();
-        // TODO: needs to stop when all ORE
+        List<Chemical> neededChemicals;
         List<Chemical> chemicalList = map.get(new Chemical(1, "FUEL"));
         List<Chemical> storage = new ArrayList<>();
         int oreTotal = 0;
 
-        int i = 4;
+        int i = 100;
         while (i-- > 0) {
             neededChemicals = new ArrayList<>();
 
@@ -65,10 +64,15 @@ public class Fourteen {
 
                 Chemical chemInStorage = findChemicalInList(producer.getName(), storage);
                 if (chemInStorage != null) {
-                    // TODO: this could be negative
-                    chemical = new Chemical(chemical.getQuantity() - chemInStorage.getQuantity(), chemical.getName());
-                    storage.remove(chemInStorage);
-
+                    if (chemInStorage.getQuantity() > chemical.getQuantity()) {
+                        int diff = chemInStorage.getQuantity() - chemical.getQuantity();
+                        chemical = new Chemical(0, chemical.getName());
+                        storage.remove(chemInStorage);
+                        storage.add(new Chemical(diff, chemical.getName()));
+                    } else {
+                        chemical = new Chemical(chemical.getQuantity() - chemInStorage.getQuantity(), chemical.getName());
+                        storage.remove(chemInStorage);
+                    }
                 }
                 int remainder;
                 int multiplier = 1;
@@ -83,7 +87,6 @@ public class Fourteen {
                     remainder = multiplier * producer.getQuantity() - chemical.getQuantity();
                 }
                 if (remainder != 0 && chemical.getQuantity() != 0) { //TODO: check
-
                     Chemical chem = findChemicalInList(producer.getName(), storage);
                     if (chem != null) {
                         int wasteSoFar = chem.getQuantity();
@@ -103,6 +106,9 @@ public class Fourteen {
                 }
             }
             chemicalList = new ArrayList<>(neededChemicals);
+            if (neededChemicals.isEmpty()) {
+                break;
+            }
         }
 
         return oreTotal;
@@ -120,22 +126,5 @@ public class Fourteen {
                 .filter(entry -> entry.getKey().getName().equals(name))
                 .findFirst()
                 .orElse(null);
-    }
-
-    static List<Chemical> findConsumedWithQuantitiesFromMap(Chemical chemical, Map<Chemical, List<Chemical>> map) {
-        List<Chemical> consumedChems = new ArrayList<>();
-
-        Chemical chem = map.entrySet().stream()
-                .filter(entry -> entry.getKey().getName().equals(chemical.getName()))
-                .findFirst().map(Map.Entry::getKey).orElse(null);
-
-        if (chem != null) {
-            for (Chemical c : map.get(chem)) {
-                Chemical consumedWithQuantity = new Chemical(c.getQuantity() * chemical.getQuantity(), c.getName());
-                consumedChems.add(consumedWithQuantity);
-            }
-        }
-
-        return consumedChems;
     }
 }

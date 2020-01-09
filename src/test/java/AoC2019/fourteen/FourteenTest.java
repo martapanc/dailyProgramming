@@ -33,17 +33,11 @@ public class FourteenTest {
 
     @Test
     public void computeChemicals() {
-//        assertEquals(41, Fourteen.computeChemicals(Fourteen.readInput(INPUT1)));
+        assertEquals(31, Fourteen.computeChemicals(Fourteen.readInput(INPUT1)));
         assertEquals(165, Fourteen.computeChemicals(Fourteen.readInput(INPUT2)));
         assertEquals(13312, Fourteen.computeChemicals(Fourteen.readInput(INPUT3)));
         assertEquals(180697, Fourteen.computeChemicals(Fourteen.readInput(INPUT4)));
         assertEquals(2210736, Fourteen.computeChemicals(Fourteen.readInput(INPUT5)));
-//        assertEquals(64260, Fourteen.computeChemicals(Fourteen.readInput(INPUT6)));
-    }
-
-    @Test
-    public void findConsumedWithQuantitiesFromMap() {
-        System.out.println(Fourteen.findConsumedWithQuantitiesFromMap(new Chemical(3, "STKFG"), Fourteen.readInput(INPUT4)));
-        System.out.println(Fourteen.findConsumedWithQuantitiesFromMap(new Chemical(6, "VPVL"), Fourteen.readInput(INPUT4)));
+        assertEquals(365768, Fourteen.computeChemicals(Fourteen.readInput(INPUT6)));
     }
 }
