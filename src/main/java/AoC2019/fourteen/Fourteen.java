@@ -18,6 +18,10 @@ import java.util.stream.Collectors;
 // Continue until the "producers list" only contains ORE
 
 public class Fourteen {
+
+    private static final String FUEL = "FUEL";
+    private static final String ORE = "ORE";
+
     public static Map<Chemical, List<Chemical>> readInput(String input) {
         Map<Chemical, List<Chemical>> chemicalListMap = new HashMap<>();
         BufferedReader reader;
@@ -34,9 +38,7 @@ public class Fourteen {
                         .collect(Collectors.toList());
 
                 String[] produced = reaction[1].split(" ");
-                Chemical producedChemical = new Chemical(Integer.parseInt(produced[0]), produced[1]);
-
-                chemicalListMap.put(producedChemical, consumedChemicals);
+                chemicalListMap.put(new Chemical(Integer.parseInt(produced[0]), produced[1]), consumedChemicals);
 
                 line = reader.readLine();
             }
@@ -48,9 +50,9 @@ public class Fourteen {
         return chemicalListMap;
     }
 
-    public static int computeChemicals(Map<Chemical, List<Chemical>> map) {
+    static int computeChemicals(Map<Chemical, List<Chemical>> map) {
         List<Chemical> neededChemicals;
-        List<Chemical> chemicalList = map.get(new Chemical(1, "FUEL"));
+        List<Chemical> chemicalList = map.get(new Chemical(1, FUEL));
         List<Chemical> storage = new ArrayList<>();
         int oreTotal = 0;
 
@@ -61,56 +63,72 @@ public class Fourteen {
             for (Chemical chemical : chemicalList) {
                 Map.Entry<Chemical, List<Chemical>> producerAndList = findProducersOfChemical(chemical.getName(), map);
                 Chemical producer = producerAndList.getKey();
-
                 Chemical chemInStorage = findChemicalInList(producer.getName(), storage);
-                if (chemInStorage != null) {
-                    if (chemInStorage.getQuantity() > chemical.getQuantity()) {
-                        int diff = chemInStorage.getQuantity() - chemical.getQuantity();
-                        chemical = new Chemical(0, chemical.getName());
-                        storage.remove(chemInStorage);
-                        storage.add(new Chemical(diff, chemical.getName()));
-                    } else {
-                        chemical = new Chemical(chemical.getQuantity() - chemInStorage.getQuantity(), chemical.getName());
-                        storage.remove(chemInStorage);
-                    }
-                }
+
+                chemical = checkExistingWaste(storage, chemical, chemInStorage);
+
                 int remainder;
                 int multiplier = 1;
 
+                // If the produced quantity is larger than needed, the waste is their difference
                 if (chemical.getQuantity() < producer.getQuantity()) {
                     remainder = producer.getQuantity() - chemical.getQuantity();
-                    if (chemical.getQuantity() == 0) { //TODO: check
+                    // Case when previous waste can be used to produce the chemical
+                    if (chemical.getQuantity() == 0) {
                         multiplier = 0;
                     }
                 } else {
                     multiplier = (int) Math.ceil((double) chemical.getQuantity() / producer.getQuantity());
                     remainder = multiplier * producer.getQuantity() - chemical.getQuantity();
                 }
-                if (remainder != 0 && chemical.getQuantity() != 0) { //TODO: check
-                    Chemical chem = findChemicalInList(producer.getName(), storage);
-                    if (chem != null) {
-                        int wasteSoFar = chem.getQuantity();
-                        storage.remove(chem);
-                        storage.add(new Chemical(wasteSoFar + remainder, producer.getName()));
-                    } else {
-                        storage.add(new Chemical(remainder, producer.getName()));
-                    }
-                }
 
-                for (Chemical chem : producerAndList.getValue()) {
-                    if (chem.getName().equals("ORE")) {
-                        oreTotal += chem.getQuantity() * multiplier;
-                    } else {
-                        neededChemicals.add(new Chemical(chem.getQuantity() * multiplier, chem.getName()));
-                    }
-                }
+                addWasteToStorage(storage, chemical, producer, remainder);
+                oreTotal = updateProducerChemicals(neededChemicals, oreTotal, producerAndList, multiplier);
             }
             chemicalList = new ArrayList<>(neededChemicals);
             if (neededChemicals.isEmpty()) {
                 break;
             }
         }
+        return oreTotal;
+    }
 
+    private static Chemical checkExistingWaste(List<Chemical> storage, Chemical chemical, Chemical chemInStorage) {
+        if (chemInStorage != null) {
+            // If the stored waste is larger than the needed amount, the chemical can be produced already
+            if (chemInStorage.getQuantity() > chemical.getQuantity()) {
+                storage.add(new Chemical(chemInStorage.getQuantity() - chemical.getQuantity(), chemical.getName()));
+                chemical = new Chemical(0, chemical.getName());
+                storage.remove(chemInStorage);
+            } else {
+                chemical = new Chemical(chemical.getQuantity() - chemInStorage.getQuantity(), chemical.getName());
+                storage.remove(chemInStorage);
+            }
+        }
+        return chemical;
+    }
+
+    private static void addWasteToStorage(List<Chemical> storage, Chemical chemical, Chemical producer, int remainder) {
+        // If there is waste, add it to storage, or update existing waste's quantity
+        if (remainder != 0 && chemical.getQuantity() != 0) {
+            Chemical chem = findChemicalInList(producer.getName(), storage);
+            if (chem != null) {
+                storage.add(new Chemical(chem.getQuantity() + remainder, producer.getName()));
+                storage.remove(chem);
+            } else {
+                storage.add(new Chemical(remainder, producer.getName()));
+            }
+        }
+    }
+
+    private static int updateProducerChemicals(List<Chemical> neededChemicals, int oreTotal, Map.Entry<Chemical, List<Chemical>> producerAndList, int multiplier) {
+        for (Chemical chem : producerAndList.getValue()) {
+            if (chem.getName().equals(ORE)) {
+                oreTotal += chem.getQuantity() * multiplier;
+            } else {
+                neededChemicals.add(new Chemical(chem.getQuantity() * multiplier, chem.getName()));
+            }
+        }
         return oreTotal;
     }
 
