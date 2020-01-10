@@ -10,16 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-// Start from the list that produces 1 FUEL
-// For every chemical, find the list that produces it
-// Divide the needed amount by the quantity produced; if remainder != 0, take ceil(result).
-// Save ceil(result) - needed amount as a "storage" for the current element
-// For the following chem reductions, check if current chem is in storage. If so, subtract the stored value from the needed amount and continue
-// Continue until the "producers list" only contains ORE
-
-// Part 2: do the process that produces 1 FUEL. Run again without resetting the storage. This way, obtaining 1 FUEL should gradually require fewer ORE
-// Every time 1 FUEL is produced, sum the ORE needed. Repeat and keep track of FUEL produced until ORE reaches 1 Trillion. Return last number of FUEL obtained.
-
 public class Fourteen {
 
     private static final String FUEL = "FUEL";
@@ -54,14 +44,31 @@ public class Fourteen {
     }
 
     static long computeChemicals(Map<Chemical, List<Chemical>> map) {
-        List<Chemical> neededChemicals;
+        return computeOreNeededFor1FuelProduction(map.get(new Chemical(1, FUEL)), map, new ArrayList<>()).getOreNeeded();
+    }
+
+    static long computeMaxFuel(Map<Chemical, List<Chemical>> map, long oreNum) {
         List<Chemical> chemicalList = map.get(new Chemical(1, FUEL));
         List<Chemical> storage = new ArrayList<>();
         long oreTotal = 0;
+        long fuelProduced = 0;
 
-        int i = 100;
-        while (i-- > 0) {
-            neededChemicals = new ArrayList<>();
+        while (oreTotal < oreNum) {
+            FuelProduction fuelProduction = computeOreNeededFor1FuelProduction(chemicalList, map, storage);
+
+            oreTotal += fuelProduction.getOreNeeded();
+            storage = fuelProduction.getWaste();
+
+            fuelProduced++;
+            chemicalList = map.get(new Chemical(1, FUEL));
+        }
+        return fuelProduced - 1;
+    }
+
+    private static FuelProduction computeOreNeededFor1FuelProduction(List<Chemical> chemicalList, Map<Chemical, List<Chemical>> map, List<Chemical> storage) {
+        long oreTotal = 0;
+        while (true) {
+            List<Chemical> neededChemicals = new ArrayList<>();
 
             for (Chemical chemical : chemicalList) {
                 Map.Entry<Chemical, List<Chemical>> producerAndList = findProducersOfChemical(chemical.getName(), map);
@@ -93,57 +100,8 @@ public class Fourteen {
                 break;
             }
         }
-        return oreTotal;
-    }
 
-    static long computeMaxFuel(Map<Chemical, List<Chemical>> map, long oreNum) {
-        List<Chemical> neededChemicals;
-        List<Chemical> chemicalList = map.get(new Chemical(1, FUEL));
-        List<Chemical> storage = new ArrayList<>();
-        long oreTotal = 0;
-
-        long fuelProduced = 0;
-
-        while (oreTotal < oreNum) {
-            int i = 100;
-            while (i-- > 0) {
-                neededChemicals = new ArrayList<>();
-
-                for (Chemical chemical : chemicalList) {
-                    Map.Entry<Chemical, List<Chemical>> producerAndList = findProducersOfChemical(chemical.getName(), map);
-                    Chemical producer = producerAndList.getKey();
-                    Chemical chemInStorage = findChemicalInList(producer.getName(), storage);
-
-                    chemical = checkExistingWaste(storage, chemical, chemInStorage);
-
-                    int remainder;
-                    int multiplier = 1;
-
-                    // If the produced quantity is larger than needed, the waste is their difference
-                    if (chemical.getQuantity() < producer.getQuantity()) {
-                        remainder = producer.getQuantity() - chemical.getQuantity();
-                        // Case when previous waste can be used to produce the chemical
-                        if (chemical.getQuantity() == 0) {
-                            multiplier = 0;
-                        }
-                    } else {
-                        multiplier = (int) Math.ceil((double) chemical.getQuantity() / producer.getQuantity());
-                        remainder = multiplier * producer.getQuantity() - chemical.getQuantity();
-                    }
-
-                    addWasteToStorage(storage, chemical, producer, remainder);
-                    oreTotal = updateProducerChemicals(neededChemicals, oreTotal, producerAndList, multiplier);
-                }
-                chemicalList = new ArrayList<>(neededChemicals);
-                if (neededChemicals.isEmpty()) {
-                    break;
-                }
-            }
-
-            fuelProduced++;
-            chemicalList = map.get(new Chemical(1, FUEL));
-        }
-        return fuelProduced - 1;
+        return new FuelProduction(oreTotal, storage);
     }
 
     private static Chemical checkExistingWaste(List<Chemical> storage, Chemical chemical, Chemical chemInStorage) {
