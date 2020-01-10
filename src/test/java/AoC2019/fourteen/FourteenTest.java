@@ -43,9 +43,9 @@ public class FourteenTest {
 
     @Test
     public void computeMaxFuel() {
-//        assertEquals(82892753, Fourteen.computeMaxFuel(Fourteen.readInput(INPUT3), 1000000000000L));
-//        assertEquals(5586022, Fourteen.computeMaxFuel(Fourteen.readInput(INPUT4), 1000000000000L));
-//        assertEquals(460664, Fourteen.computeMaxFuel(Fourteen.readInput(INPUT5), 1000000000000L));
-        assertEquals(365768, Fourteen.computeMaxFuel(Fourteen.readInput(INPUT6), 1000000000000L));
+        assertEquals(82892753, Fourteen.computeMaxFuel(Fourteen.readInput(INPUT3), 1000000000000L));
+        assertEquals(5586022, Fourteen.computeMaxFuel(Fourteen.readInput(INPUT4), 1000000000000L));
+        assertEquals(460664, Fourteen.computeMaxFuel(Fourteen.readInput(INPUT5), 1000000000000L));
+        assertEquals(3756877, Fourteen.computeMaxFuel(Fourteen.readInput(INPUT6), 1000000000000L));
     }
 }
