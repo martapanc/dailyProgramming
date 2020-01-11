@@ -6,7 +6,12 @@ import org.apache.commons.lang3.ArrayUtils;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.Stack;
+import java.util.stream.Collectors;
 
 import static AoC2019.nine.Nine.processParameterMode;
 
@@ -69,9 +74,48 @@ public class Fifteen {
     }
 
     static int findStepsToOxigenMachine(Map<Point, Cell> maze) {
+        Point currentPoint = new Point(0, 0);
+        Set<Point> visited = new HashSet<>();
+        Point fork = null;
+        int count = 0;
+        int countAtFork = -1;
 
-        Cell currentCell = maze.get(new Point(0, 0));
-        return 0;
+        while (!maze.get(currentPoint).getType().equals(CellType.OXIGEN_THING)) {
+            visited.add(currentPoint);
+            List<Point> adjacentPoints = getAdjacentPoints(currentPoint);
+            List<Point> possiblePaths = new ArrayList<>();
+            for (Point ap : adjacentPoints) {
+                if (!maze.get(ap).getType().equals(CellType.WALL) && !visited.contains(ap)) {
+                    possiblePaths.add(ap);
+                }
+            }
+
+            switch (possiblePaths.size()) {
+                case 1:
+                    count++;
+                    currentPoint = possiblePaths.get(0);
+                    break;
+                case 2:
+                    count++;
+                    fork = currentPoint;
+                    countAtFork = count;
+                    currentPoint = possiblePaths.get(0);
+                    break;
+                case 0:
+                    currentPoint = fork;
+                    count = countAtFork;
+            }
+        }
+        return count - 1;
+    }
+
+    static List<Point> getAdjacentPoints(Point p) {
+        List<Point> adjacentPoints = new ArrayList<>();
+        adjacentPoints.add(new Point(p.x - 1, p.y));
+        adjacentPoints.add(new Point(p.x, p.y + 1));
+        adjacentPoints.add(new Point(p.x + 1, p.y));
+        adjacentPoints.add(new Point(p.x, p.y - 1));
+        return adjacentPoints;
     }
 
     static Direction getRelativeWestOfCurrentDirection(Direction currentDirection) {

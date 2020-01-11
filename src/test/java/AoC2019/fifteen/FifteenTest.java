@@ -16,7 +16,7 @@ public class FifteenTest {
 
     @Test
     public void testProcessInput() {
-        System.out.println(Fifteen.processInput(Nine.readInput(INPUT1)));
+        Fifteen.processInput(Nine.readInput(INPUT1));
     }
 
     @Test
@@ -25,5 +25,10 @@ public class FifteenTest {
         assertEquals(Direction.NORTH, Fifteen.getRelativeWestOfCurrentDirection(Direction.EAST));
         assertEquals(Direction.EAST, Fifteen.getRelativeWestOfCurrentDirection(Direction.SOUTH));
         assertEquals(Direction.SOUTH, Fifteen.getRelativeWestOfCurrentDirection(Direction.WEST));
+    }
+
+    @Test
+    public void findStepsToOxigenMachine() {
+        assertEquals(242, Fifteen.findStepsToOxigenMachine(Fifteen.processInput(Nine.readInput(INPUT1))));
     }
 }
