@@ -12,7 +12,7 @@ import static AoC2019.nine.Nine.processParameterMode;
 
 public class Fifteen {
 
-    static String processInput(ArrayList<Long> numbers) {
+    static Map<Point, Cell> processInput(ArrayList<Long> numbers) {
         int index = 0;
         int relativeBase = 0;
 
@@ -65,10 +65,16 @@ public class Fifteen {
         }
         printCellMap(map);
 
-        return outputBuilder.toString();
+        return map;
     }
 
-    public static Direction getRelativeWestOfCurrentDirection(Direction currentDirection) {
+    static int findStepsToOxigenMachine(Map<Point, Cell> maze) {
+
+        Cell currentCell = maze.get(new Point(0, 0));
+        return 0;
+    }
+
+    static Direction getRelativeWestOfCurrentDirection(Direction currentDirection) {
         switch (currentDirection) {
             case NORTH:
                 return Direction.WEST;
@@ -81,7 +87,7 @@ public class Fifteen {
         }
     }
 
-    static Point getNextCellCoordinates(Point currentCell, Direction direction) {
+    private static Point getNextCellCoordinates(Point currentCell, Direction direction) {
         switch (direction) {
             case NORTH:
                 return new Point(currentCell.x, currentCell.y + 1);

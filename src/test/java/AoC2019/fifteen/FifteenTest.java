@@ -19,7 +19,6 @@ public class FifteenTest {
         System.out.println(Fifteen.processInput(Nine.readInput(INPUT1)));
     }
 
-
     @Test
     public void getRelativeWestOfCurrentDirection() {
         assertEquals(Direction.WEST, Fifteen.getRelativeWestOfCurrentDirection(Direction.NORTH));
