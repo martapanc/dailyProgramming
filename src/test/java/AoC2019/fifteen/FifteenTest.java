@@ -15,5 +15,8 @@ public class FifteenTest {
     @Test
     public void testProcessInput() {
         System.out.println(Fifteen.processInput(Nine.readInput(INPUT1), 1));
+//        System.out.println(Fifteen.processInput(Nine.readInput(INPUT1), 2));
+//        System.out.println(Fifteen.processInput(Nine.readInput(INPUT1), 3));
+//        System.out.println(Fifteen.processInput(Nine.readInput(INPUT1), 4));
     }
 }

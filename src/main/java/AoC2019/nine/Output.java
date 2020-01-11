@@ -1,9 +1,13 @@
 package AoC2019.nine;
 
+import lombok.Data;
+
+@Data
 public class Output {
     private String code;
     private int index;
     private int relativeBase;
+    private int indexOfLatestInputOpcode = -1;
 
     public Output(String code) {
         this.code = code;
@@ -18,6 +22,12 @@ public class Output {
         this.index = index;
     }
 
+    public Output(String code, int index, int indexOfLatestInputOpcode) {
+        this.code = code;
+        this.index = index;
+        this.indexOfLatestInputOpcode = indexOfLatestInputOpcode;
+    }
+
     public Output(String code, long index) {
         this.code = code;
         this.index = (int) index;
@@ -29,36 +39,13 @@ public class Output {
         this.relativeBase = relativeBase;
     }
 
-    public String getCode() {
-        return code;
-    }
-
-    public int getIndex() {
-        return index;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public void setIndex(int index) {
-        this.index = index;
-    }
-
-    public int getRelativeBase() {
-        return relativeBase;
-    }
-
-    public void setRelativeBase(int relativeBase) {
-        this.relativeBase = relativeBase;
-    }
-
     @Override
     public String toString() {
         return "{" +
                 "code='" + code + '\'' +
                 ", index=" + index +
                 ", relativeBase=" + relativeBase +
+                ", indexOfLatestInputOpcode=" + indexOfLatestInputOpcode +
                 '}';
     }
 }
