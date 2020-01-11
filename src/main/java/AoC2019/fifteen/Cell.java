@@ -37,7 +37,7 @@ public class Cell {
 
 enum CellType {
 
-    WALL('█'), PATH('░');
+    WALL('░'), PATH('█'), OXIGEN_THING('*');
 
     private char symbol;
 

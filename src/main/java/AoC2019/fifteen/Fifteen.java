@@ -1,35 +1,32 @@
 package AoC2019.fifteen;
 
 import AoC2019.nine.Output;
+import org.apache.commons.lang3.ArrayUtils;
 
-import java.awt.*;
-import java.io.IOException;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import static AoC2019.nine.Nine.processParameterMode;
 
 public class Fifteen {
 
-    static String processInput(ArrayList<Long> numbers, int input) {
+    static String processInput(ArrayList<Long> numbers) {
         int index = 0;
         int relativeBase = 0;
 
-        Point currentPoint = new Point(0, 0);
         Map<Point, Cell> map = new HashMap<>();
+        Point currentPoint = new Point(0, 0);
         map.put(currentPoint, new Cell(CellType.PATH));
         StringBuilder outputBuilder = new StringBuilder();
 
         int[] dirs = new int[]{3, 1, 4, 2}; //west, north, east, south
-        int dirIndex = 0;
+        long k = 110000;
+        Direction direction = Direction.WEST;
 
-        long k = 1000000000L;
-        Direction direction = Direction.NORTH;
-
-        loop: while (k-- > 0) {
+        loop:
+        while (k-- > 0) {
             int opCode = Math.toIntExact(numbers.get(index));
 
             Output output = processParameterMode(numbers, index, opCode, direction.getDirectionId(), relativeBase);
@@ -44,87 +41,43 @@ public class Fifteen {
 
                 switch (outputBuilder.toString()) {
                     case "0":
-//                        dirIndex++;
-//                        if (dirIndex == 4) {
-//                            dirIndex = 0;
-//                        }
-                        if (map.get(nextPoint) != null) {
-//                            map.get(nextPoint).getNotVisited().remove(direction);
-                            direction = getRandomNonVisitedDirection(map, currentPoint);
-
-                        } else {
-                            map.put(nextPoint, new Cell(CellType.WALL));
-//                            map.get(currentPoint).getNotVisited().remove(direction);
-                            direction = getRandomNonVisitedDirection(map, currentPoint);
-//                            direction = Direction.getValueOf(new Random().nextInt(3) + 1);
-                        }
-                        break;
-                    case "1":
-
-//                        dirIndex = 0;
-
+                        int rotatingId = (ArrayUtils.indexOf(dirs, direction.getDirectionId()) + 1) % 4; // index of current direction id in dirs + 1
+                        direction = Direction.getValueOf(dirs[rotatingId]);
                         if (map.get(nextPoint) == null) {
-                            map.put(nextPoint, new Cell(CellType.PATH));
-                        } else {
-
+                            map.put(nextPoint, new Cell(CellType.WALL));
                         }
-
-//                        map.get(currentPoint).getNotVisited().remove(direction);
-                        direction = getRandomNonVisitedDirection(map, currentPoint);
-                        currentPoint = new Point(nextPoint.x, nextPoint.y);
-
                         break;
                     case "2":
-                        System.out.println("Found");
+                    case "1":
+                        direction = getRelativeWestOfCurrentDirection(direction);
+                        if (map.get(nextPoint) == null) {
+                            map.put(nextPoint, new Cell(outputBuilder.toString().equals("1") ? CellType.PATH : CellType.OXIGEN_THING));
+                        }
+                        currentPoint = new Point(nextPoint.x, nextPoint.y);
                         break;
-//                        break loop;
                     default:
                         System.out.println("Unexpected output");
                         break loop;
                 }
-
-                printCellMap(map, currentPoint);
-//                System.out.print(outputBuilder.toString());
                 outputBuilder = new StringBuilder();
             }
             index += output.getIndex();
         }
+        printCellMap(map);
 
         return outputBuilder.toString();
     }
 
-    private static Direction getRandomNonVisitedDirection(Map<Point, Cell> map, Point point) {
-        List<Direction> notVisited = map.get(point).getNotVisited();
-        return notVisited.get(new Random().nextInt(notVisited.size()));
-    }
-
-    private static Direction turnLeft(Direction direction) {
-        switch (direction) {
+    public static Direction getRelativeWestOfCurrentDirection(Direction currentDirection) {
+        switch (currentDirection) {
             case NORTH:
                 return Direction.WEST;
-            case WEST:
-                return Direction.SOUTH;
-            case SOUTH:
-                return Direction.EAST;
             case EAST:
                 return Direction.NORTH;
-            default:
-                return null;
-        }
-    }
-
-    private static Direction turnRight(Direction direction) {
-        switch (direction) {
-            case NORTH:
-                return Direction.EAST;
-            case EAST:
-                return Direction.SOUTH;
             case SOUTH:
-                return Direction.WEST;
-            case WEST:
-                return Direction.NORTH;
+                return Direction.EAST;
             default:
-                return null;
+                return Direction.SOUTH;
         }
     }
 
@@ -143,7 +96,7 @@ public class Fifteen {
         return null;
     }
 
-    static void printCellMap(Map<Point, Cell> cellMap, Point currentPos) {
+    static void printCellMap(Map<Point, Cell> cellMap) {
         int minX = cellMap.keySet().stream().mapToInt(p -> p.x).min().orElse(-1);
         int maxX = cellMap.keySet().stream().mapToInt(p -> p.x).max().orElse(-1);
         int minY = cellMap.keySet().stream().mapToInt(p -> p.y).min().orElse(-1);
@@ -153,20 +106,17 @@ public class Fifteen {
             for (int x = minX; x <= maxX; x++) {
                 Point key = new Point(x, y);
                 if (cellMap.containsKey(key)) {
-                    if (key.equals(currentPos)) {
-                        System.out.print("X");
-                    } else if (new Point(0,0).equals(key)) {
+                    if (new Point(0, 0).equals(key)) {
                         System.out.print(0);
                     } else {
                         System.out.print(cellMap.get(key).getType().getSymbol());
                     }
                 } else {
-                    System.out.print(" ");
+                    System.out.print("░");
                 }
             }
             System.out.println();
         }
-        System.out.println();
     }
 }
 
