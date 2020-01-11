@@ -7,7 +7,6 @@ public class Output {
     private String code;
     private int index;
     private int relativeBase;
-    private int indexOfLatestInputOpcode = -1;
 
     public Output(String code) {
         this.code = code;
@@ -20,12 +19,6 @@ public class Output {
     public Output(String code, int index) {
         this.code = code;
         this.index = index;
-    }
-
-    public Output(String code, int index, int indexOfLatestInputOpcode) {
-        this.code = code;
-        this.index = index;
-        this.indexOfLatestInputOpcode = indexOfLatestInputOpcode;
     }
 
     public Output(String code, long index) {
@@ -45,7 +38,6 @@ public class Output {
                 "code='" + code + '\'' +
                 ", index=" + index +
                 ", relativeBase=" + relativeBase +
-                ", indexOfLatestInputOpcode=" + indexOfLatestInputOpcode +
                 '}';
     }
 }

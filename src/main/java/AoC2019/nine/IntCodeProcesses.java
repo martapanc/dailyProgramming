@@ -33,7 +33,7 @@ public class IntCodeProcesses {
             int outputIndex = map.get(1) == 2 ? outputPos : Math.toIntExact(numbers.get(index + 1));
 
             numbers.set(outputIndex, getInput(inputValue));
-            return new Output("", 2, index);
+            return new Output("", 2);
         } else {
             return new Output(numbers.get(outputPos) + "", 2);
         }
