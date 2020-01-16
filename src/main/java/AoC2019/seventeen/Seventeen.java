@@ -11,7 +11,6 @@ public class Seventeen {
     static long processInput(ArrayList<Long> numbers, int input) {
         int i = 0;
         int relativeBase = 0;
-        StringBuilder outputBuilder = new StringBuilder();
 
         while (i < numbers.size()) {
             int opCode = Math.toIntExact(numbers.get(i));
@@ -21,11 +20,18 @@ public class Seventeen {
 
             Output output = processParameterMode(numbers, i, opCode, input, relativeBase);
 
-//            if (output.getCode().length() > 0) {
-//                System.out.println(output.getCode());
-//            }
-
-            outputBuilder.append(output.getCode());
+            if (output.getCode().length() > 0) {
+                switch (output.getCode()) {
+                    case "35":
+                        System.out.print("#");
+                        break;
+                    case "46":
+                        System.out.print(".");
+                        break;
+                    case "10":
+                        System.out.println();
+                }
+            }
 
             if (output.getRelativeBase() != 0) {
                 relativeBase = output.getRelativeBase();
@@ -34,6 +40,6 @@ public class Seventeen {
             i += output.getIndex();
         }
 
-        return Long.parseLong(outputBuilder.substring(0, 10));
+        return 0;
     }
 }
