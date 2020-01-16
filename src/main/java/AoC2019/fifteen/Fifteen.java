@@ -10,8 +10,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Stack;
-import java.util.stream.Collectors;
 
 import static AoC2019.nine.Nine.processParameterMode;
 
@@ -107,6 +105,28 @@ public class Fifteen {
             }
         }
         return count - 1;
+    }
+
+    static int floodWithOxigen(Map<Point, Cell> maze) {
+        Point oxigenMachine = new Point(-16, 14);
+        Set<Point> edge = new HashSet<>();
+        Set<Point> visited = new HashSet<>();
+        edge.add(oxigenMachine);
+
+        List<Point> possiblePaths = new ArrayList<>();
+        int count = 0;
+        do {
+            count++;
+            List<Point> adjacentPoints = getAdjacentPoints(oxigenMachine);
+            for (Point ap : adjacentPoints) {
+                if (!maze.get(ap).getType().equals(CellType.WALL) && !edge.contains(ap)) {
+                    possiblePaths.add(ap);
+                }
+            }
+            edge = new HashSet<>();
+        } while (edge.size() != maze.size());
+
+        return count;
     }
 
     static List<Point> getAdjacentPoints(Point p) {

@@ -5,7 +5,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Sixteen {
@@ -72,7 +71,7 @@ public class Sixteen {
         return Math.abs(IntStream.range(0, numbers.size()).map(i -> numbers.get(i) * pattern.get(i)).sum() % 10);
     }
 
-    static String computePhase(List<Integer> numbers, int phaseNum) {
+    static String computePhase(List<Integer> numbers, int phaseNum, boolean trim) {
         int count = 0;
         String phase = "";
         List<Integer> numberList = numbers;
@@ -83,7 +82,18 @@ public class Sixteen {
             }
             phase = sb.toString();
             numberList = numberStringToList(phase);
+
+            if (!trim) {
+                System.out.println(phase);
+            }
         }
-        return phase;
+
+        return trim ? phase.substring(0, 8) : phase;
+    }
+
+    static List<Integer> tenThousandTimesList(List<Integer> numbers) {
+        List<Integer> tenThousandTimesList = new ArrayList<>();
+        IntStream.range(0, 10000).mapToObj(i -> numbers).forEach(tenThousandTimesList::addAll);
+        return tenThousandTimesList;
     }
 }

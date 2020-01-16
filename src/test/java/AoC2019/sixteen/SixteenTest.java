@@ -36,14 +36,26 @@ public class SixteenTest {
 
     @Test
     public void testComputePhase() {
-        assertEquals(INPUT3, Sixteen.computePhase(Sixteen.readStringInput(INPUT2), 1));
+        assertEquals(INPUT3, Sixteen.computePhase(Sixteen.readStringInput(INPUT2), 1, true));
 
-        assertEquals(INPUT4, Sixteen.computePhase(Sixteen.readStringInput(INPUT3), 1));
-        assertEquals(INPUT4, Sixteen.computePhase(Sixteen.readStringInput(INPUT2), 2));
-        assertEquals(INPUT5, Sixteen.computePhase(Sixteen.readStringInput(INPUT2), 3));
-        assertEquals(INPUT6, Sixteen.computePhase(Sixteen.readStringInput(INPUT2), 4));
+        assertEquals(INPUT4, Sixteen.computePhase(Sixteen.readStringInput(INPUT3), 1, true));
+        assertEquals(INPUT4, Sixteen.computePhase(Sixteen.readStringInput(INPUT2), 2, true));
+        assertEquals(INPUT5, Sixteen.computePhase(Sixteen.readStringInput(INPUT2), 3, true));
+        assertEquals(INPUT6, Sixteen.computePhase(Sixteen.readStringInput(INPUT2), 4, true));
 
-        assertEquals("24176176480919046114038763195595", Sixteen.computePhase(Sixteen.readStringInput(INPUT7), 100));
-//        assertEquals("24176176480919046114038763195595", Sixteen.computePhase(Sixteen.readInput(INPUT1), 100));
+        assertEquals("24176176", Sixteen.computePhase(Sixteen.readStringInput(INPUT7), 100, true));
+        assertEquals("77038830", Sixteen.computePhase(Sixteen.readInput(INPUT1), 100, true));
+//        assertEquals("77038830", Sixteen.computePhase(Sixteen.tenThousandTimesList(Sixteen.readInput(INPUT1)), 1, true));
+
+        Sixteen.computePhase(Sixteen.readStringInput(INPUT7), 100, false);
+        Sixteen.computePhase(Sixteen.readStringInput(INPUT2), 100, false);
     }
+
+    @Test
+    public void testCreateTenThousandTimesList(){
+        assertEquals(80000, Sixteen.tenThousandTimesList(Sixteen.readStringInput("12345678")).size());
+        assertEquals(320000, Sixteen.tenThousandTimesList(Sixteen.readStringInput("03036732577212944063491565474664")).size());
+        assertEquals(6500000, Sixteen.tenThousandTimesList(Sixteen.readInput(INPUT1)).size());
+    }
+
 }
