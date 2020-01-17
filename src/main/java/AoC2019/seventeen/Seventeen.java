@@ -5,13 +5,14 @@ import AoC2019.nine.Output;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static AoC2019.nine.Nine.processParameterMode;
 
 public class Seventeen {
 
-    static Map<Point, String> processInput(ArrayList<Long> numbers, int input) {
+    static Map<Point, String> processInput(ArrayList<Long> numbers) {
         int i = 0;
         int relativeBase = 0;
         Map<Point, String> map = new HashMap<>();
@@ -22,7 +23,7 @@ public class Seventeen {
             if (opCode == 99) {
                 break;
             }
-            Output output = processParameterMode(numbers, i, opCode, input, relativeBase);
+            Output output = processParameterMode(numbers, i, opCode, 0, relativeBase);
 
             if (output.getCode().length() > 0) {
                 switch (output.getCode()) {
@@ -58,5 +59,28 @@ public class Seventeen {
             }
             System.out.println();
         }
+    }
+
+    static List<Point> getIntersections(Map<Point, String> map) {
+        List<Point> list = new ArrayList<>();
+
+        for (Map.Entry<Point, String> entry : map.entrySet()) {
+            if (entry.getValue().equals("#")) {
+                Point current = entry.getKey();
+                String up = map.get(new Point(current.x, current.y - 1));
+                String down = map.get(new Point(current.x, current.y + 1));
+                String left = map.get(new Point(current.x - 1, current.y));
+                String right = map.get(new Point(current.x + 1, current.y));
+
+                if ("#".equals(up) && "#".equals(down) && "#".equals(left) && "#".equals(right)) {
+                    list.add(current);
+                }
+            }
+        }
+        return list;
+    }
+    
+    static int multiplyCoordinates(List<Point> list) {
+        return list.stream().mapToInt(p -> p.x * p.y).sum();
     }
 }
