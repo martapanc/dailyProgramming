@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static AoC2019.nine.Nine.processParameterMode;
 
@@ -16,7 +17,7 @@ public class Seventeen {
         int i = 0;
         int relativeBase = 0;
         Map<Point, String> map = new HashMap<>();
-        int x = 1, y = 1;
+        int x = 0, y = 0;
 
         while (i < numbers.size()) {
             int opCode = Math.toIntExact(numbers.get(i));
@@ -34,7 +35,7 @@ public class Seventeen {
                         map.put(new Point(x++, y), ".");
                         break;
                     case "10":
-                        x = 1;
+                        x = 0;
                         y++;
                 }
             }
@@ -52,8 +53,8 @@ public class Seventeen {
         int maxX = map.keySet().stream().mapToInt(p -> p.x).max().orElse(-1);
         int maxY = map.keySet().stream().mapToInt(p -> p.y).max().orElse(-1);
 
-        for (int y = 1; y <= maxY; y++) {
-            for (int x = 1; x <= maxX; x++) {
+        for (int y = 0; y < maxY; y++) {
+            for (int x = 0; x < maxX; x++) {
                 String p = map.get(new Point(x, y));
                 System.out.print(p != null ? p : " ");
             }
@@ -62,22 +63,12 @@ public class Seventeen {
     }
 
     static List<Point> getIntersections(Map<Point, String> map) {
-        List<Point> list = new ArrayList<>();
-
-        for (Map.Entry<Point, String> entry : map.entrySet()) {
-            if (entry.getValue().equals("#")) {
-                Point current = entry.getKey();
-                String up = map.get(new Point(current.x, current.y - 1));
-                String down = map.get(new Point(current.x, current.y + 1));
-                String left = map.get(new Point(current.x - 1, current.y));
-                String right = map.get(new Point(current.x + 1, current.y));
-
-                if ("#".equals(up) && "#".equals(down) && "#".equals(left) && "#".equals(right)) {
-                    list.add(current);
-                }
-            }
-        }
-        return list;
+        return map.entrySet().stream().filter(entry -> entry.getValue().equals("#"))
+                .map(Map.Entry::getKey)
+                .filter(current -> "#".equals(map.get(new Point(current.x, current.y - 1))) &&
+                        "#".equals(map.get(new Point(current.x, current.y + 1))) &&
+                "#".equals(map.get(new Point(current.x - 1, current.y))) &&
+                "#".equals(map.get(new Point(current.x + 1, current.y)))).collect(Collectors.toList());
     }
     
     static int multiplyCoordinates(List<Point> list) {
