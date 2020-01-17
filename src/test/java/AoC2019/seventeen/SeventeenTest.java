@@ -16,4 +16,9 @@ public class SeventeenTest {
     public void testProcessInput() {
         Seventeen.processInput(Nine.readInput(INPUT1), 0);
     }
+
+    @Test
+    public void testPrintMap() {
+        Seventeen.printMap(Seventeen.processInput(Nine.readInput(INPUT1), 0));
+    }
 }
